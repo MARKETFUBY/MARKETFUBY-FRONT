@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import menu from '../../assets/icon/menu.png';
 
 function Header() {
     return (
@@ -41,6 +42,25 @@ function Header() {
                     </IconBox>
                 </SectionDiv>
             </Main>
+            <CategoryContainer>
+                <CategorySt>
+                    <CategoryBox>
+                        <Icon src={menu}></Icon>
+                        <Category>카테고리</Category>
+                    </CategoryBox>
+
+                    <Menu>
+                        <li>신상품</li>
+                        <li>베스트</li>
+                        <li>알뜰쇼핑 </li>
+                        <li> 특가/혜택</li>
+                    </Menu>
+                    <Delevery>
+                        <span class='purple'>샛별・택배</span>
+                        배송 안내
+                    </Delevery>
+                </CategorySt>
+            </CategoryContainer>
         </Wrapper>
     );
 }
@@ -50,7 +70,7 @@ export default Header;
 const Wrapper = styled.div`
     position: relative;
     width: 1050px;
-    height: 100px;
+    // height: 100px;
     margin: 0px auto;
     letter-spacing: -0.3px;
 `;
@@ -206,4 +226,91 @@ const CartIcon = styled.div`
     background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAzNiAzNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZD0iTTM2IDM2SDBWMGgzNnoiLz4KICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1LjE2NCA2LjU0NykiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjciPgogICAgICAgICAgICA8cGF0aCBkPSJtMjUuNjggMy42Ni0yLjcyIDExLjU3SDcuMzdMNC42NiAzLjY2eiIvPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSIyMC41MiIgY3k9IjIwLjc4IiByPSIyLjE0Ii8+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjkuODEiIGN5PSIyMC43OCIgcj0iMi4xNCIvPgogICAgICAgICAgICA8cGF0aCBkPSJNMCAwaDMuOGwxLjc2IDcuNSIvPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+Cg==')
         50% 50% no-repeat;
     cursor: pointer;
+`;
+
+const Menu = styled.ul`
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-left: 30px;
+
+    & li {
+        padding: 7px 57px 0px 0px;
+        cursor: pointer;
+        color: #333;
+        line-height: 20px;
+        height: fit-content;
+        font-size: 16px;
+        font-weight: 500;
+        display: flex;
+        justify-content: center;
+        line-height: 20px;
+        text-align: center;
+        justify-content: center;
+        width: 90px;
+
+        &:hover {
+            color: purple;
+            text-decoration: underline;
+        }
+    }
+`;
+
+const CategoryContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    min-width: 1050px;
+    letter-spacing: -0.3px;
+    background-color: #fff;
+    position: relative;
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.07);
+    width: 100%;
+    z-index: 10;
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+`;
+const Category = styled.div`
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: -0.3px;
+    color: #333;
+`;
+const Delevery = styled.div`
+    height: 32px;
+    padding: 6px 16px;
+    border-radius: 18px;
+    border: 1px solid #eee;
+    color: #666;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: -0.32px;
+    box-sizing: border-box;
+    margin: 0;
+    .purple {
+        font-weight: 500;
+        color: #5f0080;
+    }
+`;
+const CategorySt = styled.div`
+    align-items: center;
+
+    position: relative;
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    width: 1050px;
+    height: 56px;
+    margin: 0 auto;
+`;
+
+const Icon = styled.img`
+    width: 16px;
+    height: 14px;
+    margin-right: 14px;
+`;
+const CategoryBox = styled.div`
+    display: flex;
+    align-items: center;
 `;
