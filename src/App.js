@@ -6,6 +6,7 @@ import SignUp from './pages/SignUp';
 import Main from './pages/Main';
 import './styles/global.css';
 import Cart from './pages/Cart';
+import MyPage from './pages/MyPage';
 
 function App() {
     return (
@@ -14,8 +15,10 @@ function App() {
             <Route path='/member/login' element={<Login />} />
             <Route path='/member/signup' element={<SignUp />} />
             <Route path='/cart' element={<Cart />} />
+            <Route path='/mypage/order' element={<MyPage />} />
         </Routes>
     );
 }
 
 export default App;
+// https://www.kurly.com/mypage/order
