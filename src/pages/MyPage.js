@@ -3,12 +3,12 @@ import Header from '../components/Common/Header';
 import MyKurly from '../components/Common/MyKurly';
 import UserInfo from '../components/Common/UserInfo';
 
-function MyPage() {
+function MyPage({ rightSection }) {
     return (
         <div>
             <Header />
             <UserInfo />
-            <MyKurly />
+            <MyKurly rightSection={rightSection} />
         </div>
     );
 }

@@ -1,13 +1,28 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-function MyKurly() {
+function MyKurly({ rightSection }) {
+    const navigate = useNavigate();
+
+    const clickOrder = () => {
+        navigate('/mypage/order');
+    };
+
+    const clickReview = () => {
+        navigate('/mypage/review');
+    };
+
+    const clickInquiry = () => {
+        navigate('/mypage/inquiry');
+    };
+
     return (
         <Wrapper>
             <LeftBox>
                 <div className='title'>마이 컬리</div>
                 <ul>
-                    <li>
+                    <li onClick={clickOrder}>
                         <div className='liTitle'>
                             주문내역<div>></div>
                         </div>
@@ -27,7 +42,7 @@ function MyKurly() {
                             배송지관리<div>></div>
                         </div>
                     </li>
-                    <li>
+                    <li onClick={clickReview}>
                         <div className='liTitle'>
                             상품후기<div>></div>
                         </div>
@@ -37,7 +52,7 @@ function MyKurly() {
                             결제수단 컬리페이<div>></div>
                         </div>
                     </li>
-                    <li>
+                    <li onClick={clickInquiry}>
                         <div className='liTitle'>
                             상품문의<div>></div>
                         </div>
@@ -64,7 +79,7 @@ function MyKurly() {
                     </li>
                 </ul>
             </LeftBox>
-            <RightBox></RightBox>
+            <RightBox>{rightSection}</RightBox>
         </Wrapper>
     );
 }
