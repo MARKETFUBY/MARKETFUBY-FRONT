@@ -23,6 +23,10 @@ function Header() {
         navigate('/cart');
     };
 
+    const clickMyPage = () => {
+        navigate('/mypage/order');
+    };
+
     const [openCategory, setOpenCategory] = useState(false);
 
     return (
@@ -63,7 +67,7 @@ function Header() {
                     <SectionDiv>
                         <IconBox>
                             <SpotIcon />
-                            <HeartIcon />
+                            <HeartIcon onClick={clickMyPage} />
                             <CartIcon onClick={clickCart} />
                         </IconBox>
                     </SectionDiv>
