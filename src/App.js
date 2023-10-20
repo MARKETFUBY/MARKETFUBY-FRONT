@@ -35,4 +35,3 @@ function App() {
 }
 
 export default App;
-// https://www.kurly.com/mypage/order
