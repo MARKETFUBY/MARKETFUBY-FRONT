@@ -10,6 +10,8 @@ import MyPage from './pages/MyPage';
 import Order from './components/MyPage/Order';
 import Review from './components/MyPage/Review';
 import Inquiry from './components/MyPage/Inquiry';
+import NewProduct from './pages/NewProduct';
+import Benefit from './pages/Benefit';
 
 function App() {
     return (
@@ -30,6 +32,8 @@ function App() {
                 path='/mypage/inquiry'
                 element={<MyPage rightSection={<Inquiry />} />}
             />
+            <Route path='/new-product' element={<NewProduct />} />
+            <Route path='/benefit' element={<Benefit />} />
         </Routes>
     );
 }
