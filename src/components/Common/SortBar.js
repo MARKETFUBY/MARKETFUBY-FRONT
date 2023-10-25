@@ -40,6 +40,8 @@ const SortList = styled.ul`
     -webkit-box-align: center;
     align-items: center;
     list-style-type: none;
+    margin: 0;
+    cursor: pointer;
 
     li {
         display: flex;
