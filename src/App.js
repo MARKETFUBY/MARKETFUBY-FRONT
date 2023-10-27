@@ -12,6 +12,9 @@ import Review from './components/MyPage/Review';
 import Inquiry from './components/MyPage/Inquiry';
 import NewProduct from './pages/NewProduct';
 import Benefit from './pages/Benefit';
+import Best from './pages/Best';
+import TimeSales from './pages/TimeSales';
+import ProductDetail from './pages/ProductDetail';
 
 function App() {
     return (
@@ -34,6 +37,9 @@ function App() {
             />
             <Route path='/new-product' element={<NewProduct />} />
             <Route path='/benefit' element={<Benefit />} />
+            <Route path='/best' element={<Best />} />
+            <Route path='/time-sales' element={<TimeSales />} />
+            <Route path='/goods/:id' element={<ProductDetail />} />
         </Routes>
     );
 }
