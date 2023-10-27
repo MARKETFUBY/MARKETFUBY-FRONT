@@ -7,11 +7,11 @@ import Product from '../components/Common/Product';
 
 import { PRODUCT_DATA } from './ProductData';
 
-const NewProduct = () => {
+const Best = () => {
     return (
         <>
             <Header />
-            <Title text='신상품' />
+            <Title text='베스트' />
             <Body>
                 <Filter />
                 <Result>
@@ -27,7 +27,7 @@ const NewProduct = () => {
     );
 };
 
-export default NewProduct;
+export default Best;
 
 const Body = styled.div`
     position: relative;
