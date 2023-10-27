@@ -31,6 +31,14 @@ function Header() {
         navigate('/new-product');
     };
 
+    const clickBest = () => {
+        navigate('/best');
+    };
+
+    const clickTimeSales = () => {
+        navigate('/time-sales');
+    };
+
     const clickBenefit = () => {
         navigate('/benefit');
     };
@@ -97,8 +105,8 @@ function Header() {
 
                     <Menu>
                         <li onClick={clickNewProduct}>신상품</li>
-                        <li>베스트</li>
-                        <li>알뜰쇼핑 </li>
+                        <li onClick={clickBest}>베스트</li>
+                        <li onClick={clickTimeSales}>알뜰쇼핑 </li>
                         <li onClick={clickBenefit}> 특가/혜택</li>
                     </Menu>
                     <Delevery>
