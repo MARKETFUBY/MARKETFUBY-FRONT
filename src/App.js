@@ -15,6 +15,7 @@ import Benefit from './pages/Benefit';
 import Best from './pages/Best';
 import TimeSales from './pages/TimeSales';
 import ProductDetail from './pages/ProductDetail';
+import Search from './pages/Search';
 
 function App() {
     return (
@@ -39,6 +40,7 @@ function App() {
             <Route path='/benefit' element={<Benefit />} />
             <Route path='/best' element={<Best />} />
             <Route path='/time-sales' element={<TimeSales />} />
+            <Route path='/search' element={<Search />} />
             <Route path='/goods/:id' element={<ProductDetail />} />
         </Routes>
     );
