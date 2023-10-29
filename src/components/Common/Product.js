@@ -1,10 +1,13 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as CartIcon } from '../../assets/icon/cart.svg';
 import { ReactComponent as CommentIcon } from '../../assets/icon/comment.svg';
 
 const Product = props => {
+    const nav = useNavigate();
+
     return (
-        <Wrapper>
+        <Wrapper onClick={() => nav('/goods/1')}>
             <img src={props.image} />
             <CartBtn>
                 <CartIcon />
