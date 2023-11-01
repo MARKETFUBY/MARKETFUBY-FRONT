@@ -82,9 +82,9 @@ function Header() {
                     >
                         <Icon src={menu}></Icon>
                         <CategoryTitle>카테고리</CategoryTitle>
-                        {openCategory && (
+                        {openCategory ? (
                             <Category setOpenCategory={setOpenCategory} />
-                        )}
+                        ) : null}
                     </CategoryBox>
 
                     <Menu>
@@ -333,10 +333,8 @@ const Delevery = styled.div`
 `;
 const CategorySt = styled.div`
     align-items: center;
-
     position: relative;
     display: flex;
-    -webkit-box-pack: justify;
     justify-content: space-between;
     width: 1050px;
     height: 56px;

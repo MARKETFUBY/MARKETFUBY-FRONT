@@ -6,7 +6,7 @@ import Slide from '../components/Common/Slide';
 function Main() {
     return (
         <>
-            <Header></Header>
+            <Header />
             <Slide />
         </>
     );
