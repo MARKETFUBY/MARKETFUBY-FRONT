@@ -2,7 +2,7 @@ export const category = [
     {
         title: 'SUPER BIG SALE',
         subtitle: [
-            { key: 1, label: '친환경' },
+            { key: 1, label: '친환경1' },
             { key: 2, label: '고구마·감자·당근' },
             { key: 3, label: '시금치·쌈채소·나물' },
             { key: 4, label: '브로콜리·파프리카·양배추' },
@@ -15,7 +15,7 @@ export const category = [
     {
         title: '채소',
         subtitle: [
-            { key: 1, label: '친환경' },
+            { key: 1, label: '친환경2' },
             { key: 2, label: '고구마·감자·당근' },
             { key: 3, label: '시금치·쌈채소·나물' },
             { key: 4, label: '브로콜리·파프리카·양배추' },

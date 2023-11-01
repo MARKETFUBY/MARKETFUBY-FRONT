@@ -5,12 +5,21 @@ import { category } from './CategoryList';
 
 function Category({ setOpenCategory }) {
     const navigate = useNavigate();
-    const [categories, setCategories] = useState([]);
-    const [categoryId, setCategoryId] = useState(null);
+    // const [categories, setCategories] = useState([]);
+    // const [categoryId, setCategoryId] = useState(null);
     const [active, setActive] = useState(false);
+
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedSubCategory, setSelectedSubCategory] = useState(null);
 
     const toggleCategory = () => {
         setActive(!active);
+    };
+
+    const handleCategoryClick = section => {
+        setSelectedCategory(prevRegion =>
+            prevRegion === section ? null : section,
+        );
     };
 
     return (
@@ -21,9 +30,44 @@ function Category({ setOpenCategory }) {
             >
                 {category && (
                     <div className='mainCategoryFrame'>
-                        {category.map((section, index) => (
-                            <div key={index}>{section.title}</div>
-                        ))}
+                        <ul>
+                            {category.map((section, index) => (
+                                <li
+                                    key={index}
+                                    onMouseEnter={() =>
+                                        handleCategoryClick(section.title)
+                                    }
+                                >
+                                    <span>{section.title}</span>
+                                </li>
+                            ))}
+                            {selectedCategory && (
+                                <div
+                                    className='subcategoryFrame'
+                                    // onMouseLeave={() => setCategoryId(0)}
+                                >
+                                    {category
+                                        .find(
+                                            category =>
+                                                category.title ===
+                                                selectedCategory,
+                                        )
+                                        .subtitle.map(data => (
+                                            <div key={data.key}>
+                                                <li
+                                                    onClick={() =>
+                                                        setSelectedSubCategory(
+                                                            data.key,
+                                                        )
+                                                    }
+                                                >
+                                                    <span>{data.label}</span>
+                                                </li>
+                                            </div>
+                                        ))}
+                                </div>
+                            )}
+                        </ul>
                     </div>
                 )}
             </div>
@@ -39,13 +83,12 @@ const Div = styled.div`
     min-height: 200px;
     position: absolute;
     display: flex;
-    top: 50px;
-    /* left:15%; */
+    top: 40px;
     padding-top: 10px;
+    animation: 0.2s linear 0s 1 normal none running animation-tb0mmg;
 
     .categoryContainer {
         position: relative;
-        width: 249px;
         border: 1px solid rgb(221, 221, 221);
         background-color: rgb(255, 255, 255);
     }
@@ -54,6 +97,35 @@ const Div = styled.div`
         height: 100%;
         &:hover {
             border-right: none;
+        }
+        ul {
+            overflow-y: auto;
+            width: 247px;
+            height: 100%;
+            background-color: rgb(255, 255, 255);
+            cursor: pointer;
+            margin: 0;
+            padding: 0;
+            padding-top: 10px;
+        }
+        li {
+            list-style: none;
+            padding: 7px 0px 9px 14px;
+            &:hover {
+                background-color: #f7f7f7;
+                font-weight: bold;
+            }
+        }
+        span {
+            flex: 1 1 0%;
+            padding: 1px 20px 0px 10px;
+            color: rgb(51, 51, 51);
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 22px;
+            &:hover {
+                color: rgb(95, 0, 128);
+            }
         }
         .mainCategoriesName {
             padding: 20px;
@@ -70,6 +142,25 @@ const Div = styled.div`
         }
     }
     .subcategoryFrame {
+        width: 268px;
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        left: 247px;
+        background-color: rgb(247, 247, 247);
+        z-index: -1;
+        animation: 0.2s linear 0s 1;
+        padding-top: 10px;
+        li {
+            padding: 7px 0px 9px 14px;
+        }
+        span {
+            font-size: 16px;
+            &:hover {
+                font-weight: bold;
+                text-decoration: underline;
+            }
+        }
         .subCategoriesName {
             width: 200px;
             padding: 20px;
@@ -84,114 +175,3 @@ const Div = styled.div`
         }
     }
 `;
-// function Category({ setOpenCategory }) {
-//     const [categories, setCategories] = useState([]);
-//     const [categoryId, setCategoryId] = useState(null);
-
-//     const navigate = useNavigate();
-
-//     // const findSubCategory = id => {
-//     //     const subCategory = categories.find(
-//     //         category => +category.mainCategoriesId === +id,
-//     //     );
-
-//     //     if (!subCategory) return [];
-//     //     else return subCategory.subCategories;
-//     // };
-
-//     return (
-//         <Div
-//             className='categoryContainer'
-//             onMouseLeave={() => setOpenCategory(false)}
-//         >
-//             {/* <div className='mainCategoryFrame'>
-//                 {categories.map(category => {
-//                     return (
-//                         <li
-//                             key={category.mainCategoriesId}
-//                             id={category.mainCategoriesId}
-//                             className='mainCategoriesName'
-//                             onMouseEnter={() => {
-//                                 setCategoryId(category.mainCategoriesId);
-//                             }}
-//                             onClick={() => {
-//                                 navigate(`/list/${category.mainCategoriesId}`);
-//                             }}
-//                         >
-//                             {category.mainCategoriesName}
-//                         </li>
-//                     );
-//                 })}
-//             </div>
-//             <div
-//                 className='subcategoryFrame'
-//                 onMouseLeave={() => setCategoryId(0)}
-//             >
-//                 {findSubCategory(categoryId)?.map(category => {
-//                     return (
-//                         <li
-//                             key={category.subCategoriesId}
-//                             id={category.subCategoriesId}
-//                             className='subCategoriesName'
-//                             onClick={() => {
-//                                 navigate(
-//                                     `/list/sub/${category.subCategoriesId}`,
-//                                 );
-//                             }}
-//                         >
-//                             {category?.subCategoriesName}
-//                         </li>
-//                     );
-//                 })}
-//             </div> */}
-//         </Div>
-//     );
-// }
-
-// export default Category;
-
-// const Div = styled.div`
-//     .categoryContainer {
-//         position: absolute;
-//         top: 50px;
-//         display: flex;
-//     }
-//     .mainCategoryFrame {
-//         background-color: $white-color;
-//         height: 100%;
-//         &:hover {
-//             border-right: none;
-//         }
-//         .mainCategoriesName {
-//             padding: 20px;
-//             background-color: $white-color;
-//             border-left: 1px solid #f7f7f7;
-//             border-right: 1px solid #f7f7f7;
-//             width: 200px;
-//             height: 30px;
-//             font-size: 16px;
-
-//             &:hover {
-//                 background-color: #f7f7f7;
-//                 font-weight: bold;
-//                 color: $primary-color;
-//             }
-//         }
-//     }
-//     .subcategoryFrame {
-//         .subCategoriesName {
-//             width: 200px;
-//             @include flex(null, null, column);
-//             padding: 20px;
-//             background-color: #f7f7f7;
-//             width: 200px;
-//             height: 30px;
-//             font-size: 16px;
-//             &:hover {
-//                 color: $primary-color;
-//                 font-weight: bold;
-//                 text-decoration: underline;
-//             }
-//         }
-//     }
-// `;
