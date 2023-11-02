@@ -27,6 +27,22 @@ function Header() {
         navigate('/mypage/order');
     };
 
+    const clickNewProduct = () => {
+        navigate('/new-product');
+    };
+
+    const clickBest = () => {
+        navigate('/best');
+    };
+
+    const clickTimeSales = () => {
+        navigate('/time-sales');
+    };
+
+    const clickBenefit = () => {
+        navigate('/benefit');
+    };
+
     const [openCategory, setOpenCategory] = useState(false);
 
     return (
@@ -88,10 +104,10 @@ function Header() {
                     </CategoryBox>
 
                     <Menu>
-                        <li>신상품</li>
-                        <li>베스트</li>
-                        <li>알뜰쇼핑 </li>
-                        <li> 특가/혜택</li>
+                        <li onClick={clickNewProduct}>신상품</li>
+                        <li onClick={clickBest}>베스트</li>
+                        <li onClick={clickTimeSales}>알뜰쇼핑 </li>
+                        <li onClick={clickBenefit}> 특가/혜택</li>
                     </Menu>
                     <Delevery>
                         <span class='purple'>샛별・택배</span>
