@@ -1,7 +1,19 @@
-import React from 'react';
+import { useState, React } from 'react';
 import styled from 'styled-components';
 
 function CartItem() {
+    const [count, setCount] = useState(1);
+
+    const handleDecrement = () => {
+        if (count > 1) {
+            setCount(count - 1);
+        }
+    };
+
+    const handleIncrement = () => {
+        setCount(count + 1);
+    };
+
     return (
         <Div>
             <Check>
@@ -17,9 +29,9 @@ function CartItem() {
             </div>
             <div className='name'>[청산바다] 완도 전복 250g(2마리) (생물)</div>
             <div className='count'>
-                <MinusBtn />
-                <div className='itemCount'>1</div>
-                <PlusBtn />
+                <MinusBtn onClick={handleDecrement} />
+                <div className='itemCount'>{count}</div>
+                <PlusBtn onClick={handleIncrement} />
             </div>
             <div className='price'>
                 <span className='itemPrice'>31,000원</span>

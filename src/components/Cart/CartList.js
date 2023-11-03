@@ -16,7 +16,8 @@ function CartList() {
                             ></input>
                             <label for='checkall'>✔</label>
                         </Check>
-                        <span>전체 선택(2/2)</span>
+                        <div>전체 선택(2/2)</div>
+                        <span></span>
                         <button className='deleteBtn'>선택삭제</button>
                     </label>
                 </div>
@@ -44,8 +45,16 @@ function CartList() {
             <ChoiceBox>
                 <div className='choiceSection'>
                     <label className='all'>
-                        <Input type={'checkbox'} />
-                        <span>전체 선택(2/2)</span>
+                        <Check>
+                            <input
+                                id='checkall'
+                                type='checkbox'
+                                // checked=''
+                            ></input>
+                            <label for='checkall'>✔</label>
+                        </Check>
+                        <div>전체 선택(2/2)</div>
+                        <span></span>
                         <button className='deleteBtn'>선택삭제</button>
                     </label>
                 </div>
@@ -83,6 +92,15 @@ const ChoiceBox = styled.div`
         display: flex;
         align-items: center;
         font-size: 16px;
+
+        span {
+            display: inline-block;
+            width: 1px;
+            height: 14px;
+            background: rgb(221, 221, 221);
+            margin: 6px 21px 0px 22px;
+            vertical-align: top;
+        }
     }
 
     .deleteBtn {
@@ -91,7 +109,6 @@ const ChoiceBox = styled.div`
         color: #333;
         background-color: transparent;
         border: none;
-        margin-left: 20px;
         text-align: center;
     }
 `;
