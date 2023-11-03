@@ -38,6 +38,7 @@ function Category({ setOpenCategory }) {
                                         handleCategoryClick(section.title)
                                     }
                                 >
+                                    <img src={section.img}></img>
                                     <span>{section.title}</span>
                                 </li>
                             ))}
@@ -91,8 +92,15 @@ const Div = styled.div`
         position: relative;
         border: 1px solid rgb(221, 221, 221);
         background-color: rgb(255, 255, 255);
+        position: relative;
+        z-index: 21;
+        /* width: 517px; */
     }
     .mainCategoryFrame {
+        img {
+            width: 24px;
+            height: 24px;
+        }
         background-color: white;
         height: 100%;
         &:hover {
@@ -102,13 +110,14 @@ const Div = styled.div`
             overflow-y: auto;
             width: 247px;
             height: 100%;
-            background-color: rgb(255, 255, 255);
+            /* background-color: rgb(255, 255, 255); */
             cursor: pointer;
             margin: 0;
             padding: 0;
             padding-top: 10px;
         }
         li {
+            display: flex;
             list-style: none;
             padding: 7px 0px 9px 14px;
             &:hover {
@@ -150,7 +159,7 @@ const Div = styled.div`
         background-color: rgb(247, 247, 247);
         z-index: -1;
         animation: 0.2s linear 0s 1;
-        padding-top: 10px;
+        padding-top: 5px;
         li {
             padding: 7px 0px 9px 14px;
         }

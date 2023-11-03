@@ -11,6 +11,7 @@ export const category = [
             { key: 7, label: '냉동·이색·간편채소' },
             { key: 8, label: '콩나물·버섯' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/1/4IYbd0CEWkokpqiN00CAL9cDC2Q7nT101TDEn0tF.png',
     },
     {
         title: '과일·견과쌀',
@@ -23,6 +24,7 @@ export const category = [
             { key: 6, label: '견과류' },
             { key: 7, label: '쌀·잡곡' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/2/DNXCcUaXoXakDOdHiGhIMCNUeUjJioG9EyeQ7RRX.png',
     },
     {
         title: '수산·해산·건어물',
@@ -36,6 +38,7 @@ export const category = [
             { key: 7, label: '김·미역·해조류' },
             { key: 8, label: '건어물다시팩' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/3/fivaoZPBTeqaDswJUgr3k0xMV0von36Qb9qnn7ZZ.png',
     },
     {
         title: '정육·계란',
@@ -49,6 +52,7 @@ export const category = [
             { key: 7, label: '양고기' },
             { key: 8, label: '콩나물·버섯' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/4/jj6zZg2sY94aytlc2k1udIAmWWvmUignR9VYaMcm.png',
     },
     {
         title: '국·반찬· 메인요리',
@@ -62,6 +66,7 @@ export const category = [
             { key: 7, label: '냉동·이색·간편채소' },
             { key: 8, label: '콩나물·버섯' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/5/CkyoRnUe2q9ngIOLW3bJPRYBw9xq9BHZ3fNQIq1c.png',
     },
     {
         title: '샐러드·간편식',
@@ -75,6 +80,7 @@ export const category = [
             { key: 7, label: '죽·스프·카레' },
             { key: 8, label: '선식·시리얼' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/6/kwat5Szmq0ONTpMd4hlbcGmCOBd3FsMPyTzWxKBb.png',
     },
     {
         title: '면·양념·오일',
@@ -86,6 +92,7 @@ export const category = [
             { key: 5, label: '소금·설탕·향신료' },
             { key: 6, label: '밀가루가루·믹스' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/7/CL0LpJynh8Nh2Vqmnm62RVTPePWVU84VkWwQPjdO.png',
     },
     {
         title: '생수·음료·우유·커피',
@@ -97,6 +104,7 @@ export const category = [
             { key: 5, label: '차' },
             { key: 6, label: '커피용품' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/8/bKllScRqF9gQ5q58LcmBfOOhgBrCOdVypPiRvQkL.png',
     },
     {
         title: '간식·과자·떡',
@@ -106,6 +114,7 @@ export const category = [
             { key: 3, label: '떡·한과' },
             { key: 4, label: '아이스크림' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/9/5qKRHLtIeBWLxUPa1g3koUhqsAkc39YjtMnyIXCJ.png',
     },
     {
         title: '베이커리·치즈·델리',
@@ -119,6 +128,7 @@ export const category = [
             { key: 7, label: '냉동·이색·간편채소' },
             { key: 8, label: '콩나물·버섯' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/10/bIjVH9L4oDFYv0GpjBijA6QQEjiDOW0KoflLVNC1.png',
     },
     {
         title: '건강식품',
@@ -132,6 +142,7 @@ export const category = [
             { key: 7, label: '유아동' },
             { key: 8, label: '콩나물·버섯' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/11/vEGBXqN7a2bxTC3v6jntEzTqQiwG4ogLkiruPwRs.png',
     },
     {
         title: '와인·위스키',
@@ -142,6 +153,7 @@ export const category = [
             { key: 4, label: '논알콜' },
             { key: 5, label: '와인·위스키용품' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/12/UnO3V0GDnss8p37EKmTGvnF9SzeyzgyzC0O7Wh1R.png',
     },
     {
         title: '전통주',
@@ -151,6 +163,7 @@ export const category = [
             { key: 3, label: '과실주·리큐르' },
             { key: 4, label: '전통주·선물세트' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/13/1vmSDtWcIbzUc8QNl8CV9EQ7h5dWGc4uMg4uY6cP.png',
     },
     {
         title: '생활용품·리빙·캠핑',
@@ -162,6 +175,7 @@ export const category = [
             { key: 5, label: '의약외품·마스크' },
             { key: 6, label: '캠핑용품' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/14/1vTroAoaidyGvcDf1MRU8GhS73GMp9oZ7lm7IT0Z.png',
     },
     {
         title: '스킨케어·메이크업',
@@ -176,6 +190,7 @@ export const category = [
             { key: 8, label: '맨즈케어' },
             { key: 9, label: '뷰티소품·기기' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/15/3OUDPGzCOTPixqHY1wdFEUfHacXxynCpnlzFzFBD.png',
     },
     {
         title: '헤어·바디·구강',
@@ -190,5 +205,6 @@ export const category = [
             { key: 8, label: '향수·디퓨저' },
             { key: 9, label: '헤어·바디소품' },
         ],
+        img: 'https://collection-image.kurly.com/site-category-groups/16/APNr2Xb1ZeF9WcBDky1V9GWHZaCy7kifCkwSjTjy.png',
     },
 ];

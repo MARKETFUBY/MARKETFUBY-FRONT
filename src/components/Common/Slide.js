@@ -75,10 +75,8 @@ export default Slide;
 
 const Wrapper = styled.div`
     overflow: hidden;
-    width: 100vw;
     min-width: 100%;
     max-width: 100%;
-    /* carousel elements */
     .item {
         min-width: 100%;
         max-width: 100%;
@@ -91,7 +89,6 @@ const Wrapper = styled.div`
         width: 100%;
     }
 
-    /* arrow button image */
     .prev-next-button {
         width: 1.65vw;
         filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.25));

@@ -46,7 +46,7 @@ function Header() {
     const [openCategory, setOpenCategory] = useState(false);
 
     return (
-        <>
+        <Div>
             <Wrapper>
                 <NavUser>
                     <Text purple onClick={clickSignup}>
@@ -115,11 +115,16 @@ function Header() {
                     </Delevery>
                 </CategorySt>
             </CategoryContainer>
-        </>
+        </Div>
     );
 }
 
 export default Header;
+
+const Div = styled.div`
+    /* width: 1050px; */
+    /* margin: 0px auto; */
+`;
 
 const Wrapper = styled.div`
     position: relative;
