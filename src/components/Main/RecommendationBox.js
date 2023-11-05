@@ -4,15 +4,30 @@ import 'react-alice-carousel/lib/alice-carousel.css';
 import AliceCarousel from 'react-alice-carousel';
 import Product from '../Common/Product';
 import { PRODUCT_DATA } from '../../pages/ProductData';
+import rightBtn from '../../assets/icon/rightBtn.png';
+
+const responsive = {
+    0: {
+        items: 2,
+    },
+    512: {
+        items: 4,
+    },
+};
 
 function RecommendationBox() {
-    const responsive = {
-        0: {
-            items: 2,
-        },
-        512: {
-            items: 4,
-        },
+    const renderPrevButton = ({ isDisabled }) => {
+        if (isDisabled) {
+            return null;
+        }
+        return <img src={rightBtn} className='prev-button' />;
+    };
+
+    const renderNextButton = ({ isDisabled }) => {
+        if (isDisabled) {
+            return null;
+        }
+        return <img src={rightBtn} className='next-button' />;
     };
 
     const items = PRODUCT_DATA.map(product => {
@@ -29,14 +44,20 @@ function RecommendationBox() {
             </Title>
             <Card>
                 <AliceCarousel
-                    infinite={1000}
-                    animationDuration={1000}
+                    infinite
+                    mouseTracking
+                    dotsDisabled={true}
+                    autoPlayInterval={5000}
                     disableDotsControls
                     disableButtonsControls
                     responsive={responsive}
-                    // autoPlay
                     items={items}
-                    paddingRight={40}
+                    renderPrevButton={renderPrevButton}
+                    renderNextButton={renderNextButton}
+                    duration={400}
+                    startIndex={1}
+                    mouseDragEnabled={true}
+                    className='custom-carousel'
                 />
             </Card>
         </Div>
@@ -76,4 +97,23 @@ const Card = styled.div`
     position: relative;
     width: 1050px;
     margin: 0px auto;
+
+    .alice-carousel__stage-item {
+        padding-right: 15px;
+    }
+    .prev-button {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        top: 170px;
+        left: -20px;
+    }
+
+    .next-button {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        top: 170px;
+        right: 10px;
+    }
 `;
