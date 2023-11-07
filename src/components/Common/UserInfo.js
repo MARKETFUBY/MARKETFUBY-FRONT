@@ -223,6 +223,7 @@ const Box = styled.div`
 
     .addBox {
         display: flex;
+        font-size: 12px;
         justify-content: space-between;
         padding: 15px 12px;
         border-radius: 6px;

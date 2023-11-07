@@ -98,9 +98,9 @@ function SignUp() {
                                 />
                                 {/* {passwordCheck.length !== 0 &&
                                 (isPasswordCheck || ( */}
-                                <span className='warningText'>
+                                {/* <span className='warningText'>
                                     동일한 비밀번호를 입력
-                                </span>
+                                </span> */}
                                 {/* ))} */}
                             </div>
                             <div className='blankBox'> </div>
@@ -119,9 +119,9 @@ function SignUp() {
                                 />
                                 {/* {name.length !== 0 &&
                                 (isNameValid || ( */}
-                                <span className='warningText'>
+                                {/* <span className='warningText'>
                                     이름을 입력해주세요.
-                                </span>
+                                </span> */}
                                 {/* ))} */}
                             </div>
                             <div className='blankBox'> </div>
@@ -141,9 +141,9 @@ function SignUp() {
                                 />
                                 {/* {email.length !== 0 &&
                                 (isEmailValid || ( */}
-                                <span className='warningText'>
+                                {/* <span className='warningText'>
                                     이메일 형식으로 입력해 주세요.
-                                </span>
+                                </span> */}
                                 {/* ))} */}
                             </div>
                             <button
@@ -185,22 +185,28 @@ function SignUp() {
                                 <span className='requiredSymbol'>*</span>
                             </span>
                             <div className='inputContainer'>
-                                <Input
-                                    className='signupInputBox'
-                                    name='number'
-                                    // value={email}
-                                    placeholder='주소 검색'
-                                    // onChange={valueHandler}
-                                />
+                                <button
+                                    className='addressButton'
+                                    // onClick={emailDuplicationCheck}
+                                >
+                                    <span className='duplicationCheckButtonText'>
+                                        주소 검색
+                                    </span>
+                                </button>
+                                <span className='alarm'>
+                                    배송지에 따라 상품 정보가 달라질 수
+                                    있습니다.
+                                </span>
                             </div>
                             <div className='blankBox'> </div>
+                            {/* <div className='blankBox'> </div> */}
                         </div>
 
                         <div className='eachContainer'>
                             <span className='containerTitle'>성별</span>
                             <div className='choiceContainer'>
                                 <div className='label'>
-                                    <input
+                                    <Input
                                         name='genderId'
                                         type='radio'
                                         className='genderChoiceButton'
@@ -208,10 +214,11 @@ function SignUp() {
                                         // checked={genderId === '1'}
                                         // onChange={valueHandler}
                                     />
+                                    <span></span>
                                     <div className='maleLetter'>남자</div>
                                 </div>
                                 <div className='label'>
-                                    <input
+                                    <Input
                                         type='radio'
                                         name='genderId'
                                         className='genderChoiceButton'
@@ -222,7 +229,7 @@ function SignUp() {
                                     <div className='femaleLetter'>여자</div>
                                 </div>
                                 <div className='label'>
-                                    <input
+                                    <Input
                                         type='radio'
                                         name='genderId'
                                         className='genderChoiceButton'
@@ -234,7 +241,7 @@ function SignUp() {
                                         선택 안함
                                     </div>
                                 </div>
-                            </div>{' '}
+                            </div>
                             <div className='blankBox'> </div>
                         </div>
 
@@ -271,6 +278,7 @@ function SignUp() {
                                     // onChange={valueHandler}
                                 />
                             </div>
+                            <div className='blankBox'> </div>
                         </div>
 
                         <div className='eachContainer'>
@@ -294,9 +302,11 @@ function SignUp() {
                                     />
                                     <span>참여 이벤트명</span>
                                 </div>
+                                <div className='blankBox'> </div>
                             </div>
                         </div>
                         <div className='bottomSeparatorBar'></div>
+                        <Border />
                         <div className='signupSubmitButtonContainer'>
                             <button
                                 className='signupSubmitButton'
@@ -346,6 +356,35 @@ const SignupDiv = styled.div`
         color: rgb(51, 51, 51);
     }
 
+    .duplicationCheckButton {
+        display: block;
+        padding: 0px 10px;
+        text-align: center;
+        overflow: hidden;
+        /* width: 100%; */
+        width: 120px;
+        margin-left: 8px;
+        height: 52px;
+        border-radius: 3px;
+        color: rgb(95, 0, 128);
+        background-color: rgb(255, 255, 255);
+        border: 1px solid rgb(95, 0, 128);
+    }
+
+    .addressButton {
+        display: block;
+        padding: 0px 10px;
+        text-align: center;
+        overflow: hidden;
+        width: 100%;
+        margin-left: 8px;
+        height: 52px;
+        border-radius: 3px;
+        color: rgb(95, 0, 128);
+        background-color: rgb(255, 255, 255);
+        border: 1px solid rgb(95, 0, 128);
+    }
+
     .requiredSymbolDescription {
         display: flex;
         flex-direction: row;
@@ -369,6 +408,97 @@ const SignupDiv = styled.div`
         justify-content: space-between;
         flex-direction: row;
         flex: 1 1 0%;
+
+        .male {
+            display: flex;
+            justify-content: space-between;
+            width: 62px;
+            margin-right: 50px;
+        }
+
+        .female {
+            display: flex;
+            justify-content: space-between;
+            width: 62px;
+            margin-right: 50px;
+        }
+
+        .genderChoiceButton {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: rgb(95, 0, 128);
+            border: 1px solid black;
+        }
+    }
+
+    .alarm {
+        display: block;
+        margin-top: 10px;
+        font-size: 12px;
+        line-height: 18px;
+        color: rgb(102, 102, 102);
+    }
+
+    .birthInputContainer {
+        height: 44px;
+        display: flex;
+        margin-left: 10px;
+        align-items: center;
+        width: 60%;
+        border: 1px solid rgb(204, 204, 204);
+        border-radius: 3px;
+        padding: 0px 15px;
+        text-align: center;
+        font-size: 14px;
+        /* border: none; */
+
+        input {
+            width: 100%;
+            height: 40px;
+            padding: 0px 11px 1px 15px;
+            border-radius: 4px;
+            border: none;
+            font-weight: 400;
+            font-size: 16px;
+            text-align: center;
+            line-height: 38px;
+            color: rgb(51, 51, 51);
+            outline: none;
+            box-sizing: border-box;
+        }
+    }
+
+    .recommendContainer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .signupSubmitButtonContainer {
+        display: flex;
+        justify-content: center;
+        border-top: 1px solid rgb(247, 247, 247);
+        padding: 40px 0px;
+
+        button {
+            display: block;
+            padding: 0px 10px;
+            text-align: center;
+            overflow: hidden;
+            width: 240px;
+            height: 56px;
+            border-radius: 3px;
+            color: rgb(255, 255, 255);
+            background-color: rgb(95, 0, 128);
+            border: 0px none;
+        }
+
+        span {
+            display: inline-block;
+            font-size: 16px;
+            font-weight: 500;
+        }
     }
 `;
 const FormDiv = styled.div`
@@ -381,7 +511,7 @@ const FormDiv = styled.div`
     .eachContainer {
         display: inline-flex;
         width: 100%;
-        padding: 10px 20px;
+        padding: 10px 0;
     }
 
     .containerTitle {
@@ -391,10 +521,11 @@ const FormDiv = styled.div`
 
     .inputContainer {
         position: relative;
-        height: 48px;
+        height: 60px;
         padding-bottom: 0px;
         margin: 0;
         flex: 1 1 0%;
+        margin-right: 10px;
     }
 
     .blankBox {
@@ -409,6 +540,7 @@ const FormDiv = styled.div`
         padding: 12px 0px 9px;
     }
 `;
+
 const Input = styled.input`
     width: 100%;
     height: 46px;
@@ -421,4 +553,8 @@ const Input = styled.input`
     color: rgb(51, 51, 51);
     outline: none;
     box-sizing: border-box;
+`;
+const Border = styled.div`
+    padding: 10px 0px;
+    border-bottom: 1px solid rgb(51, 51, 51);
 `;

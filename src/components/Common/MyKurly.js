@@ -100,7 +100,7 @@ const LeftBox = styled.div`
 
     .title {
         height: 75px;
-        padding: 5px 0px 35px 1px;
+        padding: 5px 0px 5px 1px;
         font-weight: 500;
         font-size: 28px;
         line-height: 35px;

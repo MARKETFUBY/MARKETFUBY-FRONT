@@ -29,7 +29,7 @@ const renderSlideInfo = ({ item, itemsCount }) => {
 };
 
 const renderPrevButton = ({ isDisabled }) => {
-    return <img src={right} className='prev-next-button' />;
+    return <img src={right} className='prev-prev-button' />;
 };
 
 const renderNextButton = ({ isDisabled }) => {
@@ -75,10 +75,8 @@ export default Slide;
 
 const Wrapper = styled.div`
     overflow: hidden;
-    width: 100vw;
     min-width: 100%;
     max-width: 100%;
-    /* carousel elements */
     .item {
         min-width: 100%;
         max-width: 100%;
@@ -91,29 +89,30 @@ const Wrapper = styled.div`
         width: 100%;
     }
 
-    /* arrow button image */
-    .prev-next-button {
-        width: 1.65vw;
-        filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.25));
-    }
-
-    .alice-carousel__prev-btn,
-    .alice-carousel__next-btn {
+    .alice-carousel__prev-btn {
+        img {
+            transform: rotate(180deg);
+            width: 52px;
+            height: 52px;
+        }
+        text-align: left;
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-
-        width: 60%;
+        top: 40%;
+        left: 3%;
         padding: 0;
     }
 
-    .alice-carousel__prev-btn {
-        text-align: left;
-    }
-
     .alice-carousel__next-btn {
+        position: absolute;
+        top: 40%;
+        right: 3%;
         text-align: right;
+        /* transform: translate(-50%, -50%); */
+
+        /* width: 60%; */
+        padding: 0;
+
+        filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.25));
     }
 
     .alice-carousel__slide-info {

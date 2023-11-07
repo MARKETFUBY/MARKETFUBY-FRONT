@@ -46,7 +46,7 @@ function Header() {
     const [openCategory, setOpenCategory] = useState(false);
 
     return (
-        <>
+        <Div>
             <Wrapper>
                 <NavUser>
                     <Text purple onClick={clickSignup}>
@@ -98,9 +98,9 @@ function Header() {
                     >
                         <Icon src={menu}></Icon>
                         <CategoryTitle>카테고리</CategoryTitle>
-                        {openCategory && (
+                        {openCategory ? (
                             <Category setOpenCategory={setOpenCategory} />
-                        )}
+                        ) : null}
                     </CategoryBox>
 
                     <Menu>
@@ -115,11 +115,16 @@ function Header() {
                     </Delevery>
                 </CategorySt>
             </CategoryContainer>
-        </>
+        </Div>
     );
 }
 
 export default Header;
+
+const Div = styled.div`
+    /* width: 1050px; */
+    /* margin: 0px auto; */
+`;
 
 const Wrapper = styled.div`
     position: relative;
@@ -349,10 +354,8 @@ const Delevery = styled.div`
 `;
 const CategorySt = styled.div`
     align-items: center;
-
     position: relative;
     display: flex;
-    -webkit-box-pack: justify;
     justify-content: space-between;
     width: 1050px;
     height: 56px;

@@ -35,7 +35,7 @@ function Review() {
             </Box>
             <Content>
                 <span>총 3개</span>
-                <button>작성시 유의사항</button>
+                <button className='alarm'>작성시 유의사항</button>
                 <ReviewBox></ReviewBox>
                 <ReviewBox></ReviewBox>
                 <ReviewBox></ReviewBox>
@@ -144,7 +144,7 @@ const Content = styled.div`
         line-height: 17px;
     }
 
-    button {
+    .alarm {
         position: absolute;
         top: -38px;
         right: 3px;
