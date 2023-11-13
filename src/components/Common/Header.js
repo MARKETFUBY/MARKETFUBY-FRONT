@@ -49,7 +49,7 @@ function Header() {
         <Div>
             <Wrapper>
                 <NavUser>
-                    <Text purple onClick={clickSignup}>
+                    <Text purple='true' onClick={clickSignup}>
                         회원가입
                     </Text>
                     <Space />
@@ -71,7 +71,7 @@ function Header() {
                             />
                             <LogoBtn onClick={clickLogo}>마켓컬리</LogoBtn>
                             <Gab />
-                            <LogoBtn beauty>뷰티컬리</LogoBtn>
+                            <LogoBtn beauty='true'>뷰티컬리</LogoBtn>
                         </SectionDiv>
                         <SectionDiv>
                             <SearchBox>
@@ -110,7 +110,7 @@ function Header() {
                         <li onClick={clickBenefit}> 특가/혜택</li>
                     </Menu>
                     <Delevery>
-                        <span class='purple'>샛별・택배</span>
+                        <span className='purple'>샛별・택배</span>
                         배송 안내
                     </Delevery>
                 </CategorySt>
