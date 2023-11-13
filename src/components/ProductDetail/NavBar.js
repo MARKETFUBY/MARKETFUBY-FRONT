@@ -22,7 +22,7 @@ const Wrapper = styled.nav`
     width: 1010px;
     box-shadow: inset 0 -0.5px 0 0 #ddd;
     background-color: #fff;
-    margin: 90px auto 0px;
+    margin: 50px auto 0px;
 `;
 
 const BtnWrapper = styled.ul`
