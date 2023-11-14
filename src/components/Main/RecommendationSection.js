@@ -5,6 +5,7 @@ import RecommendationBox from './RecommendationBox';
 
 function RecommendationSection() {
     const [data, setData] = useState([]);
+    const [listLength, setListLength] = useState(0);
 
     useEffect(() => {
         getMain();
@@ -13,18 +14,20 @@ function RecommendationSection() {
     const getMain = async () => {
         try {
             const getData = await getMainList();
-            setData(getData);
-            console.log(data);
+            setData(
+                Object.entries(getData).map(([key, value]) => ({ key, value })),
+            );
         } catch (err) {
             console.log(err);
         }
     };
+
     return (
-        <Div>
-            <RecommendationBox />
-            <RecommendationBox />
-            <RecommendationBox />
-        </Div>
+        <div>
+            {data.map((section, key) => (
+                <RecommendationBox key={key} data={section.value} />
+            ))}
+        </div>
     );
 }
 
