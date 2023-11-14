@@ -5,7 +5,6 @@ import RecommendationBox from './RecommendationBox';
 
 function RecommendationSection() {
     const [data, setData] = useState([]);
-    const [listLength, setListLength] = useState(0);
 
     useEffect(() => {
         getMain();

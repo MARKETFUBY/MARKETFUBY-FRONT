@@ -1,8 +1,26 @@
-import React from 'react';
+import { React, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { getMyOrder } from '../../api/mypage';
 import OrderContent from './OrderContent';
 
 function Order() {
+    const [orderList, setOrderList] = useState([]);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        getOrder();
+    }, []);
+
+    const getOrder = async () => {
+        try {
+            const getData = await getMyOrder();
+            setData(getData);
+            // setOrderList(getData.productList);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <div>
             <TopBox>
@@ -20,9 +38,9 @@ function Order() {
             </TopBox>
             <Line />
             <OrderBox>
-                <OrderContent />
-                <OrderContent />
-                <OrderContent />
+                {/* {reviewList.map((data, key) => (
+                    <OrderContent data={data} key={key} />
+                ))} */}
             </OrderBox>
         </div>
     );

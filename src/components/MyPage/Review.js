@@ -1,8 +1,26 @@
-import React from 'react';
+import { React, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { getMyReview } from '../../api/mypage';
 import ReviewBox from './ReviewBox';
 
 function Review() {
+    const [reviewList, setLivewList] = useState([]);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        getReview();
+    }, []);
+
+    const getReview = async () => {
+        try {
+            const getData = await getMyReview();
+            setData(getData);
+            setLivewList(getData.productList);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <div>
             <TopBox>
@@ -34,11 +52,11 @@ function Review() {
                 </article>
             </Box>
             <Content>
-                <span>총 3개</span>
+                <span>총 {data.total}개</span>
                 <button className='alarm'>작성시 유의사항</button>
-                <ReviewBox></ReviewBox>
-                <ReviewBox></ReviewBox>
-                <ReviewBox></ReviewBox>
+                {reviewList.map((data, key) => (
+                    <ReviewBox data={data} key={key} />
+                ))}
             </Content>
         </div>
     );
