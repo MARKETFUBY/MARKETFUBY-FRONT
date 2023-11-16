@@ -6,7 +6,7 @@ function OrderContent({ data }) {
     return (
         <Div>
             <div className='top'>
-                <span>2023.10.14 (22시 21분)</span>
+                <span>{data.date}</span>
                 <a>주문내역 상세보기</a>
             </div>
             <div className='main'>

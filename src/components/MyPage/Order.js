@@ -5,7 +5,6 @@ import OrderContent from './OrderContent';
 
 function Order() {
     const [orderList, setOrderList] = useState([]);
-    const [data, setData] = useState([]);
 
     useEffect(() => {
         getOrder();
@@ -14,7 +13,6 @@ function Order() {
     const getOrder = async () => {
         try {
             const getData = await getMyOrder();
-            setData(getData);
             setOrderList(getData.orderList);
             console.log(orderList);
         } catch (err) {
