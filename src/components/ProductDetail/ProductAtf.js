@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import product1 from '../../assets/product/product1.png';
 import { ReactComponent as RightArrow } from '../../assets/product/arrow_right.svg';
+import { ReactComponent as HeartIcon } from '../../assets/product/heart.svg';
+import { ReactComponent as AlarmIcon } from '../../assets/product/alarm.svg';
 
 const ProductAtf = () => {
     return (
@@ -111,8 +113,27 @@ const ProductAtf = () => {
                     </Info>
                 </InfoWrapper>
                 <TotalPriceWrapper>
-                    <TotalPrice></TotalPrice>
+                    <TotalPriceInfo>
+                        <span className='total-price-text'>총 상품금액 :</span>
+                        <span className='price-num'>12,000</span>
+                        <span className='price-unit'>원</span>
+                    </TotalPriceInfo>
+                    <TotalPriceInfo>
+                        <span className='save-icon-text'>적립</span>
+                        <span className='save-info-text'>
+                            로그인 후, 적립 혜택 제공
+                        </span>
+                    </TotalPriceInfo>
                 </TotalPriceWrapper>
+                <BtnWrapper>
+                    <SquareBtn>
+                        <HeartIcon />
+                    </SquareBtn>
+                    <SquareBtn>
+                        <AlarmIcon />
+                    </SquareBtn>
+                    <CartBtn>장바구니 담기</CartBtn>
+                </BtnWrapper>
             </RightSection>
         </Wrapper>
     );
@@ -297,6 +318,7 @@ const SavePointBottom = styled.div`
 const InfoWrapper = styled.ul`
     margin-top: 20px;
     padding: 0;
+    border-bottom: 1px solid #f4f4f4;
 `;
 
 const Info = styled.li`
@@ -429,8 +451,88 @@ const TotalPriceWrapper = styled.div`
     align-items: flex-end;
 `;
 
-const TotalPrice = styled.div`
+const TotalPriceInfo = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
+
+    span {
+        &.total-price-text {
+            padding-right: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgb(51, 51, 51);
+            line-height: 20px;
+        }
+
+        &.price-num {
+            font-weight: bold;
+            font-size: 32px;
+            color: rgb(51, 51, 51);
+            line-height: 36px;
+        }
+
+        &.price-unit {
+            padding-left: 5px;
+            font-size: 20px;
+            font-weight: 600;
+            color: rgb(51, 51, 51);
+            line-height: 30px;
+        }
+
+        &.save-icon-text {
+            background-color: rgb(255, 191, 0);
+            margin: 1px 6px 0px 0px;
+            padding: 0px 7px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+            color: rgb(255, 255, 255);
+            line-height: 20px;
+        }
+
+        &.save-info-text {
+            font-size: 14px;
+            line-height: 1.45;
+            color: rgb(102, 102, 102);
+            padding-top: 10px;
+        }
+    }
+`;
+
+const BtnWrapper = styled.div`
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+`;
+
+const SquareBtn = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    width: 56px;
+    height: 56px;
+    border-radius: 3px;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    cursor: pointer;
+`;
+
+const CartBtn = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 56px;
+    padding: 0 10px;
+    overflow: hidden;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 3px;
+    color: #fff;
+    background-color: #5f0080;
+    border: 0;
+    cursor: pointer;
 `;
