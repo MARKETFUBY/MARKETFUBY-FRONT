@@ -1,8 +1,35 @@
-import React from 'react';
+import { React, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CartItem from './CartItem';
 
 function CartList({ roomTempList, refrigeList, frozenList }) {
+    const [checkedRefrigeItems, setCheckedRefrigeItems] = useState(
+        Array(refrigeList.length).fill(false),
+    );
+    const [checkedRoomItems, setCheckedRoomItems] = useState(
+        Array(roomTempList.length).fill(false),
+    );
+    const [checkedFrozenItems, setCheckedFrozenItems] = useState(
+        Array(frozenList.length).fill(false),
+    );
+
+    const handleCheckRefrigeChange = index => {
+        const newCheckedRefrigeItems = [...checkedRefrigeItems];
+        newCheckedRefrigeItems[index] = !newCheckedRefrigeItems[index];
+        setCheckedRefrigeItems(newCheckedRefrigeItems);
+    };
+    const handleCheckRoomChange = index => {
+        const newCheckedRoomItems = [...checkedRoomItems];
+        newCheckedRoomItems[index] = !newCheckedRoomItems[index];
+        setCheckedRoomItems(newCheckedRoomItems);
+    };
+    const handleCheckFrozenChange = index => {
+        console.log('index', index);
+        const newCheckedFrozenItems = [...checkedFrozenItems];
+        newCheckedFrozenItems[index] = !newCheckedFrozenItems[index];
+        setCheckedFrozenItems(newCheckedFrozenItems);
+    };
+
     return (
         <Div>
             <ChoiceBox>
@@ -22,25 +49,98 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                     </label>
                 </div>
             </ChoiceBox>
-            <div className='cartListDropTab'>
-                {/* <div className='cartListIconBox'>
-                    {list.icon}
-                    <p className='cartListText'>{list.type}</p>
-                </div> */}
-            </div>
+            <TopIconBox>
+                <h4>
+                    <span className='top'>
+                        <span>
+                            <span
+                                className='iconImg'
+                                style={{
+                                    backgroundImage:
+                                        'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwt)',
+                                }}
+                            ></span>
+                        </span>
+                        냉장식품
+                    </span>
+                </h4>
+                <div className='cartListIconBox'>
+                    <p className='cartListText'>↓</p>
+                </div>
+            </TopIconBox>
             <div className='cartItemList'>
-                <CartItem
-                // list={list}
-                // key={list.cartId}
-                // setCartData={setCartData}
-                // cartData={cartData}
-                />
-                <CartItem
-                // list={list}
-                // key={list.cartId}
-                // setCartData={setCartData}
-                // cartData={cartData}
-                />
+                {refrigeList.map((data, key) => (
+                    <CartItem
+                        itemKey={data.productId}
+                        data={data}
+                        checked={checkedRefrigeItems[data.productId]}
+                        onCheckChange={() =>
+                            handleCheckRefrigeChange(data.productId)
+                        }
+                    />
+                ))}
+            </div>
+            <TopIconBox>
+                <h4>
+                    <span className='top'>
+                        <span>
+                            <span
+                                className='iconImg'
+                                style={{
+                                    backgroundImage:
+                                        'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZD0iTTAgMGgzMHYzMEgweiIvPgogICAgICAgIDxwYXRoIGQ9Ik0xNS4wNDQgNGEuNzUuNzUgMCAwIDEgLjc0NC42NDhsLjAwNi4xMDJ2Mi42ODlsMS43Mi0xLjcyYS43NS43NSAwIDAgMSAuOTc3LS4wNzJsLjA4NC4wNzNhLjc1Ljc1IDAgMCAxIC4wNzIuOTc2bC0uMDcyLjA4NC0yLjc4IDIuNzgtLjAwMSA0LjM5IDMuODAyLTIuMTk0IDEuMDE4LTMuNzk4YS43NS43NSAwIDAgMSAxLjQ3LjI3OWwtLjAyLjEwOS0uNjMgMi4zNSAyLjMyOS0xLjM0NmEuNzUuNzUgMCAwIDEgLjgzNCAxLjI0M2wtLjA4NC4wNTctMi4zMjggMS4zNDQgMi4zNDguNjNhLjc1Ljc1IDAgMCAxIC41NS44MDlsLS4wMi4xMWEuNzUuNzUgMCAwIDEtLjgxLjU1bC0uMTA4LS4wMi0zLjc5OC0xLjAxOC0zLjgwMyAyLjE5NCAzLjgwMiAyLjE5NiAzLjc5OS0xLjAxOGEuNzUuNzUgMCAwIDEgLjQ5MyAxLjQxM2wtLjEwNS4wMzYtMi4zNS42MyAyLjMzIDEuMzQ0YS43NS43NSAwIDAgMS0uNjU5IDEuMzQ0bC0uMDkxLS4wNDQtMi4zMjgtMS4zNDQuNjI4IDIuMzQ4YS43NS43NSAwIDAgMS0uNDI1Ljg4MmwtLjEwNS4wMzdhLjc1Ljc1IDAgMCAxLS44ODItLjQyNmwtLjAzNy0uMTA1LTEuMDE3LTMuNzk3LTMuODAzLTIuMTk3djQuMzkxbDIuNzggMi43OGEuNzUuNzUgMCAwIDEtLjk3NiAxLjEzNGwtLjA4NC0uMDczLTEuNzItMS43MnYyLjY5YS43NS43NSAwIDAgMS0xLjQ5My4xMDJsLS4wMDctLjEwMnYtMi42ODhsLTEuNzIgMS43MThhLjc1Ljc1IDAgMCAxLS45NzYuMDczbC0uMDg0LS4wNzNhLjc1Ljc1IDAgMCAxLS4wNzMtLjk3NmwuMDczLS4wODQgMi43OC0yLjc4di00LjM5MWwtMy44MDEgMi4xOTUtMS4wMTggMy43OThhLjc1Ljc1IDAgMCAxLTEuNDctLjI3OWwuMDItLjEwOS42My0yLjM1LTIuMzI5IDEuMzQ2YS43NS43NSAwIDAgMS0uODM1LTEuMjQzbC4wODUtLjA1NyAyLjMyOC0xLjM0NC0yLjM0OC0uNjNhLjc1Ljc1IDAgMCAxLS41NTEtLjgwOWwuMDItLjExYS43NS43NSAwIDAgMSAuODEtLjU1bC4xMS4wMiAzLjc5NyAxLjAxOCAzLjgwMi0yLjE5NS0zLjgwMS0yLjE5NS0zLjc5OSAxLjAxOGEuNzUuNzUgMCAwIDEtLjQ5My0xLjQxM2wuMTA1LS4wMzYgMi4zNS0uNjMtMi4zMy0xLjM0NGEuNzUuNzUgMCAwIDEgLjY1OS0xLjM0NGwuMDkxLjA0NCAyLjMyOCAxLjM0NC0uNjI4LTIuMzQ4YS43NS43NSAwIDAgMSAuNDI1LS44ODJsLjEwNS0uMDM3YS43NS43NSAwIDAgMSAuODgyLjQyNmwuMDM3LjEwNSAxLjAxNyAzLjc5NyAzLjgwMiAyLjE5NnYtNC4zOWwtMi43OC0yLjc4YS43NS43NSAwIDAgMSAuOTc3LTEuMTM0bC4wODQuMDczIDEuNzIgMS43MTlWNC43NWEuNzUuNzUgMCAwIDEgLjc1LS43NXoiIGZpbGw9IiM2RkFGRjMiIGZpbGwtcnVsZT0ibm9uemVybyIvPgogICAgPC9nPgo8L3N2Zz4K)',
+                                }}
+                            ></span>
+                        </span>
+                        냉동식품
+                    </span>
+                </h4>
+                <div className='cartListIconBox'>
+                    <p className='cartListText'>↓</p>
+                </div>
+            </TopIconBox>
+            <div className='cartItemList'>
+                {frozenList.map((data, key) => (
+                    <CartItem
+                        itemKey={data.productId}
+                        data={data}
+                        checked={checkedFrozenItems[data.productId]}
+                        onCheckChange={() =>
+                            handleCheckFrozenChange(data.productId)
+                        }
+                    />
+                ))}
+            </div>
+            <TopIconBox>
+                <h4>
+                    <span className='top'>
+                        <span>
+                            <span
+                                className='iconImg'
+                                style={{
+                                    backgroundImage:
+                                        'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZD0iTTAgMGgzMHYzMEgweiIvPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMuNSA0KSIgc3Ryb2tlPSIjRkY5QjVDIiBzdHJva2Utd2lkdGg9IjEuNSI+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjExLjUiIGN5PSIxMSIgcj0iNiIvPgogICAgICAgICAgICA8cGF0aCBzdHJva2UtbGluZWNhcD0icm91bmQiIGQ9Ik0xMS41IDB2Mk0xOS4yNzggMy4yMjJsLTEuNDE0IDEuNDE0TTIyLjUgMTFoLTJNMTkuMjc4IDE4Ljc3OGwtMS40MTQtMS40MTRNMTEuNSAyMnYtMk0zLjcyMiAxOC43NzhsMS40MTQtMS40MTRNLjUgMTFoMk0zLjcyMiAzLjIyMmwxLjQxNCAxLjQxNCIvPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+Cg==)',
+                                }}
+                            ></span>
+                        </span>
+                        상온식품
+                    </span>
+                </h4>
+                <div className='cartListIconBox'>
+                    <p className='cartListText'>↓</p>
+                </div>
+            </TopIconBox>
+            <div className='cartItemList'>
+                {roomTempList.map((data, key) => (
+                    <CartItem
+                        itemKey={data.productId}
+                        data={data}
+                        checked={checkedRoomItems[data.productId]}
+                        onCheckChange={() =>
+                            handleCheckRoomChange(data.productId)
+                        }
+                    />
+                ))}
             </div>
             <ChoiceBox>
                 <div className='choiceSection'>
@@ -117,6 +217,41 @@ const Input = styled.input`
     box-sizing: border-box;
     padding: 0;
     overflow: hidden;
+`;
+
+const TopIconBox = styled.div`
+    display: flex;
+    justify-content: space-between;
+    height: 60px;
+    border-top: 1px solid rgb(51, 51, 51);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+
+    .top {
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+    }
+
+    span {
+        margin-right: 8px;
+        vertical-align: top;
+    }
+
+    .icon {
+        margin-right: 8px;
+        vertical-align: top;
+    }
+
+    .iconImg {
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+        background-size: cover;
+        background-position: center center;
+        background-image: ;
+    }
 `;
 
 const Check = styled.div`
