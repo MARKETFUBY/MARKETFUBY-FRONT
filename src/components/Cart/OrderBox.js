@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function OrderBox() {
+function OrderBox({ totalAmount, discountAmount, paymentAmount }) {
+    console.log('가격', totalAmount, discountAmount, paymentAmount);
     return (
         <Div>
             <OrderDiv>
@@ -23,20 +24,21 @@ function OrderBox() {
                 <Price>
                     <div className='priceSection'>
                         <span>상품금액</span>
-                        <span>40,900원</span>
+                        <span>{totalAmount}원</span>
                     </div>
                     <div className='priceSection'>
                         <span>상품할인금액</span>
-                        <span>0원</span>
+                        <span>{discountAmount}원</span>
                     </div>
                     <div className='priceSection'>
                         <span>배송비</span>
-                        <span>4000원</span>
+                        <span>0원</span>
                     </div>
                     <div className='priceSection'>
                         <span>결제예상금액</span>
                         <span>
-                            <span className='totalPrice'>4000</span>원
+                            <span className='totalPrice'>{paymentAmount}</span>
+                            원
                         </span>
                     </div>
                 </Price>

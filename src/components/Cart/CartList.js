@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import CartItem from './CartItem';
 
-function CartList() {
+function CartList({ roomTempList, refrigeList, frozenList }) {
     return (
         <Div>
             <ChoiceBox>

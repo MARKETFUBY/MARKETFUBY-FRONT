@@ -2,15 +2,24 @@ import React from 'react';
 import styled from 'styled-components';
 import CartList from './CartList';
 import OrderBox from './OrderBox';
+import { cart } from './dummydata';
 
 function CartComponent() {
     return (
         <Div>
             <div className='cartContentsBox'>
                 <CartBox>
-                    <CartList />
+                    <CartList
+                        roomTempList={cart[0].roomTempList}
+                        refrigeList={cart[0].refrigeList}
+                        frozenList={cart[0].frozenList}
+                    />
                 </CartBox>
-                <OrderBox />
+                <OrderBox
+                    totalAmount={cart[0].totalAmount}
+                    discountAmount={cart[0].discountAmount}
+                    paymentAmount={cart[0].paymentAmount}
+                />
             </div>
         </Div>
     );

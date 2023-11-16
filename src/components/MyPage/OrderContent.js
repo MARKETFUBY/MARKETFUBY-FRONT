@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 function OrderContent({ data }) {
-    console.log('data', data);
     return (
         <Div>
             <div className='top'>
