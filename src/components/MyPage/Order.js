@@ -15,7 +15,8 @@ function Order() {
         try {
             const getData = await getMyOrder();
             setData(getData);
-            // setOrderList(getData.productList);
+            setOrderList(getData.orderList);
+            console.log(orderList);
         } catch (err) {
             console.log(err);
         }
@@ -38,9 +39,9 @@ function Order() {
             </TopBox>
             <Line />
             <OrderBox>
-                {/* {reviewList.map((data, key) => (
+                {orderList.map((data, key) => (
                     <OrderContent data={data} key={key} />
-                ))} */}
+                ))}
             </OrderBox>
         </div>
     );

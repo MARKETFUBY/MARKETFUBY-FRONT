@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function OrderContent() {
+function OrderContent({ data }) {
+    console.log('data', data);
     return (
         <Div>
             <div className='top'>
@@ -14,19 +15,19 @@ function OrderContent() {
                     <div className='content'>
                         <dl>
                             <dt>상품명</dt>
-                            <dd>[Dole] 실속 바나나 600g 외 8건</dd>
+                            <dd>{data.title}</dd>
                         </dl>
                         <dl>
                             <dt>주문번호</dt>
-                            <dd>2320822210167</dd>
+                            <dd>{data.orderId}</dd>
                         </dl>
                         <dl>
                             <dt>결제방법</dt>
-                            <dd>네이버페이</dd>
+                            <dd>{data.paymentType}</dd>
                         </dl>
                         <dl>
                             <dt>결제금액</dt>
-                            <dd>54410원</dd>
+                            <dd>{data.price}</dd>
                         </dl>
                     </div>
                 </div>
