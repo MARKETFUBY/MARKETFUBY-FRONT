@@ -1,4 +1,4 @@
-import { React, useEffect, useRef, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getMyOrder } from '../../api/mypage';
 import OrderContent from './OrderContent';
@@ -51,7 +51,6 @@ const TopBox = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
-    /* padding-bottom: 27px; */
     justify-content: space-between;
 
     .title {
