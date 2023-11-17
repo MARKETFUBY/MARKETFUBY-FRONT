@@ -3,38 +3,40 @@ import { useNavigate } from 'react-router-dom';
 import { ReactComponent as CartIcon } from '../../assets/icon/cart.svg';
 import { ReactComponent as CommentIcon } from '../../assets/icon/comment.svg';
 
-const Product = props => {
+import { useEffect } from 'react';
+
+const Product = ({ product }) => {
     const nav = useNavigate();
 
     return (
-        <Wrapper onClick={() => nav('/goods/1')}>
-            <img src={props.image} />
+        <Wrapper onClick={() => nav(`/goods/${product.productId}`)}>
+            <img src={product.image} />
             <CartBtn>
                 <CartIcon />
                 담기
             </CartBtn>
             <TextWrapper>
-                <DeliveryText>샛별배송</DeliveryText>
-                <ProductName>{props.name}</ProductName>
-                <ProductDescription>{props.description}</ProductDescription>
+                <DeliveryText>{product.delivery}</DeliveryText>
+                <ProductName>{product.title}</ProductName>
+                <ProductDescription>{product.subtitle}</ProductDescription>
                 <PriceWrapper>
-                    <Price className={props.isDiscounted && 'discounted'}>
-                        {props.price}원
+                    <Price className={product.discount > 0 && 'discounted'}>
+                        {product.price}원
                     </Price>
-                    {props.isDiscounted && (
+                    {product.discount > 0 && (
                         <DiscountWrapper>
                             <Price className='discount-rate'>
-                                {props.discountRate}
+                                {product.discount}%
                             </Price>
-                            <Price>{props.discountedPrice}원</Price>
+                            <Price>{product.price}원</Price>
                         </DiscountWrapper>
                     )}
                 </PriceWrapper>
                 <Comment>
                     <CommentIcon />
-                    <span>{props.commentCnt}</span>
+                    {/* <span>{props.commentCnt}</span> */}
                 </Comment>
-                {props.isKurlyOnly && <KurlyOnly>Kurly Only</KurlyOnly>}
+                {/* {props.isKurlyOnly && <KurlyOnly>Kurly Only</KurlyOnly>} */}
             </TextWrapper>
         </Wrapper>
     );
