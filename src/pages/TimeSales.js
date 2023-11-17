@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Header from '../components/Common/Header';
+import banner from '../assets/banner/time_sales_banner.png';
 import Title from '../components/Common/Title';
 import Filter from '../components/Common/Filter';
 import SortBar from '../components/Common/SortBar';
@@ -9,8 +10,9 @@ import { PRODUCT_DATA } from './ProductData';
 
 const TimeSales = () => {
     return (
-        <>
+        <Wrapper>
             <Header />
+            <img src={banner} />
             <Title text='알뜰쇼핑' />
             <Body>
                 <Filter />
@@ -23,11 +25,20 @@ const TimeSales = () => {
                     </ProductList>
                 </Result>
             </Body>
-        </>
+        </Wrapper>
     );
 };
 
 export default TimeSales;
+
+const Wrapper = styled.div`
+    width: 1050px;
+    margin: 0 auto;
+
+    & img {
+        cursor: pointer;
+    }
+`;
 
 const Body = styled.div`
     position: relative;
