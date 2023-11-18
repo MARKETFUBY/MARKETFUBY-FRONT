@@ -1,33 +1,73 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 import Header from '../components/Common/Header';
 import Title from '../components/Common/Title';
+import banner from '../assets/banner/new_product_banner.png';
 import Filter from '../components/Common/Filter';
 import SortBar from '../components/Common/SortBar';
 import Product from '../components/Common/Product';
 
-import { PRODUCT_DATA } from './ProductData';
+import { getProductList } from '../api/product';
 
 const NewProduct = () => {
+    const [products, setProducts] = useState(); // 상품 목록
+
+    // 상품 목록 받아오기
+    const getProducts = async (sort, filters) => {
+        try {
+            const res = await getProductList(
+                'market-newproduct',
+                sort,
+                filters,
+            );
+            setProducts(res.productList);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getProducts(0, null);
+    }, []);
+
+    // 정렬된 상품 목록 받아오기
+    const sortProducts = async sort => {
+        getProducts(sort, null);
+    };
+
     return (
-        <>
+        <Wrapper>
             <Header />
+            <img src={banner} />
             <Title text='신상품' />
             <Body>
                 <Filter />
                 <Result>
-                    <SortBar count='6' />
+                    <SortBar
+                        count={products?.length}
+                        sortProducts={sortProducts}
+                    />
                     <ProductList>
-                        {PRODUCT_DATA.map(product => {
-                            return <Product {...product} />;
+                        {products?.map((product, idx) => {
+                            return <Product key={idx} product={product} />;
                         })}
                     </ProductList>
                 </Result>
             </Body>
-        </>
+        </Wrapper>
     );
 };
 
 export default NewProduct;
+
+const Wrapper = styled.div`
+    width: 1050px;
+    margin: 0 auto;
+
+    & img {
+        cursor: pointer;
+    }
+`;
 
 const Body = styled.div`
     position: relative;

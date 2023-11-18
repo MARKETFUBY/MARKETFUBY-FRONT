@@ -1,44 +1,88 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+import { ReactComponent as InitializationIcon } from '../../assets/icon/initialization.svg';
 import { ReactComponent as ArrowIcon } from '../../assets/icon/arrow.svg';
+import { ReactComponent as CheckIcon } from '../../assets/icon/check.svg';
+import { ReactComponent as PurpleCheckIcon } from '../../assets/icon/check_purple.svg';
+import { FILTER_LIST } from './FilterData';
 
 const Filter = () => {
+    const [isCategoryClicked, setIsCategoryClicked] = useState(false);
+
+    const handleCategoryClick = () => {
+        setIsCategoryClicked(!isCategoryClicked);
+    };
+
     return (
         <Wrapper>
-            <Header>필터</Header>
+            <Header>
+                <span>필터</span>
+                <button>
+                    <InitializationIcon />
+                    <span>초기화</span>
+                </button>
+            </Header>
             <div>
                 <MenuWrapper>
+                    <MenuTitle
+                        className='category'
+                        $clicked={isCategoryClicked}
+                        onClick={handleCategoryClick}
+                    >
+                        <span>카테고리</span>
+                        <ArrowIcon />
+                    </MenuTitle>
+                    {isCategoryClicked && (
+                        <>
+                            <ul>
+                                {FILTER_LIST.map(filter => {
+                                    return (
+                                        <li key={filter.id}>
+                                            {filter.clicked ? (
+                                                <PurpleCheckIcon />
+                                            ) : (
+                                                <CheckIcon />
+                                            )}
+                                            <span>{filter.label}</span>
+                                            <span>22</span>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                            <button>
+                                <span>카테고리 더보기</span>
+                                <ArrowIcon />
+                            </button>
+                        </>
+                    )}
+                </MenuWrapper>
+                <MenuWrapper>
                     <MenuTitle>
-                        <div>카테고리</div>
+                        <span>브랜드</span>
                         <ArrowIcon />
                     </MenuTitle>
                 </MenuWrapper>
                 <MenuWrapper>
                     <MenuTitle>
-                        <div>브랜드</div>
+                        <span>가격</span>
                         <ArrowIcon />
                     </MenuTitle>
                 </MenuWrapper>
                 <MenuWrapper>
                     <MenuTitle>
-                        <div>가격</div>
+                        <span>혜택</span>
                         <ArrowIcon />
                     </MenuTitle>
                 </MenuWrapper>
                 <MenuWrapper>
                     <MenuTitle>
-                        <div>혜택</div>
+                        <span>유형</span>
                         <ArrowIcon />
                     </MenuTitle>
                 </MenuWrapper>
                 <MenuWrapper>
                     <MenuTitle>
-                        <div>유형</div>
-                        <ArrowIcon />
-                    </MenuTitle>
-                </MenuWrapper>
-                <MenuWrapper>
-                    <MenuTitle>
-                        <div>특정상품 제외</div>
+                        <span>특정상품 제외</span>
                         <ArrowIcon />
                     </MenuTitle>
                 </MenuWrapper>
@@ -76,10 +120,85 @@ const Header = styled.div`
     padding-bottom: 20px;
     border-bottom: 1px solid rgb(238, 238, 238);
     line-height: 20px;
+
+    & button {
+        display: inline-flex;
+        align-items: center;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+
+        span {
+            margin-left: 5px;
+            font-weight: 500;
+            color: rgb(221, 221, 221);
+        }
+    }
 `;
 
 const MenuWrapper = styled.div`
     border-bottom: 1px solid rgb(238, 238, 238);
+
+    & ul {
+        padding: 0;
+        margin: 0;
+    }
+
+    & li {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        margin: 9px 0 18px;
+        padding: 0;
+        cursor: pointer;
+
+        svg {
+            margin-right: 8px;
+        }
+
+        span {
+            font-weight: 400;
+
+            &:first-of-type {
+                margin-right: 4px;
+                font-size: 14px;
+                line-height: 17px;
+                color: #333;
+
+                &:hover {
+                    color: #8d4cc4;
+                }
+            }
+
+            &:last-of-type {
+                font-size: 12px;
+                line-height: 16px;
+                color: #ccc;
+            }
+        }
+    }
+
+    & button {
+        width: 100%;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 11px;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+
+        span {
+            color: #999;
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        svg {
+            transform: rotate(90deg);
+        }
+    }
 `;
 
 const MenuTitle = styled.div`
@@ -93,7 +212,7 @@ const MenuTitle = styled.div`
     overflow: hidden;
     cursor: pointer;
 
-    div {
+    span {
         display: flex;
         -webkit-box-align: center;
         align-items: center;
@@ -101,5 +220,16 @@ const MenuTitle = styled.div`
         font-size: 15px;
         line-height: 20px;
         color: rgb(51, 51, 51);
+    }
+
+    svg {
+        transform: rotate(180deg);
+    }
+
+    &.category {
+        svg {
+            transform: ${props =>
+                props.$clicked ? 'rotate(0deg)' : 'rotate(180deg)'};
+        }
     }
 `;

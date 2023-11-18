@@ -1,16 +1,29 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 
-const SortBar = ({ count }) => {
+/*
+ * props
+ * 1. count : 상품 총 개수
+ * 2. handleSortClick : 정렬 버튼 클릭 시 실행할 함수
+ */
+const SortBar = ({ count, sortProducts }) => {
+    const [clickedSort, setClickedSort] = useState(1); // 클릭된 정렬 방법
+
+    const handleSortClick = sort => {
+        setClickedSort(sort + 1);
+        sortProducts(sort);
+    };
+
     return (
         <Wrapper>
             <Count>총 {count}건</Count>
-            <SortList>
-                <li>추천순</li>
-                <li>신상품순</li>
-                <li>판매량순</li>
-                <li>혜택순</li>
-                <li>낮은 가격순</li>
-                <li>높은 가격순</li>
+            <SortList $clicked={clickedSort}>
+                <li onClick={() => handleSortClick(0)}>추천순</li>
+                <li onClick={() => handleSortClick(1)}>신상품순</li>
+                <li onClick={() => handleSortClick(2)}>판매량순</li>
+                <li onClick={() => handleSortClick(3)}>혜택순</li>
+                <li onClick={() => handleSortClick(4)}>낮은 가격순</li>
+                <li onClick={() => handleSortClick(5)}>높은 가격순</li>
             </SortList>
         </Wrapper>
     );
@@ -42,6 +55,10 @@ const SortList = styled.ul`
     list-style-type: none;
     margin: 0;
     cursor: pointer;
+
+    li:nth-child(${props => props.$clicked}) {
+        color: rgb(51, 51, 51);
+    }
 
     li {
         display: flex;
