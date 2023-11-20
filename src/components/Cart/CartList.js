@@ -2,8 +2,13 @@ import { React, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CartItem from './CartItem';
 import arrow from '../../assets/icon/arrow.png';
+import flippedArrow from '../../assets/icon/flippedArrow.png';
 
 function CartList({ roomTempList, refrigeList, frozenList }) {
+    const [isCartRefrigeVisible, setCartRefrigeVisible] = useState(true);
+    const [isCartRoomVisible, setCartRoomVisible] = useState(true);
+    const [isCartFrozenVisible, setCartFrozenVisible] = useState(true);
+
     const [checkedRefrigeItems, setCheckedRefrigeItems] = useState(
         Array(refrigeList.length).fill(false),
     );
@@ -29,6 +34,16 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
         const newCheckedFrozenItems = [...checkedFrozenItems];
         newCheckedFrozenItems[index] = !newCheckedFrozenItems[index];
         setCheckedFrozenItems(newCheckedFrozenItems);
+    };
+
+    const toggleCartRefrigeVisibility = () => {
+        setCartRefrigeVisible(!isCartRefrigeVisible);
+    };
+    const toggleCartRoomVisibility = () => {
+        setCartRoomVisible(!isCartRoomVisible);
+    };
+    const toggleCartFrozenVisibility = () => {
+        setCartFrozenVisible(!isCartFrozenVisible);
     };
 
     return (
@@ -61,22 +76,28 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                         냉장식품
                     </span>
                 </h4>
-                <button className='cartListIconBox'>
-                    <img src={arrow} />
+                <button
+                    className='cartListIconBox'
+                    onClick={toggleCartRefrigeVisibility}
+                >
+                    <img src={isCartRefrigeVisible ? arrow : flippedArrow} />
                 </button>
             </TopIconBox>
-            <div className='cartItemList'>
-                {refrigeList.map((data, key) => (
-                    <CartItem
-                        itemKey={data.productId}
-                        data={data}
-                        checked={checkedRefrigeItems[data.productId]}
-                        onCheckChange={() =>
-                            handleCheckRefrigeChange(data.productId)
-                        }
-                    />
-                ))}
-            </div>
+            {isCartRefrigeVisible && (
+                <div className='cartItemList'>
+                    {refrigeList.map((data, key) => (
+                        <CartItem
+                            key={data.productId}
+                            itemKey={data.productId}
+                            data={data}
+                            checked={checkedRefrigeItems[data.productId]}
+                            onCheckChange={() =>
+                                handleCheckRefrigeChange(data.productId)
+                            }
+                        />
+                    ))}
+                </div>
+            )}
             <TopIconBox>
                 <h4>
                     <span className='top'>
@@ -92,22 +113,27 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                         냉동식품
                     </span>
                 </h4>
-                <button className='cartListIconBox'>
-                    <img src={arrow} />
+                <button
+                    className='cartListIconBox'
+                    onClick={toggleCartRoomVisibility}
+                >
+                    <img src={isCartRoomVisible ? arrow : flippedArrow} />
                 </button>
             </TopIconBox>
-            <div className='cartItemList'>
-                {frozenList.map((data, key) => (
-                    <CartItem
-                        itemKey={data.productId}
-                        data={data}
-                        checked={checkedFrozenItems[data.productId]}
-                        onCheckChange={() =>
-                            handleCheckFrozenChange(data.productId)
-                        }
-                    />
-                ))}
-            </div>
+            {isCartRoomVisible && (
+                <div className='cartItemList'>
+                    {frozenList.map((data, key) => (
+                        <CartItem
+                            itemKey={data.productId}
+                            data={data}
+                            checked={checkedFrozenItems[data.productId]}
+                            onCheckChange={() =>
+                                handleCheckFrozenChange(data.productId)
+                            }
+                        />
+                    ))}
+                </div>
+            )}
             <TopIconBox>
                 <h4>
                     <span className='top'>
@@ -123,22 +149,27 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                         상온식품
                     </span>
                 </h4>
-                <button className='cartListIconBox'>
-                    <img src={arrow} />
+                <button
+                    className='cartListIconBox'
+                    onClick={toggleCartFrozenVisibility}
+                >
+                    <img src={isCartFrozenVisible ? arrow : flippedArrow} />
                 </button>
             </TopIconBox>
-            <div className='cartItemList'>
-                {roomTempList.map((data, key) => (
-                    <CartItem
-                        itemKey={data.productId}
-                        data={data}
-                        checked={checkedRoomItems[data.productId]}
-                        onCheckChange={() =>
-                            handleCheckRoomChange(data.productId)
-                        }
-                    />
-                ))}
-            </div>
+            {isCartFrozenVisible && (
+                <div className='cartItemList'>
+                    {frozenList.map((data, key) => (
+                        <CartItem
+                            itemKey={data.productId}
+                            data={data}
+                            checked={checkedFrozenItems[data.productId]}
+                            onCheckChange={() =>
+                                handleCheckFrozenChange(data.productId)
+                            }
+                        />
+                    ))}
+                </div>
+            )}
             <ChoiceBox>
                 <div className='choiceSection'>
                     <label className='all'>
@@ -165,10 +196,10 @@ const ChoiceBox = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 18px 10px 16px 2px;
+    border-top: 1px solid rgb(244, 244, 244);
     font-size: 14px;
     line-height: 26px;
     font-weight: 500;
-    border-bottom: 1px solid #333;
 
     .choiceSection {
         margin: 0;
