@@ -10,7 +10,7 @@ function OrderContent({ data }) {
             </div>
             <div className='main'>
                 <div className='leftContent'>
-                    <img />
+                    <img src={data.imageUrl} />
                     <div className='content'>
                         <dl>
                             <dt>상품명</dt>

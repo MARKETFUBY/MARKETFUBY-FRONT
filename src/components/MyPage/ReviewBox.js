@@ -5,7 +5,7 @@ function ReviewBox({ data }) {
     return (
         <Wrapper>
             <div className='ImgBox'>
-                <img></img>
+                <img src={data.imageUrl} />
             </div>
             <div className='content'>
                 <div>
