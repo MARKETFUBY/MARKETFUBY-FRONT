@@ -1,8 +1,25 @@
-import React from 'react';
+import { React, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { getMyOrder } from '../../api/mypage';
 import OrderContent from './OrderContent';
 
 function Order() {
+    const [orderList, setOrderList] = useState([]);
+
+    useEffect(() => {
+        getOrder();
+    }, []);
+
+    const getOrder = async () => {
+        try {
+            const getData = await getMyOrder();
+            setOrderList(getData.orderList);
+            console.log(orderList);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <div>
             <TopBox>
@@ -20,9 +37,9 @@ function Order() {
             </TopBox>
             <Line />
             <OrderBox>
-                <OrderContent />
-                <OrderContent />
-                <OrderContent />
+                {orderList.map((data, key) => (
+                    <OrderContent data={data} key={key} />
+                ))}
             </OrderBox>
         </div>
     );
@@ -34,7 +51,6 @@ const TopBox = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
-    /* padding-bottom: 27px; */
     justify-content: space-between;
 
     .title {

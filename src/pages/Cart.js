@@ -16,8 +16,6 @@ function Cart() {
 export default Cart;
 
 const Div = styled.div`
-    width: 1050px;
-    margin: 0px auto;
     padding-bottom: 80px;
 
     .title {

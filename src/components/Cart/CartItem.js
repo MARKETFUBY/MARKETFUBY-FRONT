@@ -1,40 +1,45 @@
 import { useState, React } from 'react';
 import styled from 'styled-components';
 
-function CartItem() {
+function CartItem({ itemKey, data, checked, onCheckChange, updateItemCount }) {
     const [count, setCount] = useState(1);
 
     const handleDecrement = () => {
         if (count > 1) {
             setCount(count - 1);
+            updateItemCount(itemKey, count - 1);
         }
     };
 
     const handleIncrement = () => {
         setCount(count + 1);
+        updateItemCount(itemKey, count + 1);
     };
 
     return (
         <Div>
             <Check>
                 <input
-                    id='check1'
+                    id={itemKey}
                     type='checkbox'
-                    // checked=''
-                ></input>
-                <label for='check1'>✔</label>
+                    checked={checked}
+                    onChange={onCheckChange}
+                />
+                <label className={checked ? 'checked' : ''} htmlFor={itemKey}>
+                    ✔
+                </label>
             </Check>
             <div className='ImgBox'>
-                <img></img>
+                <img src={data.image} alt={data.title} />
             </div>
-            <div className='name'>[청산바다] 완도 전복 250g(2마리) (생물)</div>
+            <div className='name'>{data.title}</div>
             <div className='count'>
-                <MinusBtn onClick={handleDecrement} />
+                <MinusBtn onClick={handleDecrement}>-</MinusBtn>
                 <div className='itemCount'>{count}</div>
-                <PlusBtn onClick={handleIncrement} />
+                <PlusBtn onClick={handleIncrement}>+</PlusBtn>
             </div>
             <div className='price'>
-                <span className='itemPrice'>31,000원</span>
+                <span className='itemPrice'>{data.price}원</span>
             </div>
             <Btn>
                 <span></span>
@@ -174,9 +179,10 @@ const Check = styled.div`
         color: rgb(221, 221, 221);
         margin-right: 12px;
         border-radius: 24px;
-    }
-    input[id='check1']:checked + label {
-        background-color: rgb(95, 0, 128);
-        border: 1px solid rgb(95, 0, 128);
+
+        &.checked {
+            background-color: rgb(95, 0, 128);
+            border: 1px solid rgb(95, 0, 128);
+        }
     }
 `;

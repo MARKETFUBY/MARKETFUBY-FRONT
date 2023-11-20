@@ -1,7 +1,23 @@
-import React from 'react';
+import { React, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { getMyInquiry } from '../../api/mypage';
+import InquiryContent from './InquiryContent';
 
 function Inquiry() {
+    const [inquiryList, setInquiryList] = useState([]);
+
+    useEffect(() => {
+        getInquiry();
+    }, []);
+
+    const getInquiry = async () => {
+        try {
+            const getData = await getMyInquiry();
+            setInquiryList(getData.inquiryList);
+        } catch (err) {
+            console.log(err);
+        }
+    };
     return (
         <div>
             <TopBox>
@@ -25,11 +41,25 @@ function Inquiry() {
                 <div className='li2'>작성일</div>
                 <div className='li2'>답변 상태</div>
             </Content>
-            <Main>
-                <ul>
-                    <div className='none'>작성한 상품 문의가 없습니다.</div>
-                </ul>
-            </Main>
+            {inquiryList && inquiryList.length > 0 ? (
+                <InquiryList>
+                    <li>
+                        {inquiryList.map((data, key) => (
+                            <InquiryContent data={data} key={key} />
+                        ))}
+                    </li>
+                </InquiryList>
+            ) : (
+                <Main>
+                    {inquiryList.length === 0 && (
+                        <ul>
+                            <div className='none'>
+                                작성한 상품 문의가 없습니다.
+                            </div>
+                        </ul>
+                    )}
+                </Main>
+            )}
         </div>
     );
 }
@@ -111,4 +141,12 @@ const Main = styled.div`
     color: rgb(51, 51, 51);
     padding: 117px 0px;
     cursor: default;
+`;
+
+const InquiryList = styled.ul`
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 `;

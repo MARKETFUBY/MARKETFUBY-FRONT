@@ -1,16 +1,33 @@
-import React from 'react';
+import { React, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { getMyOrder } from '../../api/mypage';
 
 function UserInfo() {
+    const [profile, setProfile] = useState([]);
+
+    useEffect(() => {
+        getProfile();
+    }, []);
+
+    const getProfile = async () => {
+        try {
+            const getData = await getMyOrder();
+            setProfile(getData);
+        } catch (err) {
+            console.log(err);
+        }
+    };
     return (
         <div>
             <TopBox>
                 <Box>
                     <div className='profile'>
                         <div className='name'>
-                            <div className='class'>일반</div>
+                            <div className='class'>{profile.level}</div>
                             <div className='myInfo'>
-                                <strong className='nickname'>홍길동님</strong>
+                                <strong className='nickname'>
+                                    {profile.name}님
+                                </strong>
                                 <div className='confirmClass'>
                                     <div className='btn'>
                                         다음달 등급 확인 •{'\u00A0'}

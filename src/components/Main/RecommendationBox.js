@@ -3,7 +3,6 @@ import { styled } from 'styled-components';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import AliceCarousel from 'react-alice-carousel';
 import Product from '../Common/Product';
-import { PRODUCT_DATA } from '../../pages/ProductData';
 import rightBtn from '../../assets/icon/rightBtn.png';
 
 const responsive = {
@@ -15,7 +14,7 @@ const responsive = {
     },
 };
 
-function RecommendationBox() {
+function RecommendationBox({ data }) {
     const renderPrevButton = ({ isDisabled }) => {
         if (isDisabled) {
             return null;
@@ -30,9 +29,9 @@ function RecommendationBox() {
         return <img src={rightBtn} className='next-button' />;
     };
 
-    const items = PRODUCT_DATA.map(product => {
-        return <Product {...product} />;
-    });
+    const items = data.map(product => (
+        <Product key={product.productId} {...product} />
+    ));
 
     return (
         <Div>
@@ -70,7 +69,7 @@ const Div = styled.div`
     position: relative;
     width: 1050px;
     margin: 0px auto;
-    margin-bottom: 40px;
+    margin-top: 40px;
 `;
 
 const Title = styled.div`

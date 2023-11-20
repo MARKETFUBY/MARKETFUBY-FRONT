@@ -1,19 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function ReviewBox() {
+function ReviewBox({ data }) {
     return (
         <Wrapper>
             <div className='ImgBox'>
-                <img></img>
+                <img src={data.imageUrl} />
             </div>
             <div className='content'>
                 <div>
-                    <div className='name'>[존쿡 델리미트] 사각잠봉 400g</div>
-                    <div className='date'>2023.10.15 배송 완료</div>
+                    <div className='name'>{data.title}</div>
+                    <div className='date'>
+                        {data.date} {data.status}
+                    </div>
                 </div>
             </div>
-            <p>11.15 까지 작성 가능</p>
+            <p>{data.date} 까지 작성 가능</p>
             <button>후기 작성</button>
         </Wrapper>
     );
