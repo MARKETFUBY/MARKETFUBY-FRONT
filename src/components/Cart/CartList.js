@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CartItem from './CartItem';
+import arrow from '../../assets/icon/arrow.png';
 
 function CartList({ roomTempList, refrigeList, frozenList }) {
     const [checkedRefrigeItems, setCheckedRefrigeItems] = useState(
@@ -36,11 +37,7 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                 <div className='choiceSection'>
                     <label className='all'>
                         <Check>
-                            <input
-                                id='checkall'
-                                type='checkbox'
-                                // checked=''
-                            ></input>
+                            <input id='checkall' type='checkbox'></input>
                             <label for='checkall'>✔</label>
                         </Check>
                         <div>전체 선택(2/2)</div>
@@ -64,9 +61,9 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                         냉장식품
                     </span>
                 </h4>
-                <div className='cartListIconBox'>
-                    <p className='cartListText'>↓</p>
-                </div>
+                <button className='cartListIconBox'>
+                    <img src={arrow} />
+                </button>
             </TopIconBox>
             <div className='cartItemList'>
                 {refrigeList.map((data, key) => (
@@ -95,9 +92,9 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                         냉동식품
                     </span>
                 </h4>
-                <div className='cartListIconBox'>
-                    <p className='cartListText'>↓</p>
-                </div>
+                <button className='cartListIconBox'>
+                    <img src={arrow} />
+                </button>
             </TopIconBox>
             <div className='cartItemList'>
                 {frozenList.map((data, key) => (
@@ -126,9 +123,9 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                         상온식품
                     </span>
                 </h4>
-                <div className='cartListIconBox'>
-                    <p className='cartListText'>↓</p>
-                </div>
+                <button className='cartListIconBox'>
+                    <img src={arrow} />
+                </button>
             </TopIconBox>
             <div className='cartItemList'>
                 {roomTempList.map((data, key) => (
@@ -146,11 +143,7 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                 <div className='choiceSection'>
                     <label className='all'>
                         <Check>
-                            <input
-                                id='checkall'
-                                type='checkbox'
-                                // checked=''
-                            ></input>
+                            <input id='checkall' type='checkbox'></input>
                             <label for='checkall'>✔</label>
                         </Check>
                         <div>전체 선택(2/2)</div>
@@ -213,12 +206,6 @@ const ChoiceBox = styled.div`
     }
 `;
 
-const Input = styled.input`
-    box-sizing: border-box;
-    padding: 0;
-    overflow: hidden;
-`;
-
 const TopIconBox = styled.div`
     display: flex;
     justify-content: space-between;
@@ -251,6 +238,17 @@ const TopIconBox = styled.div`
         background-size: cover;
         background-position: center center;
         background-image: ;
+    }
+
+    .cartListIconBox {
+        border: 0px;
+        background: none;
+        outline: none;
+
+        img {
+            width: 20px;
+            height: 20px;
+        }
     }
 `;
 
