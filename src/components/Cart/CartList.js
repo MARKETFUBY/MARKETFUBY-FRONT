@@ -62,14 +62,14 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                 </div>
             </ChoiceBox>
             <TopIconBox>
-                <h4>
+                <h4 style={{ display: 'flex' }}>
                     <span className='top'>
                         <span>
                             <span
                                 className='iconImg'
                                 style={{
                                     backgroundImage:
-                                        'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwt)',
+                                        'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZD0iTTAgMGgzMHYzMEgweiIvPgogICAgICAgIDxnIHN0cm9rZT0iIzVFQzQ5RSIgc3Ryb2tlLXdpZHRoPSIxLjUiPgogICAgICAgICAgICA8cGF0aCBkPSJNMTQuNjI3IDI1LjI1NWE3LjYyNyA3LjYyNyAwIDAgMCA3LjYyNi03LjYyN2MwLTIuODA4LTIuNTQyLTcuMTg0LTcuNjI2LTEzLjEyOEM5LjU0MiAxMC40NDQgNyAxNC44MiA3IDE3LjYyOGE3LjYyNyA3LjYyNyAwIDAgMCA3LjYyNyA3LjYyN3oiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICAgICAgICAgICAgPHBhdGggZD0iTTE0LjYyNyAyMC42NmEzLjgxMyAzLjgxMyAwIDAgMCAzLjgxMy0zLjgxMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4K)',
                                 }}
                             ></span>
                         </span>
@@ -99,7 +99,7 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                 </div>
             )}
             <TopIconBox>
-                <h4>
+                <h4 style={{ display: 'flex' }}>
                     <span className='top'>
                         <span>
                             <span
@@ -135,7 +135,7 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                 </div>
             )}
             <TopIconBox>
-                <h4>
+                <h4 style={{ display: 'flex' }}>
                     <span className='top'>
                         <span>
                             <span
@@ -272,15 +272,21 @@ const TopIconBox = styled.div`
     }
 
     .cartListIconBox {
+        display: flex;
         border: 0px;
         background: none;
         outline: none;
+        align-items: center;
 
         img {
             width: 20px;
             height: 20px;
         }
     }
+
+    /* .h4 {
+        display: flex;
+    } */
 `;
 
 const Check = styled.div`
