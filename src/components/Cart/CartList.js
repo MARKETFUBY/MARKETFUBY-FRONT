@@ -8,6 +8,7 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const [isCartRefrigeVisible, setCartRefrigeVisible] = useState(true);
     const [isCartRoomVisible, setCartRoomVisible] = useState(true);
     const [isCartFrozenVisible, setCartFrozenVisible] = useState(true);
+    const [checked, setChecked] = useState(false);
 
     const [checkedRefrigeItems, setCheckedRefrigeItems] = useState(
         Array(refrigeList.length).fill(false),
@@ -24,13 +25,14 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
         newCheckedRefrigeItems[index] = !newCheckedRefrigeItems[index];
         setCheckedRefrigeItems(newCheckedRefrigeItems);
     };
+
     const handleCheckRoomChange = index => {
         const newCheckedRoomItems = [...checkedRoomItems];
         newCheckedRoomItems[index] = !newCheckedRoomItems[index];
         setCheckedRoomItems(newCheckedRoomItems);
     };
+
     const handleCheckFrozenChange = index => {
-        console.log('index', index);
         const newCheckedFrozenItems = [...checkedFrozenItems];
         newCheckedFrozenItems[index] = !newCheckedFrozenItems[index];
         setCheckedFrozenItems(newCheckedFrozenItems);
@@ -39,26 +41,53 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const toggleCartRefrigeVisibility = () => {
         setCartRefrigeVisible(!isCartRefrigeVisible);
     };
+
     const toggleCartRoomVisibility = () => {
         setCartRoomVisible(!isCartRoomVisible);
     };
+
     const toggleCartFrozenVisibility = () => {
         setCartFrozenVisible(!isCartFrozenVisible);
+    };
+
+    const handleUpdateItemCount = (itemKey, newCount) => {
+        console.log(`${itemKey} : ${newCount}`);
+    };
+
+    const handleCheckAllChange = () => {
+        setChecked(!checked);
+
+        const newCheckedRefrigeItems = checkedRefrigeItems.map(() => !checked);
+        setCheckedRefrigeItems(newCheckedRefrigeItems);
+
+        const newCheckedRoomItems = checkedRoomItems.map(() => !checked);
+        setCheckedRoomItems(newCheckedRoomItems);
+
+        const newCheckedFrozenItems = checkedFrozenItems.map(() => !checked);
+        setCheckedFrozenItems(newCheckedFrozenItems);
     };
 
     return (
         <Div>
             <ChoiceBox>
-                <div className='choiceSection'>
-                    <label className='all'>
-                        <Check>
-                            <input id='checkall' type='checkbox'></input>
-                            <label for='checkall'>✔</label>
-                        </Check>
-                        <div>전체 선택(2/2)</div>
-                        <span></span>
-                        <button className='deleteBtn'>선택삭제</button>
-                    </label>
+                <div className='all'>
+                    <Check>
+                        <input
+                            id='checkall'
+                            type='checkbox'
+                            checked={checked}
+                            onChange={handleCheckAllChange}
+                        ></input>
+                        <label
+                            htmlFor='checkall'
+                            className={checked ? 'checked' : ''}
+                        >
+                            ✔
+                        </label>
+                    </Check>
+                    <div>전체 선택(2/2)</div>
+                    <span></span>
+                    <button className='deleteBtn'>선택삭제</button>
                 </div>
             </ChoiceBox>
             <TopIconBox>
@@ -94,6 +123,9 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                             onCheckChange={() =>
                                 handleCheckRefrigeChange(data.productId)
                             }
+                            updateItemCount={(itemKey, newCount) =>
+                                handleUpdateItemCount(itemKey, newCount)
+                            }
                         />
                     ))}
                 </div>
@@ -115,20 +147,24 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                 </h4>
                 <button
                     className='cartListIconBox'
-                    onClick={toggleCartRoomVisibility}
+                    onClick={toggleCartFrozenVisibility}
                 >
-                    <img src={isCartRoomVisible ? arrow : flippedArrow} />
+                    <img src={isCartFrozenVisible ? arrow : flippedArrow} />
                 </button>
             </TopIconBox>
-            {isCartRoomVisible && (
+            {isCartFrozenVisible && (
                 <div className='cartItemList'>
                     {frozenList.map((data, key) => (
                         <CartItem
+                            key={data.productId}
                             itemKey={data.productId}
                             data={data}
                             checked={checkedFrozenItems[data.productId]}
                             onCheckChange={() =>
                                 handleCheckFrozenChange(data.productId)
+                            }
+                            updateItemCount={(itemKey, newCount) =>
+                                handleUpdateItemCount(itemKey, newCount)
                             }
                         />
                     ))}
@@ -151,36 +187,48 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                 </h4>
                 <button
                     className='cartListIconBox'
-                    onClick={toggleCartFrozenVisibility}
+                    onClick={toggleCartRoomVisibility}
                 >
-                    <img src={isCartFrozenVisible ? arrow : flippedArrow} />
+                    <img src={isCartRoomVisible ? arrow : flippedArrow} />
                 </button>
             </TopIconBox>
-            {isCartFrozenVisible && (
+            {isCartRoomVisible && (
                 <div className='cartItemList'>
-                    {frozenList.map((data, key) => (
+                    {roomTempList.map((data, key) => (
                         <CartItem
+                            key={data.productId}
                             itemKey={data.productId}
                             data={data}
-                            checked={checkedFrozenItems[data.productId]}
+                            checked={checkedRoomItems[data.productId]}
                             onCheckChange={() =>
-                                handleCheckFrozenChange(data.productId)
+                                handleCheckRoomChange(data.productId)
+                            }
+                            updateItemCount={(itemKey, newCount) =>
+                                handleUpdateItemCount(itemKey, newCount)
                             }
                         />
                     ))}
                 </div>
             )}
             <ChoiceBox>
-                <div className='choiceSection'>
-                    <label className='all'>
-                        <Check>
-                            <input id='checkall' type='checkbox'></input>
-                            <label for='checkall'>✔</label>
-                        </Check>
-                        <div>전체 선택(2/2)</div>
-                        <span></span>
-                        <button className='deleteBtn'>선택삭제</button>
-                    </label>
+                <div className='all'>
+                    <Check>
+                        <input
+                            id='checkall'
+                            type='checkbox'
+                            checked={checked}
+                            onChange={handleCheckAllChange}
+                        ></input>
+                        <label
+                            htmlFor='checkall'
+                            className={checked ? 'checked' : ''}
+                        >
+                            ✔
+                        </label>
+                    </Check>
+                    <div>전체 선택(2/2)</div>
+                    <span></span>
+                    <button className='deleteBtn'>선택삭제</button>
                 </div>
             </ChoiceBox>
         </Div>
@@ -283,10 +331,6 @@ const TopIconBox = styled.div`
             height: 20px;
         }
     }
-
-    /* .h4 {
-        display: flex;
-    } */
 `;
 
 const Check = styled.div`
@@ -306,9 +350,10 @@ const Check = styled.div`
         color: rgb(221, 221, 221);
         margin-right: 12px;
         border-radius: 24px;
-    }
-    input[id='checkall']:checked + label {
-        background-color: rgb(95, 0, 128);
-        border: 1px solid rgb(95, 0, 128);
+
+        &.checked {
+            background-color: rgb(95, 0, 128);
+            border: 1px solid rgb(95, 0, 128);
+        }
     }
 `;

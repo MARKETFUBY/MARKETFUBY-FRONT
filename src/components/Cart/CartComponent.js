@@ -28,11 +28,12 @@ function CartComponent() {
 export default CartComponent;
 
 const Div = styled.div`
+    width: 1050px;
+    margin: 0px auto;
     .cartContentsBox {
         display: flex;
         justify-content: space-between;
         margin: 0;
-        width: 1050px;
         margin-top: 50px;
     }
 `;

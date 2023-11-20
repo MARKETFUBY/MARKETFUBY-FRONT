@@ -1,17 +1,19 @@
 import { useState, React } from 'react';
 import styled from 'styled-components';
 
-function CartItem({ itemKey, data, checked, onCheckChange }) {
+function CartItem({ itemKey, data, checked, onCheckChange, updateItemCount }) {
     const [count, setCount] = useState(1);
 
     const handleDecrement = () => {
         if (count > 1) {
             setCount(count - 1);
+            updateItemCount(itemKey, count - 1);
         }
     };
 
     const handleIncrement = () => {
         setCount(count + 1);
+        updateItemCount(itemKey, count + 1);
     };
 
     return (
@@ -28,13 +30,13 @@ function CartItem({ itemKey, data, checked, onCheckChange }) {
                 </label>
             </Check>
             <div className='ImgBox'>
-                <img src={data.image}></img>
+                <img src={data.image} alt={data.title} />
             </div>
             <div className='name'>{data.title}</div>
             <div className='count'>
-                <MinusBtn onClick={handleDecrement} />
-                <div className='itemCount'>{data.productId}</div>
-                <PlusBtn onClick={handleIncrement} />
+                <MinusBtn onClick={handleDecrement}>-</MinusBtn>
+                <div className='itemCount'>{count}</div>
+                <PlusBtn onClick={handleIncrement}>+</PlusBtn>
             </div>
             <div className='price'>
                 <span className='itemPrice'>{data.price}원</span>
