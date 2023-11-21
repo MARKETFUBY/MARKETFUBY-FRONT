@@ -11,10 +11,10 @@ export const getCartList = async () => {
 };
 
 //장바구니 물품 수량 변경
-export const putCartList = async (cartProductId, count) => {
+export const putCartList = async (productId, count) => {
     try {
         const res = await client.put(`/cart`, {
-            data: { cartProductId: cartProductId, count: count },
+            data: { productId: productId, count: count },
         });
         return res.data;
     } catch (err) {
@@ -23,10 +23,10 @@ export const putCartList = async (cartProductId, count) => {
 };
 
 //장바구니 물품 삭제
-export const deleteCartList = async cartProductId => {
+export const deleteCartList = async itemKey => {
     try {
         const res = await client.delete(`/cart`, {
-            data: { cartProductId: cartProductId },
+            data: { cartProductId: itemKey },
         });
         return res.data;
     } catch (err) {

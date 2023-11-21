@@ -17,14 +17,10 @@ function CartItem({ itemKey, data, checked, onCheckChange, updateItemCount }) {
         updateItemCount(itemKey, count + 1);
     };
 
-    useEffect(() => {
-        deleteCartItem();
-    }, []);
-
     const deleteCartItem = async () => {
         try {
             const data = await deleteCartList(itemKey);
-            console.log(data);
+            alert('삭제되었습니다.');
         } catch (err) {
             console.log(err);
         }
