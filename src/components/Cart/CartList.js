@@ -53,13 +53,11 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
         setCartFrozenVisible(!isCartFrozenVisible);
     };
 
-    // useEffect(() => {
-    //     handleUpdateItemCount();
-    // }, []);
 
     const handleUpdateItemCount = async (itemKey, newCount) => {
         try {
             const data = await putCartList(itemKey, newCount);
+            console.log('df', itemKey, newCount);
             console.log(data);
         } catch (err) {
             console.log(err);

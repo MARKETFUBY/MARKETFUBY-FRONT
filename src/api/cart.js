@@ -11,10 +11,11 @@ export const getCartList = async () => {
 };
 
 //장바구니 물품 수량 변경
-export const putCartList = async (productId, count) => {
+export const putCartList = async (itemKey, count) => {
     try {
         const res = await client.put(`/cart`, {
-            data: { productId: productId, count: count },
+            cartProductId: itemKey,
+            count: count,
         });
         return res.data;
     } catch (err) {
