@@ -18,6 +18,7 @@ function Inquiry() {
             console.log(err);
         }
     };
+    
     return (
         <div>
             <TopBox>

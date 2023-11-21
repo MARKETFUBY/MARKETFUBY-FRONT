@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import CartItem from './CartItem';
 import arrow from '../../assets/icon/arrow.png';
 import flippedArrow from '../../assets/icon/flippedArrow.png';
+import { putCartList } from '../../api/cart';
 
 function CartList({ roomTempList, refrigeList, frozenList }) {
     const [isCartRefrigeVisible, setCartRefrigeVisible] = useState(true);
@@ -11,13 +12,15 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const [checked, setChecked] = useState(false);
 
     const [checkedRefrigeItems, setCheckedRefrigeItems] = useState(
-        Array(refrigeList.length).fill(false),
+        refrigeList?.length > 0 ? Array(refrigeList.length).fill(false) : [],
     );
+
     const [checkedRoomItems, setCheckedRoomItems] = useState(
-        Array(roomTempList.length).fill(false),
+        roomTempList?.length > 0 ? Array(roomTempList.length).fill(false) : [],
     );
+
     const [checkedFrozenItems, setCheckedFrozenItems] = useState(
-        Array(frozenList.length).fill(false),
+        frozenList?.length > 0 ? Array(frozenList.length).fill(false) : [],
     );
 
     const handleCheckRefrigeChange = index => {
@@ -50,8 +53,17 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
         setCartFrozenVisible(!isCartFrozenVisible);
     };
 
-    const handleUpdateItemCount = (itemKey, newCount) => {
-        console.log(`${itemKey} : ${newCount}`);
+    useEffect(() => {
+        handleUpdateItemCount();
+    }, []);
+
+    const handleUpdateItemCount = async (itemKey, newCount) => {
+        try {
+            const data = await putCartList(itemKey, newCount);
+            console.log(data);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     const handleCheckAllChange = () => {
@@ -114,20 +126,23 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
             </TopIconBox>
             {isCartRefrigeVisible && (
                 <div className='cartItemList'>
-                    {refrigeList.map((data, key) => (
-                        <CartItem
-                            key={data.productId}
-                            itemKey={data.productId}
-                            data={data}
-                            checked={checkedRefrigeItems[data.productId]}
-                            onCheckChange={() =>
-                                handleCheckRefrigeChange(data.productId)
-                            }
-                            updateItemCount={(itemKey, newCount) =>
-                                handleUpdateItemCount(itemKey, newCount)
-                            }
-                        />
-                    ))}
+                    {refrigeList &&
+                        refrigeList.map((data, key) => (
+                            <CartItem
+                                key={data.cartProductId}
+                                itemKey={data.cartProductId}
+                                data={data}
+                                checked={
+                                    checkedRefrigeItems[data.cartProductId]
+                                }
+                                onCheckChange={() =>
+                                    handleCheckRefrigeChange(data.cartProductId)
+                                }
+                                updateItemCount={(itemKey, newCount) =>
+                                    handleUpdateItemCount(itemKey, newCount)
+                                }
+                            />
+                        ))}
                 </div>
             )}
             <TopIconBox>
@@ -154,20 +169,21 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
             </TopIconBox>
             {isCartFrozenVisible && (
                 <div className='cartItemList'>
-                    {frozenList.map((data, key) => (
-                        <CartItem
-                            key={data.productId}
-                            itemKey={data.productId}
-                            data={data}
-                            checked={checkedFrozenItems[data.productId]}
-                            onCheckChange={() =>
-                                handleCheckFrozenChange(data.productId)
-                            }
-                            updateItemCount={(itemKey, newCount) =>
-                                handleUpdateItemCount(itemKey, newCount)
-                            }
-                        />
-                    ))}
+                    {frozenList &&
+                        frozenList.map((data, key) => (
+                            <CartItem
+                                key={data.cartProductId}
+                                itemKey={data.cartProductId}
+                                data={data}
+                                checked={checkedFrozenItems[data.cartProductId]}
+                                onCheckChange={() =>
+                                    handleCheckFrozenChange(data.cartProductId)
+                                }
+                                updateItemCount={(itemKey, newCount) =>
+                                    handleUpdateItemCount(itemKey, newCount)
+                                }
+                            />
+                        ))}
                 </div>
             )}
             <TopIconBox>
@@ -194,20 +210,21 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
             </TopIconBox>
             {isCartRoomVisible && (
                 <div className='cartItemList'>
-                    {roomTempList.map((data, key) => (
-                        <CartItem
-                            key={data.productId}
-                            itemKey={data.productId}
-                            data={data}
-                            checked={checkedRoomItems[data.productId]}
-                            onCheckChange={() =>
-                                handleCheckRoomChange(data.productId)
-                            }
-                            updateItemCount={(itemKey, newCount) =>
-                                handleUpdateItemCount(itemKey, newCount)
-                            }
-                        />
-                    ))}
+                    {roomTempList &&
+                        roomTempList.map((data, key) => (
+                            <CartItem
+                                key={data.cartProductId}
+                                itemKey={data.cartProductId}
+                                data={data}
+                                checked={checkedRoomItems[data.cartProductId]}
+                                onCheckChange={() =>
+                                    handleCheckRoomChange(data.cartProductId)
+                                }
+                                updateItemCount={(itemKey, newCount) =>
+                                    handleUpdateItemCount(itemKey, newCount)
+                                }
+                            />
+                        ))}
                 </div>
             )}
             <ChoiceBox>
