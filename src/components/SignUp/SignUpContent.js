@@ -1,26 +1,27 @@
 import { React, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { SignUpAPI } from '../../api/member';
 
 function SignUpContent() {
     const navigate = useNavigate();
     const [values, setValues] = useState({
-        userId: '',
-        password: '',
-        passwordCheck: '',
+        fubyId: '',
+        passwd: '',
+        passwdCheck: '',
         name: '',
         email: '',
         phone: '',
-        home: '',
+        home: '서울',
         sex: '',
         year: '',
         month: '',
         day: '',
     });
-    const [isPasswordWarning, setIspasswordWarning] = useState(false);
+    const [isPasswordWarning, setIspasswdWarning] = useState(false);
 
     const showPasswordWarning = () => {
-        setIspasswordWarning(true);
+        setIspasswdWarning(true);
     };
 
     const valueHandler = e => {
@@ -29,77 +30,49 @@ function SignUpContent() {
     };
 
     const {
-        userId,
-        password,
+        fubyId,
+        passwd,
         name,
         email,
         phone,
         home,
         sex,
-        passwordCheck,
+        passwdCheck,
         year,
         month,
         day,
     } = values;
 
-    const userIdRegEx = /^[a-z]+[a-z0-9]{5,16}$/g;
+    const fubyIdRegEx = /^[a-z]+[a-z0-9]{5,16}$/g;
     // 6자 이상 16자 이하의 영문 소문자 혹은 숫자 조합
-    const userIdValid = userIdRegEx.test(userId);
-    const passwordRegEx =
+    const fubyIdValid = fubyIdRegEx.test(fubyId);
+    const passwdRegEx =
         /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{9,})/;
     // a-z와 A-Z/숫자/특수 문자(공백 제외) 허용, 2개이상 조합, 최소 10자 이상
-    const isPasswordValid = passwordRegEx.test(password);
-    const isPasswordCheck = password === passwordCheck;
+
+    const isPasswordValid = passwdRegEx.test(passwd);
+    const isPasswordCheck = passwd === passwdCheck;
     const isNameValid = name.length > 0;
     const emailRegEx = /[a-zA-Z0-9+_]+@[a-z]+\.+[a-z]/;
     // a-z와 A-Z/숫자/+와 - 허용, @와 a-z 그리고 \. a-z 사용가능
     const isEmailValid = emailRegEx.test(email);
-    const isSubmitValid =
-        userIdValid && password && passwordCheck && name && email;
-
-    const birthday = year + month.padStart(2, 0) + day.padStart(2, 0);
 
     const signupSubmit = e => {
         submitUseInfo(e);
-        navigate('/');
+        alert('회원가입이 완료되었습니다');
     };
 
-    const submitUseInfo = e => {
-        e.preventDefault();
-        fetch('http://10.58.52.89:3000/users/signup', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json;charset=utf-8',
-            },
-            body: JSON.stringify({
-                userId: '',
-                password: '',
-                passwordCheck: '',
-                name: '',
-                email: '',
-                phone: '',
-                home: '',
-                sex: sex,
-                birthday: year + month + day,
-            }),
-        })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(
-                        `회원가입 ${res.status} 에러가 발생했습니다`,
-                    );
-                }
-                return res.json();
-            })
-            .then(result =>
-                result.message === 'SIGNUP_SUCCESS'
-                    ? alert('회원가입 성공')
-                    : alert('회원가입 실패'),
-            )
-            .catch(error => {
-                console.log(error.mesasge);
-                alert('회원가입 실패');
-            });
+    const submitUseInfo = async () => {
+        try {
+            const SignUpInfo = {
+                ...values,
+                birthday: year + '-' + month + '-' + day,
+            };
+            console.log('SignUpInfo', SignUpInfo);
+            SignUpAPI(SignUpInfo);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
@@ -117,14 +90,18 @@ function SignUpContent() {
                         <div className='inputContainer'>
                             <Input
                                 className='signupInputBox'
-                                name='userId'
+                                name='fubyId'
                                 type='text'
                                 placeholder='아이디를 입력해주세요'
                                 onChange={valueHandler}
                             />
-                            {/* <span className='warningText'>
-                                    6자 이상 16자 이하의 영문 혹은 숫자를 조합
-                                </span> */}
+                            {fubyId.length !== 0 &&
+                                (fubyIdValid || (
+                                    <span className='warningText'>
+                                        6자 이상 16자 이하의 영문 혹은 숫자를
+                                        조합
+                                    </span>
+                                ))}
                         </div>
                         <button
                             className='duplicationCheckButton'
@@ -155,14 +132,14 @@ function SignUpContent() {
                         <div className='inputContainer'>
                             <Input
                                 className='signupInputBox'
-                                type='password'
-                                name='password'
+                                type='passwd'
+                                name='passwd'
                                 placeholder='비밀번호를 입력해주세요'
                                 onChange={valueHandler}
-                                // onFocus={showPasswordWarning}
+                                onFocus={showPasswordWarning}
                             />
                             {isPasswordWarning &&
-                                (password.length < 10 ? (
+                                (passwd.length < 10 ? (
                                     <span className='warningText'>
                                         최소 10자 이상 입력
                                     </span>
@@ -185,13 +162,13 @@ function SignUpContent() {
                         </span>
                         <div className='inputContainer'>
                             <Input
-                                type='password'
-                                name='passwordCheck'
+                                type='passwd'
+                                name='passwdCheck'
                                 className='signupInputBox'
                                 placeholder='비밀번호를 한번 더 입력해주세요'
                                 onChange={valueHandler}
                             />
-                            {passwordCheck.length !== 0 &&
+                            {passwdCheck.length !== 0 &&
                                 (isPasswordCheck || (
                                     <span className='warningText'>
                                         동일한 비밀번호를 입력
@@ -258,8 +235,8 @@ function SignUpContent() {
                         <div className='inputContainer'>
                             <Input
                                 className='signupInputBox'
-                                name='number'
-                                value={email}
+                                name='phone'
+                                value={phone}
                                 placeholder='숫자만 입력해주세요.'
                                 onChange={valueHandler}
                             />
@@ -300,30 +277,30 @@ function SignUpContent() {
                         <span className='containerTitle'>성별</span>
                         <div className='choiceContainer'>
                             <div className='label'>
-                                <Input
+                                <input
                                     name='sex'
                                     type='radio'
                                     className='sexChoiceButton'
-                                    value='1'
-                                    checked={sex === '1'}
+                                    value='MALE'
+                                    checked={sex === 'MALE'}
                                     onChange={valueHandler}
                                 />
                                 <span></span>
                                 <div className='maleLetter'>남자</div>
                             </div>
                             <div className='label'>
-                                <Input
+                                <input
                                     type='radio'
                                     name='sex'
                                     className='sexChoiceButton'
-                                    checked={sex === '2'}
-                                    value='2'
+                                    checked={sex === 'FEMALE'}
+                                    value='FEMALE'
                                     onChange={valueHandler}
                                 />
                                 <div className='femaleLetter'>여자</div>
                             </div>
                             <div className='label'>
-                                <Input
+                                <input
                                     type='radio'
                                     name='sex'
                                     className='sexChoiceButton'
@@ -623,11 +600,37 @@ const FormDiv = styled.div`
         display: flex;
         align-items: center;
         padding: 12px 0px 9px;
+
+        input {
+            width: 30px;
+            min-width: 24px;
+            min-height: 24px;
+            display: inline-block;
+            position: relative;
+            border-radius: 50%;
+            background-color: white;
+            border: 1px solid rgb(221, 221, 221);
+        }
+
+        input[type='radio']:checked {
+            /* background-color: #22d3ee; */
+            /* border: 3px solid white; */
+            /* box-shadow: 0 0 0 1.6px #22d3ee; */
+            background-color: rgb(95, 0, 128);
+        }
+    }
+
+    .warningText {
+        font-size: 13px;
+        color: rgb(240, 63, 64);
+        margin-top: 4px;
+        margin-left: 4px;
     }
 `;
 
 const Input = styled.input`
-    width: 100%;
+    width: ${props =>
+        props.className.includes('sexChoiceButton') ? '30px' : '100%'};
     height: 46px;
     padding: 0px 11px 1px 15px;
     border-radius: 4px;
@@ -639,6 +642,25 @@ const Input = styled.input`
     outline: none;
     box-sizing: border-box;
 `;
+const Input2 = styled.input`
+    width: 30px;
+    min-width: 24px;
+    min-height: 24px;
+    display: inline-block;
+    position: relative;
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid rgb(221, 221, 221);
+
+    input[type='radio']:checked {
+        background-color: #22d3ee; // 체크 시 내부 원으로 표시될 색상
+        border: 3px solid white; // 테두리가 아닌, 테두리와 원 사이의 색상
+        box-shadow: 0 0 0 1.6px #22d3ee; // 얘가 테두리가 됨
+        // 그림자로 테두리를 직접 만들어야 함 (퍼지는 정도를 0으로 주면 테두리처럼 보입니다.)
+        // 그림자가 없으면 그냥 설정한 색상이 꽉 찬 원으로만 나옵니다.
+    }
+`;
+
 const Border = styled.div`
     padding: 10px 0px;
     border-bottom: 1px solid rgb(51, 51, 51);
