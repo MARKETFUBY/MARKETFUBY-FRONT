@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { ReactComponent as CartIcon } from '../../assets/icon/cart.svg';
 import { ReactComponent as CommentIcon } from '../../assets/icon/comment.svg';
 
-import { useEffect } from 'react';
-
 const Product = ({ product }) => {
     const nav = useNavigate();
+
+    // 할인된 가격 계산
+    const getDiscountPrice = (price, discount) => {
+        return parseInt((1 - discount / 100) * price);
+    };
 
     return (
         <Wrapper onClick={() => nav(`/goods/${product.productId}`)}>
@@ -28,14 +31,22 @@ const Product = ({ product }) => {
                             <Price className='discount-rate'>
                                 {product.discount}%
                             </Price>
-                            <Price>{product.price}원</Price>
+                            <Price>
+                                {getDiscountPrice(
+                                    product.price,
+                                    product.discount,
+                                )}
+                                원
+                            </Price>
                         </DiscountWrapper>
                     )}
                 </PriceWrapper>
-                <Comment>
-                    <CommentIcon />
-                    {/* <span>{props.commentCnt}</span> */}
-                </Comment>
+                {product.reviewNum > 0 && (
+                    <Comment>
+                        <CommentIcon />
+                        <span>{product.reviewNum}</span>
+                    </Comment>
+                )}
                 {/* {props.isKurlyOnly && <KurlyOnly>Kurly Only</KurlyOnly>} */}
             </TextWrapper>
         </Wrapper>
