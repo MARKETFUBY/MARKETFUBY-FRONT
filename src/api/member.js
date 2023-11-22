@@ -19,3 +19,27 @@ export const SignUpAPI = async signUpInfo => {
         //   }
     }
 };
+
+// 로그인
+export const SignInAPI = async loginInfo => {
+    try {
+        console.log(loginInfo, 'loginInfo');
+        const res = await client.post('/members/login', loginInfo);
+        if (res.data && res.data.accessToken && res.data.refreshToken) {
+            console.log(res, '로그인 성공');
+            localStorage.setItem('accessToken', res.data.accessToken);
+            localStorage.setItem('refreshToken', res.data.refreshToken);
+            window.location.replace('/');
+            return 'Login Success';
+        } else {
+            console.log('Invalid response format', res);
+        }
+    } catch (err) {
+        console.log(err, '로그인 에러');
+        //   if (err.response?.data.details === "자격 증명에 실패하였습니다.") {
+        //     return "Login Fail";
+        //   } else {
+        //     return "Login Error";
+        //   }
+    }
+};
