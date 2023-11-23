@@ -78,6 +78,12 @@ function Header() {
         };
     }, []);
 
+    useEffect(() => {
+        localStorage.getItem('refreshToken')
+            ? setIsLogin(true)
+            : setIsLogin(false);
+    }, []);
+
     return (
         <Div>
             {!isFixed ? (

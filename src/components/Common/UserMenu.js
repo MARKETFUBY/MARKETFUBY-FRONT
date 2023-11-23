@@ -1,7 +1,17 @@
 import { React, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { LogoutAPI } from '../../api/member';
 
 function UserMenu({ setOpenUserMenu }) {
+    const ClickLogout = async () => {
+        const refreshToken = localStorage.getItem('refreshToken');
+        try {
+            LogoutAPI(refreshToken);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <Div onMouseLeave={() => setOpenUserMenu(false)}>
             <div className='menuItem'>주문 내역</div>
@@ -15,7 +25,9 @@ function UserMenu({ setOpenUserMenu }) {
             <div className='menuItem'>쿠폰</div>
             <div className='menuItem'>개인정보수정</div>
             <div className='menuItem'>나의 컬리스타일</div>
-            <div className='menuItem'>로그아웃</div>
+            <div className='menuItem' onClick={ClickLogout}>
+                로그아웃
+            </div>
         </Div>
     );
 }
