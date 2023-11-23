@@ -11,6 +11,8 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const [isCartFrozenVisible, setCartFrozenVisible] = useState(true);
     const [checked, setChecked] = useState(false);
 
+    const count = roomTempList.length + refrigeList.length + frozenList.length;
+
     const [checkedRefrigeItems, setCheckedRefrigeItems] = useState(
         refrigeList?.length > 0 ? Array(refrigeList.length).fill(false) : [],
     );
@@ -53,7 +55,6 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
         setCartFrozenVisible(!isCartFrozenVisible);
     };
 
-
     const handleUpdateItemCount = async (itemKey, newCount) => {
         try {
             const data = await putCartList(itemKey, newCount);
@@ -95,7 +96,7 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                             ✔
                         </label>
                     </Check>
-                    <div>전체 선택(2/2)</div>
+                    <div>전체 선택(2/{count})</div>
                     <span></span>
                     <button className='deleteBtn'>선택삭제</button>
                 </div>
@@ -249,7 +250,7 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                             ✔
                         </label>
                     </Check>
-                    <div>전체 선택(2/2)</div>
+                    <div>전체 선택(2/{count})</div>
                     <span></span>
                     <button className='deleteBtn'>선택삭제</button>
                 </div>
