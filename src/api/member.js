@@ -27,8 +27,14 @@ export const SignInAPI = async loginInfo => {
         const res = await client.post('/members/login', loginInfo);
         if (res.data && res.data.accessToken && res.data.refreshToken) {
             console.log(res, '로그인 성공');
-            localStorage.setItem('accessToken', res.data.accessToken);
-            localStorage.setItem('refreshToken', res.data.refreshToken);
+            localStorage.setItem(
+                'accessToken',
+                'Bearer ' + res.data.accessToken,
+            );
+            localStorage.setItem(
+                'refreshToken',
+                'Bearer ' + res.data.refreshToken,
+            );
             window.location.replace('/');
             return 'Login Success';
         } else {
