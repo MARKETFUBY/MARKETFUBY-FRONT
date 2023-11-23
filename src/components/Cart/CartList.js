@@ -11,7 +11,10 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const [isCartFrozenVisible, setCartFrozenVisible] = useState(true);
     const [checked, setChecked] = useState(false);
 
-    const count = roomTempList.length + refrigeList.length + frozenList.length;
+    const count =
+        roomTempList && refrigeList && frozenList
+            ? roomTempList.length + refrigeList.length + frozenList.length
+            : 0;
 
     const [checkedRefrigeItems, setCheckedRefrigeItems] = useState(
         refrigeList?.length > 0 ? Array(refrigeList.length).fill(false) : [],

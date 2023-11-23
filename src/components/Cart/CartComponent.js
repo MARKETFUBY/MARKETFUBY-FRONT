@@ -2,7 +2,6 @@ import { React, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CartList from './CartList';
 import OrderBox from './OrderBox';
-import { cart } from './dummydata';
 import { getCartList } from '../../api/cart';
 
 function CartComponent() {

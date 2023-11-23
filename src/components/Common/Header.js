@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import menu from '../../assets/icon/menu.png';
 import Category from './Category';
+import UserMenu from './UserMenu';
 
 function Header() {
     const navigate = useNavigate();
@@ -45,7 +46,13 @@ function Header() {
         navigate('/benefit');
     };
 
+    // const clickUserMenu = userMenuClick => {
+    //     console.log('click', userMenuClick);
+    //     setUserMenuClick(true);
+    // };
+
     const [openCategory, setOpenCategory] = useState(false);
+    const [openUserMenu, setOpenUserMenu] = useState(false);
 
     // 네브바 스타일 - 스크롤 감지
     const [isFixed, setIsFixed] = useState(false);
@@ -79,12 +86,22 @@ function Header() {
                         <NavUser>
                             {isLogin ? (
                                 <User>
-                                    <a>
+                                    <a
+                                        onMouseEnter={() => {
+                                            setOpenUserMenu(true);
+                                        }}
+                                    >
                                         <div>
                                             <span className='class'>일반</span>
-                                            {username} 님<PlusBtn />
+                                            {username} 님
+                                            <PlusBtn />
                                         </div>
                                     </a>
+                                    {openUserMenu ? (
+                                        <UserMenu
+                                            setOpenUserMenu={setOpenUserMenu}
+                                        />
+                                    ) : null}
                                 </User>
                             ) : (
                                 <>
@@ -148,7 +165,6 @@ function Header() {
                                     />
                                 ) : null}
                             </CategoryBox>
-
                             <Menu>
                                 <li onClick={clickNewProduct}>신상품</li>
                                 <li onClick={clickBest}>베스트</li>
