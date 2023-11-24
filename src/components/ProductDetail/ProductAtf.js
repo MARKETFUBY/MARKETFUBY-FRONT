@@ -13,7 +13,7 @@ const ProductAtf = ({ productInfo }) => {
     const productId = useParams().id;
     const [num, setNum] = useState(1); // 선택한 상품 개수
     const [heartClicked, setHeartClicked] = useState(false); // 찜 버튼 클릭 여부
-    const memberId = 1; //🚨임의설정
+    const memberId = 13; //🚨임의설정
 
     const handleHeartClick = () => {
         setHeartClicked(!heartClicked);
@@ -22,7 +22,7 @@ const ProductAtf = ({ productInfo }) => {
     // 찜하기 & 찜 취소하기
     const handleLike = async memberId => {
         try {
-            if (!heartClicked) {
+            if (heartClicked) {
                 const res = await postLike(productId, memberId);
             } else {
                 const res = await deleteLike(productId, memberId);

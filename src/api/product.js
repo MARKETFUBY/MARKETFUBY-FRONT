@@ -39,7 +39,7 @@ export const getProductDetail = async productId => {
 export const postLike = async (productId, memberId) => {
     try {
         const res = await client.post(`goods/${productId}/likes`, {
-            memberId: memberId,
+            data: { memberId: memberId },
         });
         return res;
     } catch (err) {
@@ -51,7 +51,7 @@ export const postLike = async (productId, memberId) => {
 export const deleteLike = async (productId, memberId) => {
     try {
         const res = await client.delete(`goods/${productId}/likes`, {
-            memberId: memberId,
+            data: { memberId: memberId },
         });
         return res;
     } catch (err) {
