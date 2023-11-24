@@ -56,7 +56,7 @@ const ProductInquiry = () => {
                 <tbody>
                     {inquiryData.map((inquiry, idx) => {
                         return (
-                            <tr>
+                            <tr key={idx}>
                                 {inquiry.isSecret ? (
                                     <td className='inquiry-title'>
                                         비밀글입니다.
