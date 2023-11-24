@@ -7,7 +7,10 @@ import { ReactComponent as HeartIcon } from '../../assets/product/heart.svg';
 import { ReactComponent as FilledHeartIcon } from '../../assets/product/heart_fill.svg';
 import { ReactComponent as AlarmIcon } from '../../assets/product/alarm.svg';
 import { formatPrice } from '../../utils/formatPrice';
+
+import { getCartList, postCartItem, putCartList } from '../../api/cart';
 import { postLike, deleteLike } from '../../api/product';
+import CartModal from '../Common/CartModal';
 
 const ProductAtf = ({ productInfo }) => {
     const productId = useParams().id;
@@ -36,8 +39,87 @@ const ProductAtf = ({ productInfo }) => {
         handleLike(memberId);
     }, [heartClicked]);
 
+    // 장바구니 관련
+    const CART_CATEGORY = ['roomTempList', 'refrigeList', 'frozenList'];
+    const [cartList, setCartList] = useState();
+    const [isAdded, setIsAdded] = useState([false, false]); // 장바구니에 담겼는지, 기존에 장바구니에 있었는지
+
+    // 장바구니 목록 저장할 함수
+    const getCartItems = async () => {
+        try {
+            const cartItems = await getCartList();
+            setCartList(cartItems);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getCartItems();
+    }, []);
+
+    // 장바구니에 담기
+    const putInCart = async () => {
+        try {
+            const res = postCartItem(productInfo.productId, 1);
+            setIsAdded([true, false]);
+            getCartItems();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // 장바구니에 수량 추가
+    const addCartCnt = async (cartProductId, cnt) => {
+        try {
+            const res = putCartList(cartProductId, cnt);
+            setIsAdded([true, true]);
+            getCartItems();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // 담기 버튼 클릭 시 실행할 함수
+    const handleCartClick = () => {
+        let sameProduct = [];
+        for (let category of CART_CATEGORY) {
+            sameProduct = cartList[category]?.filter(
+                item => item.productName === productInfo.title,
+            );
+
+            if (sameProduct?.length > 0) {
+                break;
+            }
+        }
+
+        // 장바구니에 없는 상품일 경우, 장바구니에 담기
+        if (sameProduct.length === 0) {
+            putInCart();
+        }
+        // 장바구니에 있는 제품일 경우, 상품 개수 1 증가
+        else {
+            addCartCnt(sameProduct[0].cartProductId, sameProduct[0].count + 1);
+        }
+    };
+
+    // 5초 뒤에 해당 변수 초기화
+    useEffect(() => {
+        if (isAdded) {
+            const timer = setTimeout(() => setIsAdded([false, false]), 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [isAdded]);
+
     return (
         <Wrapper>
+            {isAdded[0] && (
+                <CartModal
+                    name={productInfo.title}
+                    productImg={productInfo.image}
+                    alreadyInCart={isAdded[1]}
+                />
+            )}
             <img src={product1} />
             <RightSection>
                 <Deliver>{productInfo.delivery}</Deliver>
@@ -173,7 +255,7 @@ const ProductAtf = ({ productInfo }) => {
                     <SquareBtn>
                         <AlarmIcon />
                     </SquareBtn>
-                    <CartBtn>장바구니 담기</CartBtn>
+                    <CartBtn onClick={handleCartClick}>장바구니 담기</CartBtn>
                 </BtnWrapper>
             </RightSection>
         </Wrapper>
@@ -185,7 +267,6 @@ export default ProductAtf;
 const Wrapper = styled.div`
     display: flex;
     width: 1050px;
-    -webkit-box-pack: justify;
     justify-content: space-between;
     margin: 0px auto;
     padding-top: 30px;
