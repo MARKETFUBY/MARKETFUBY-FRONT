@@ -1,19 +1,20 @@
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
 import { ReactComponent as CloseBtn } from '../../assets/icon/close.svg';
 import { ReactComponent as CheckIcon } from '../../assets/icon/check.svg';
 import { ReactComponent as PurpleCheckIcon } from '../../assets/icon/check_purple.svg';
 import { ReactComponent as InitializationIcon } from '../../assets/icon/initialization.svg';
-import { FILTER_LIST } from './FilterData';
+import { click } from '../../store/filterSlice';
 
 const FilterModal = ({ onClick }) => {
-    const handleCheckClick = clickedIdx => {
-        FILTER_LIST.map((filter, idx) => {
-            return idx === clickedIdx
-                ? { ...filter, clicked: !filter.clicked }
-                : filter;
-        });
+    // 체크 버튼 클릭 시
+    const dispatch = useDispatch();
+    const filterList = useSelector(state => {
+        return state.filter;
+    });
 
-        console.log(FILTER_LIST);
+    const handleCheckClick = id => {
+        dispatch(click(id));
     };
 
     return (
@@ -23,10 +24,12 @@ const FilterModal = ({ onClick }) => {
                     <CloseBtn className='close' onClick={onClick} />
                     <h3>카테고리</h3>
                     <ul>
-                        {FILTER_LIST.map(filter => (
+                        {filterList.map(filter => (
                             <li
                                 key={filter.id}
-                                onClick={() => handleCheckClick(filter.id)}
+                                onClick={() => {
+                                    handleCheckClick(filter.id);
+                                }}
                             >
                                 {filter.clicked ? (
                                     <PurpleCheckIcon />
