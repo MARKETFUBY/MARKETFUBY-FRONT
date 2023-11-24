@@ -1,8 +1,10 @@
 import { React, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { LogoutAPI } from '../../api/member';
 
 function UserMenu({ setOpenUserMenu }) {
+    const navigate = useNavigate();
     const ClickLogout = async () => {
         const refreshToken = localStorage.getItem('refreshToken');
         try {
@@ -11,16 +13,30 @@ function UserMenu({ setOpenUserMenu }) {
             console.log(err);
         }
     };
-
+    const clickOrder = () => {
+        navigate('/mypage/order');
+    };
+    const clickInquiry = () => {
+        navigate('/mypage/inquiry');
+    };
+    const clickReview = () => {
+        navigate('/mypage/review');
+    };
     return (
         <Div onMouseLeave={() => setOpenUserMenu(false)}>
-            <div className='menuItem'>주문 내역</div>
+            <div className='menuItem' onClick={clickOrder}>
+                주문 내역
+            </div>
             <div className='menuItem'>선물 내역</div>
             <div className='menuItem'>찜한상품</div>
             <div className='menuItem'>배송지관리</div>
-            <div className='menuItem'>상품후기</div>
+            <div className='menuItem' onClick={clickReview}>
+                상품후기
+            </div>
             <div className='menuItem'>결제수단 컬리페이</div>
-            <div className='menuItem'>상품문의</div>
+            <div className='menuItem' onClick={clickInquiry}>
+                상품문의
+            </div>
             <div className='menuItem'>적립금 컬리캐시</div>
             <div className='menuItem'>쿠폰</div>
             <div className='menuItem'>개인정보수정</div>

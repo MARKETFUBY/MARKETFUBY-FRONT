@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import CartItem from './CartItem';
 import arrow from '../../assets/icon/arrow.png';
 import flippedArrow from '../../assets/icon/flippedArrow.png';
-import { putCartList } from '../../api/cart';
+import { deleteCartList, putCartList } from '../../api/cart';
 
 function CartList({ roomTempList, refrigeList, frozenList }) {
     const [isCartRefrigeVisible, setCartRefrigeVisible] = useState(true);
     const [isCartRoomVisible, setCartRoomVisible] = useState(true);
     const [isCartFrozenVisible, setCartFrozenVisible] = useState(true);
     const [checked, setChecked] = useState(false);
+    const [selectedItems, setSelectedItems] = useState([]);
 
     const count =
         roomTempList && refrigeList && frozenList
@@ -61,8 +62,6 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const handleUpdateItemCount = async (itemKey, newCount) => {
         try {
             const data = await putCartList(itemKey, newCount);
-            console.log('df', itemKey, newCount);
-            console.log(data);
         } catch (err) {
             console.log(err);
         }
@@ -79,6 +78,17 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
 
         const newCheckedFrozenItems = checkedFrozenItems.map(() => !checked);
         setCheckedFrozenItems(newCheckedFrozenItems);
+    };
+
+    const handleDeleteSelected = async () => {
+        try {
+            const deletedItems = await deleteCartList(selectedItems);
+            console.log('Deleted Items:', deletedItems);
+            alert('삭제되었습니다.');
+            window.location.reload();
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
@@ -99,9 +109,16 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                             ✔
                         </label>
                     </Check>
-                    <div>전체 선택(2/{count})</div>
+                    <div>
+                        전체 선택({selectedItems.length}/{count})
+                    </div>
                     <span></span>
-                    <button className='deleteBtn'>선택삭제</button>
+                    <button
+                        className='deleteBtn'
+                        onClick={handleDeleteSelected}
+                    >
+                        선택삭제
+                    </button>
                 </div>
             </ChoiceBox>
             {refrigeList && refrigeList.length > 0 && (
@@ -253,9 +270,16 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                             ✔
                         </label>
                     </Check>
-                    <div>전체 선택(2/{count})</div>
+                    <div>
+                        전체 선택({selectedItems.length}/{count})
+                    </div>
                     <span></span>
-                    <button className='deleteBtn'>선택삭제</button>
+                    <button
+                        className='deleteBtn'
+                        onClick={handleDeleteSelected}
+                    >
+                        선택삭제
+                    </button>
                 </div>
             </ChoiceBox>
         </Div>
