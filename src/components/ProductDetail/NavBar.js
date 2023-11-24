@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { formatPrice } from '../../utils/formatPrice';
 
 const NavBar = ({ reviewNum }) => {
     return (
@@ -8,7 +9,7 @@ const NavBar = ({ reviewNum }) => {
                 <NavBtn>상세정보</NavBtn>
                 <NavBtn>
                     <span>후기</span>
-                    <span className='reveiw-cnt'>({reviewNum})</span>
+                    <span className='reveiw-cnt'>{formatPrice(reviewNum)}</span>
                 </NavBtn>
                 <NavBtn>문의</NavBtn>
             </BtnWrapper>
