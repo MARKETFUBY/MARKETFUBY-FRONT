@@ -12,7 +12,6 @@ const Filter = ({ handleModalOpen }) => {
 
     // 카테고리 옆 화살표 버튼 클릭 시 실행할 함수
     const handleCategoryClick = () => {
-        console.log(filterList);
         setIsCategoryClicked(!isCategoryClicked);
     };
 
