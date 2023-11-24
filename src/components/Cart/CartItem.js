@@ -1,19 +1,30 @@
-import { useState, React } from 'react';
+import { useState, React, useEffect } from 'react';
 import styled from 'styled-components';
+import { deleteCartList, putCartList } from '../../api/cart';
 
 function CartItem({ itemKey, data, checked, onCheckChange, updateItemCount }) {
-    const [count, setCount] = useState(1);
+    const [itemCount, setItemCount] = useState(data.count);
 
     const handleDecrement = () => {
-        if (count > 1) {
-            setCount(count - 1);
-            updateItemCount(itemKey, count - 1);
+        if (itemCount > 1) {
+            setItemCount(itemCount - 1);
+            updateItemCount(itemKey, itemCount - 1);
         }
     };
 
     const handleIncrement = () => {
-        setCount(count + 1);
-        updateItemCount(itemKey, count + 1);
+        setItemCount(itemCount + 1);
+        updateItemCount(itemKey, itemCount + 1);
+    };
+
+    const deleteCartItem = async () => {
+        try {
+            const data = await deleteCartList(itemKey);
+            alert('삭제되었습니다.');
+            window.location.reload();
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
@@ -30,18 +41,18 @@ function CartItem({ itemKey, data, checked, onCheckChange, updateItemCount }) {
                 </label>
             </Check>
             <div className='ImgBox'>
-                <img src={data.image} alt={data.title} />
+                <img src={data.imageUrl} alt={data.productName} />
             </div>
-            <div className='name'>{data.title}</div>
+            <div className='name'>{data.productName}</div>
             <div className='count'>
                 <MinusBtn onClick={handleDecrement}>-</MinusBtn>
-                <div className='itemCount'>{count}</div>
+                <div className='itemCount'>{itemCount}</div>
                 <PlusBtn onClick={handleIncrement}>+</PlusBtn>
             </div>
             <div className='price'>
                 <span className='itemPrice'>{data.price}원</span>
             </div>
-            <Btn>
+            <Btn onClick={() => deleteCartItem({ itemKey })}>
                 <span></span>
             </Btn>
         </Div>

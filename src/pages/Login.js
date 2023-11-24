@@ -1,8 +1,30 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { SignInAPI } from '../api/member';
 import Header from '../components/Common/Header';
 
 function Login() {
+    const [userInfo, setUserInfo] = useState({ fubyId: '', passwd: '' });
+    const { fubyId, passwd } = userInfo;
+
+    const getUserInfo = e => {
+        const { name, value } = e.target;
+        setUserInfo({ ...userInfo, [name]: value });
+    };
+
+    const submitUserInfo = async () => {
+        const LoginInfo = {
+            ...userInfo,
+        };
+        try {
+            console.log(LoginInfo);
+            SignInAPI(LoginInfo);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <div>
             <Header />
@@ -12,18 +34,20 @@ function Login() {
                     <InputDiv>
                         <Input
                             data-testid='input-box'
-                            name='id'
+                            name='fubyId'
+                            value={fubyId}
                             placeholder='아이디를 입력해주세요'
                             type='text'
-                            value=''
+                            onChange={getUserInfo}
                         />
                         <Input
                             data-testid='input-box'
-                            name='password'
+                            name='passwd'
                             placeholder='비밀번호를 입력해주세요'
-                            type='password'
+                            type='passwd'
                             autocomplete='off'
-                            value=''
+                            value={passwd}
+                            onChange={getUserInfo}
                         />
                     </InputDiv>
                 </FormDiv>
@@ -35,6 +59,7 @@ function Login() {
                 <BtnDiv>
                     <button
                         className='loginBtn'
+                        onClick={submitUserInfo}
                         type='submit'
                         height='54'
                         radius='3'
