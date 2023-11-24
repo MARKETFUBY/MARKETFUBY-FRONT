@@ -70,7 +70,6 @@ const Best = () => {
 export default Best;
 
 const Body = styled.div`
-    position: relative;
     display: flex;
     width: 1050px;
     margin: 50px auto 75px;
