@@ -8,7 +8,7 @@ const Benefit = () => {
 
     useEffect(() => {
         getBenefitList()
-            .then(res => setEvents(res.eventList))
+            .then(res => setEvents(res))
             .catch(err => console.log(err));
     }, []);
 
