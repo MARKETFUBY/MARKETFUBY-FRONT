@@ -33,18 +33,36 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
         const newCheckedRefrigeItems = [...checkedRefrigeItems];
         newCheckedRefrigeItems[index] = !newCheckedRefrigeItems[index];
         setCheckedRefrigeItems(newCheckedRefrigeItems);
+        updateSelectedItems(index, refrigeList, newCheckedRefrigeItems);
     };
 
     const handleCheckRoomChange = index => {
         const newCheckedRoomItems = [...checkedRoomItems];
         newCheckedRoomItems[index] = !newCheckedRoomItems[index];
         setCheckedRoomItems(newCheckedRoomItems);
+        updateSelectedItems(index, roomTempList, newCheckedRoomItems);
     };
 
     const handleCheckFrozenChange = index => {
         const newCheckedFrozenItems = [...checkedFrozenItems];
         newCheckedFrozenItems[index] = !newCheckedFrozenItems[index];
         setCheckedFrozenItems(newCheckedFrozenItems);
+        updateSelectedItems(index, frozenList, newCheckedFrozenItems);
+    };
+
+    const updateSelectedItems = (index, itemList, checkedItems) => {
+        const selectedItem = index;
+
+        if (checkedItems[index]) {
+            setSelectedItems(prevSelectedItems => [
+                ...prevSelectedItems,
+                selectedItem,
+            ]);
+        } else {
+            setSelectedItems(prevSelectedItems =>
+                prevSelectedItems.filter(item => item !== selectedItem),
+            );
+        }
     };
 
     const toggleCartRefrigeVisibility = () => {

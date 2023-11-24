@@ -18,8 +18,9 @@ function CartItem({ itemKey, data, checked, onCheckChange, updateItemCount }) {
     };
 
     const deleteCartItem = async () => {
+        const item = [itemKey];
         try {
-            const data = await deleteCartList(itemKey);
+            const data = await deleteCartList(item);
             alert('삭제되었습니다.');
             window.location.reload();
         } catch (err) {
