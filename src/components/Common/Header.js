@@ -6,6 +6,8 @@ import Category from './Category';
 
 function Header() {
     const navigate = useNavigate();
+    const [isLogin, setIsLogin] = useState(true);
+    const username = localStorage.getItem('username');
 
     const clickLogin = () => {
         navigate('/member/login');
@@ -59,6 +61,7 @@ function Header() {
             setIsFixed(false);
         }
     };
+
     useEffect(() => {
         window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
         window.addEventListener('scroll', handleScroll);
@@ -74,11 +77,25 @@ function Header() {
                 <>
                     <Wrapper>
                         <NavUser>
-                            <Text purple='true' onClick={clickSignup}>
-                                회원가입
-                            </Text>
-                            <Space />
-                            <Text onClick={clickLogin}>로그인</Text>
+                            {isLogin ? (
+                                <User>
+                                    <a>
+                                        <div>
+                                            <span className='class'>일반</span>
+                                            {username} 님<PlusBtn />
+                                        </div>
+                                    </a>
+                                </User>
+                            ) : (
+                                <>
+                                    <Text purple='true' onClick={clickSignup}>
+                                        회원가입
+                                    </Text>
+                                    <Space />
+                                    <Text onClick={clickLogin}>로그인</Text>
+                                </>
+                            )}
+
                             <Space />
                             <Text>
                                 고객센터
@@ -497,5 +514,32 @@ const FixedSearch = styled.div`
         background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZD0iTTI0IDI0SDZWNmgxOHoiLz4KICAgICAgICA8cGF0aCBkPSJNMjIuNSAyMi41aC0xNXYtMTVoMTV6Ii8+CiAgICAgICAgPGcgc3Ryb2tlPSIjMzMzIiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjEuNiI+CiAgICAgICAgICAgIDxwYXRoIGQ9Ik0xOC44MjUgMTMuMzUyYzAgMS43MjUtLjc1IDMuMjI1LTEuOTUgNC4yLS45NzUuODI1LTIuMTc1IDEuMjc1LTMuNTI1IDEuMjc1YTUuNDU3IDUuNDU3IDAgMCAxLTUuNDc1LTUuNDc1IDUuNDU3IDUuNDU3IDAgMCAxIDUuNDc1LTUuNDc1YzMtLjA3NSA1LjQ3NSAyLjQgNS40NzUgNS40NzV6TTIxLjM3NSAyMS4zNzVsLTMuNzUtMy43NSIvPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+Cg==)
             0px 0px no-repeat;
         border: none;
+    }
+`;
+
+const User = styled.div`
+    line-height: 35px;
+    position: relative;
+
+    a {
+        display: block;
+        cursor: pointer;
+    }
+
+    .class {
+        display: inline-block;
+        min-width: 44px;
+        height: 16px;
+        margin-right: 6px;
+        padding: 0px 4px;
+        border-radius: 30px;
+        font-size: 10px;
+        line-height: 14px;
+        text-align: center;
+        letter-spacing: -0.3px;
+        vertical-align: 0px;
+        color: rgb(95, 0, 128);
+        border: 1px solid rgb(95, 0, 128);
+        background-color: rgb(255, 255, 255);
     }
 `;

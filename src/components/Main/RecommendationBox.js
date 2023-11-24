@@ -30,7 +30,7 @@ function RecommendationBox({ data }) {
     };
 
     const items = data.map(product => (
-        <Product key={product.productId} {...product} />
+        <Product key={product.productId} product={product} />
     ));
 
     return (

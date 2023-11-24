@@ -1,24 +1,43 @@
-import React from 'react';
+import { React, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CartList from './CartList';
 import OrderBox from './OrderBox';
 import { cart } from './dummydata';
+import { getCartList } from '../../api/cart';
 
 function CartComponent() {
+    const [cartItem, setCartItem] = useState([]);
+
+    console.log('cartItem', cartItem);
+
+    useEffect(() => {
+        getCartItem();
+    }, []);
+
+    const getCartItem = async () => {
+        try {
+            const data = await getCartList();
+            setCartItem(data);
+            console.log('cartItem', cartItem);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <Div>
             <div className='cartContentsBox'>
                 <CartBox>
                     <CartList
-                        roomTempList={cart[0].roomTempList}
-                        refrigeList={cart[0].refrigeList}
-                        frozenList={cart[0].frozenList}
+                        roomTempList={cartItem.roomTempList}
+                        refrigeList={cartItem.refrigeList}
+                        frozenList={cartItem.frozenList}
                     />
                 </CartBox>
                 <OrderBox
-                    totalAmount={cart[0].totalAmount}
-                    discountAmount={cart[0].discountAmount}
-                    paymentAmount={cart[0].paymentAmount}
+                    totalAmount={cartItem.totalAmount}
+                    discountAmount={cartItem.discountAmount}
+                    paymentAmount={cartItem.paymentAmount}
                 />
             </div>
         </Div>
