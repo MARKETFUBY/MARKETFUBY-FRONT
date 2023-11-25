@@ -1,12 +1,16 @@
 import styled from 'styled-components';
+import { formatPrice } from '../../utils/formatPrice';
 
-const NavBar = () => {
+const NavBar = ({ reviewNum }) => {
     return (
         <Wrapper>
             <BtnWrapper>
                 <NavBtn>상품설명</NavBtn>
                 <NavBtn>상세정보</NavBtn>
-                <NavBtn>후기</NavBtn>
+                <NavBtn>
+                    <span>후기</span>
+                    <span className='reveiw-cnt'>{formatPrice(reviewNum)}</span>
+                </NavBtn>
                 <NavBtn>문의</NavBtn>
             </BtnWrapper>
         </Wrapper>
@@ -48,5 +52,16 @@ const NavBtn = styled.li`
     border-color: #eee;
     border-style: solid;
     background-color: #fafafa;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
     cursor: pointer;
+
+    & .reveiw-cnt {
+        margin-left: 4px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #999;
+        line-height: 16px;
+    }
 `;

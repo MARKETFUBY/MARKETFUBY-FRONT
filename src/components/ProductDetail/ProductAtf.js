@@ -1,23 +1,139 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import product1 from '../../assets/product/product1.png';
 import { ReactComponent as RightArrow } from '../../assets/product/arrow_right.svg';
 import { ReactComponent as HeartIcon } from '../../assets/product/heart.svg';
+import { ReactComponent as FilledHeartIcon } from '../../assets/product/heart_fill.svg';
 import { ReactComponent as AlarmIcon } from '../../assets/product/alarm.svg';
+import { formatPrice } from '../../utils/formatPrice';
 
-const ProductAtf = () => {
+import { getCartList, postCartItem, putCartList } from '../../api/cart';
+import { postLike, deleteLike } from '../../api/product';
+import CartModal from '../Common/CartModal';
+
+const ProductAtf = ({ productInfo }) => {
+    const productId = useParams().id;
+    const [num, setNum] = useState(1); // 선택한 상품 개수
+    const [heartClicked, setHeartClicked] = useState(false); // 찜 버튼 클릭 여부
+    const memberId = 13; //🚨임의설정
+
+    const handleHeartClick = () => {
+        setHeartClicked(!heartClicked);
+    };
+
+    // 찜하기 & 찜 취소하기
+    const handleLike = async memberId => {
+        try {
+            if (heartClicked) {
+                const res = await postLike(productId, memberId);
+            } else {
+                const res = await deleteLike(productId, memberId);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        handleLike(memberId);
+    }, [heartClicked]);
+
+    // 장바구니 관련
+    const CART_CATEGORY = ['roomTempList', 'refrigeList', 'frozenList'];
+    const [cartList, setCartList] = useState();
+    const [isAdded, setIsAdded] = useState([false, false]); // 장바구니에 담겼는지, 기존에 장바구니에 있었는지
+
+    // 장바구니 목록 저장할 함수
+    const getCartItems = async () => {
+        try {
+            const cartItems = await getCartList();
+            setCartList(cartItems);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getCartItems();
+    }, []);
+
+    // 장바구니에 담기
+    const putInCart = async () => {
+        try {
+            const res = postCartItem(productInfo.productId, 1);
+            setIsAdded([true, false]);
+            getCartItems();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // 장바구니에 수량 추가
+    const addCartCnt = async (cartProductId, cnt) => {
+        try {
+            const res = putCartList(cartProductId, cnt);
+            setIsAdded([true, true]);
+            getCartItems();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // 담기 버튼 클릭 시 실행할 함수
+    const handleCartClick = () => {
+        let sameProduct = [];
+        for (let category of CART_CATEGORY) {
+            sameProduct = cartList[category]?.filter(
+                item => item.productName === productInfo.title,
+            );
+
+            if (sameProduct?.length > 0) {
+                break;
+            }
+        }
+
+        // 장바구니에 없는 상품일 경우, 장바구니에 담기
+        if (sameProduct.length === 0) {
+            putInCart();
+        }
+        // 장바구니에 있는 제품일 경우, 상품 개수 1 증가
+        else {
+            addCartCnt(sameProduct[0].cartProductId, sameProduct[0].count + 1);
+        }
+    };
+
+    // 5초 뒤에 해당 변수 초기화
+    useEffect(() => {
+        if (isAdded) {
+            const timer = setTimeout(() => setIsAdded([false, false]), 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [isAdded]);
+
     return (
         <Wrapper>
+            {isAdded[0] && (
+                <CartModal
+                    name={productInfo.title}
+                    productImg={productInfo.image}
+                    alreadyInCart={isAdded[1]}
+                />
+            )}
             <img src={product1} />
             <RightSection>
-                <Deliver>샛별배송</Deliver>
+                <Deliver>{productInfo.delivery}</Deliver>
                 <ProductName>
-                    <div>[사미헌] 갈비탕</div>
+                    <div>{productInfo.title}</div>
                     <div className='share'></div>
-                    <div>진짜 갈비로 우려낸 전통 갈비탕</div>
+                    <div>{productInfo.subtitle}</div>
                 </ProductName>
                 <Price>
-                    <span>12,000</span>
-                    <span>원</span>
+                    {productInfo.discount > 0 && (
+                        <span className='red'>{productInfo.discount}%</span>
+                    )}
+                    <span>{formatPrice(productInfo.price)}</span>
+                    <span className='small'>원</span>
                 </Price>
                 <Origin>원산지: 상품설명/상세정보 참조</Origin>
                 <SavePointWrapper>
@@ -42,7 +158,7 @@ const ProductAtf = () => {
                     <Info>
                         <dt>배송</dt>
                         <dd>
-                            <p>샛별배송</p>
+                            <p>{productInfo.delivery}</p>
                             <p className='additional'>
                                 23시 전 주문 시 내일 아침 7시 전 도착
                                 (대구·부산·울산 샛별배송 운영시간 별도 확인)
@@ -52,13 +168,13 @@ const ProductAtf = () => {
                     <Info>
                         <dt>판매자</dt>
                         <dd>
-                            <p>컬리</p>
+                            <p>{productInfo.seller}</p>
                         </dd>
                     </Info>
                     <Info>
                         <dt>포장타입</dt>
                         <dd>
-                            <p>냉동 (종이포장)</p>
+                            <p>{productInfo.packing}</p>
                             <p className='additional'>
                                 택배배송은 에코 포장이 스티로폼으로 대체됩니다.
                             </p>
@@ -67,7 +183,7 @@ const ProductAtf = () => {
                     <Info>
                         <dt>판매단위</dt>
                         <dd>
-                            <p>PK</p>
+                            <p>{productInfo.unit}</p>
                         </dd>
                     </Info>
                     <Info>
@@ -95,18 +211,23 @@ const ProductAtf = () => {
                         <dt>상품선택</dt>
                         <dd className='product-select'>
                             <div className='cart-option-item'>
-                                <span>[사미헌] 갈비탕</span>
+                                <span>{productInfo.title}</span>
                                 <OptionWrapper>
                                     <AddBtnWrapper>
-                                        <button>
+                                        <button
+                                            onClick={() => setNum(num - 1)}
+                                            disabled={num <= 1 ? true : false}
+                                        >
                                             <img src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0yMCAxNHYySDEwdi0yeiIgZmlsbD0iIzMzMyIgZmlsbC1ydWxlPSJub256ZXJvIi8+Cjwvc3ZnPgo=' />
                                         </button>
-                                        <div>1</div>
-                                        <button>
+                                        <div>{num}</div>
+                                        <button onClick={() => setNum(num + 1)}>
                                             <img src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0xNiAxMHY0aDR2MmgtNHY0aC0ydi00aC00di0yaDR2LTRoMnoiIGZpbGw9IiMzMzMiIGZpbGwtcnVsZT0ibm9uemVybyIvPgo8L3N2Zz4K' />
                                         </button>
                                     </AddBtnWrapper>
-                                    <span>12,000원</span>
+                                    <span>
+                                        {formatPrice(productInfo.price)}원
+                                    </span>
                                 </OptionWrapper>
                             </div>
                         </dd>
@@ -115,7 +236,9 @@ const ProductAtf = () => {
                 <TotalPriceWrapper>
                     <TotalPriceInfo>
                         <span className='total-price-text'>총 상품금액 :</span>
-                        <span className='price-num'>12,000</span>
+                        <span className='price-num'>
+                            {formatPrice(num * productInfo.price)}
+                        </span>
                         <span className='price-unit'>원</span>
                     </TotalPriceInfo>
                     <TotalPriceInfo>
@@ -126,13 +249,13 @@ const ProductAtf = () => {
                     </TotalPriceInfo>
                 </TotalPriceWrapper>
                 <BtnWrapper>
-                    <SquareBtn>
-                        <HeartIcon />
+                    <SquareBtn onClick={handleHeartClick}>
+                        {heartClicked ? <FilledHeartIcon /> : <HeartIcon />}
                     </SquareBtn>
                     <SquareBtn>
                         <AlarmIcon />
                     </SquareBtn>
-                    <CartBtn>장바구니 담기</CartBtn>
+                    <CartBtn onClick={handleCartClick}>장바구니 담기</CartBtn>
                 </BtnWrapper>
             </RightSection>
         </Wrapper>
@@ -144,7 +267,6 @@ export default ProductAtf;
 const Wrapper = styled.div`
     display: flex;
     width: 1050px;
-    -webkit-box-pack: justify;
     justify-content: space-between;
     margin: 0px auto;
     padding-top: 30px;
@@ -216,19 +338,21 @@ const Price = styled.div`
     letter-spacing: -0.5px;
 
     span {
-        &:first-child {
-            padding-right: 4px;
-            font-size: 28px;
-            color: rgb(51, 51, 51);
-        }
+        padding-right: 4px;
+        font-size: 28px;
+        color: rgb(51, 51, 51);
 
-        &:nth-child(2) {
+        &.small {
             display: inline-block;
             position: relative;
             top: 4px;
             font-size: 18px;
-            color: rgb(51, 51, 51);
             vertical-align: bottom;
+        }
+
+        &.red {
+            padding-right: 9px;
+            color: #fa622f;
         }
     }
 `;

@@ -1,23 +1,40 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { ReactComponent as InitializationIcon } from '../../assets/icon/initialization.svg';
 import { ReactComponent as ArrowIcon } from '../../assets/icon/arrow.svg';
 import { ReactComponent as CheckIcon } from '../../assets/icon/check.svg';
 import { ReactComponent as PurpleCheckIcon } from '../../assets/icon/check_purple.svg';
-import { FILTER_LIST } from './FilterData';
+import { click, initialize } from '../../store/filterSlice';
 
-const Filter = () => {
+const Filter = ({ handleModalOpen }) => {
     const [isCategoryClicked, setIsCategoryClicked] = useState(false);
 
+    // 카테고리 옆 화살표 버튼 클릭 시 실행할 함수
     const handleCategoryClick = () => {
         setIsCategoryClicked(!isCategoryClicked);
     };
 
+    // 체크 버튼 클릭 시
+    const dispatch = useDispatch();
+    const filterList = useSelector(state => {
+        return state.filter;
+    });
+
+    const handleCheckClick = id => {
+        dispatch(click(id));
+    };
+
     return (
         <Wrapper>
-            <Header>
+            <Header
+                className={
+                    filterList.filter(item => item.clicked).length > 0 &&
+                    'initialize-able'
+                }
+            >
                 <span>필터</span>
-                <button>
+                <button onClick={() => dispatch(initialize())}>
                     <InitializationIcon />
                     <span>초기화</span>
                 </button>
@@ -35,9 +52,14 @@ const Filter = () => {
                     {isCategoryClicked && (
                         <>
                             <ul>
-                                {FILTER_LIST.map(filter => {
+                                {filterList.map(filter => {
                                     return (
-                                        <li key={filter.id}>
+                                        <li
+                                            key={filter.id}
+                                            onClick={() => {
+                                                handleCheckClick(filter.id);
+                                            }}
+                                        >
                                             {filter.clicked ? (
                                                 <PurpleCheckIcon />
                                             ) : (
@@ -49,7 +71,7 @@ const Filter = () => {
                                     );
                                 })}
                             </ul>
-                            <button>
+                            <button onClick={handleModalOpen}>
                                 <span>카테고리 더보기</span>
                                 <ArrowIcon />
                             </button>
@@ -132,6 +154,16 @@ const Header = styled.div`
             margin-left: 5px;
             font-weight: 500;
             color: rgb(221, 221, 221);
+        }
+    }
+
+    &.initialize-able {
+        svg path {
+            stroke: #666;
+        }
+
+        span:last-child {
+            color: #666;
         }
     }
 `;
