@@ -10,7 +10,7 @@ function CartComponent() {
     useEffect(() => {
         getCartItem();
     }, []);
-
+    
     const getCartItem = async () => {
         try {
             const data = await getCartList();

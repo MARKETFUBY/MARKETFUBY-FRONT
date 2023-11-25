@@ -23,7 +23,6 @@ export const SignUpAPI = async signUpInfo => {
 // 로그인
 export const SignInAPI = async loginInfo => {
     try {
-        console.log(loginInfo, 'loginInfo');
         const res = await client.post('/members/login', loginInfo);
         if (res.data && res.data.accessToken && res.data.refreshToken) {
             console.log(res, '로그인 성공');
@@ -64,6 +63,31 @@ export const LogoutAPI = async refreshToken => {
         window.location.replace('/');
         console.log('로그아웃 성공');
         return res.data;
+    } catch (err) {
+        console.log(err, '로그아웃 에러');
+    }
+};
+
+// 토큰 재발급
+export const RefreshAPI = async refreshToken => {
+    try {
+        const res = await client.post('/members/refreshtoken', {
+            refreshToken,
+        });
+        if (res.data && res.data.accessToken && res.data.refreshToken) {
+            console.log(res, '재발급 성공');
+            localStorage.setItem(
+                'accessToken',
+                'Bearer ' + res.data.accessToken,
+            );
+            localStorage.setItem(
+                'refreshToken',
+                'Bearer ' + res.data.refreshToken,
+            );
+            return res.data;
+        } else {
+            console.log('Invalid response format', res);
+        }
     } catch (err) {
         console.log(err, '로그아웃 에러');
     }
