@@ -13,7 +13,7 @@ console.log(
     client.defaults.headers.common['Authorization'],
 );
 
-// 헤더 없는 refresh용 axios 인스턴스 생성
+// refresh용 axios 인스턴스
 const refreshClient = axios.create({
     baseURL: process.env.REACT_APP_SERVER_URL,
     contentType: 'application/json; charset=utf-8;',
@@ -28,16 +28,21 @@ client.interceptors.response.use(
     },
     async error => {
         const originalConfig = error.config;
-        const refreshToken = localStorage.getItem('refreshToken');
-
-        if (error.response?.data.details === 'JWT EXPIRED') {
+        const refreshToken = localStorage.getItem('refreshToken')?.slice(7);
+        if (refreshToken && error.response?.data.details === 'JWT EXPIRED') {
             try {
-                const res = await refreshClient.post('/auth/reissue', {
-                    token: refreshToken,
+                const res = await refreshClient.post('/members/refreshtoken', {
+                    refreshToken: refreshToken,
                 });
                 console.log(res, '토큰 재발급 성공');
-                localStorage.setItem('accessToken', res.data.accessToken);
-                localStorage.setItem('refreshToken', res.data.refreshToken);
+                localStorage.setItem(
+                    'accessToken',
+                    `Bearer  ${res.data.accessToken}`,
+                );
+                localStorage.setItem(
+                    'refreshToken',
+                    `Bearer  ${res.data.refreshToken}`,
+                );
                 originalConfig.headers['Authorization'] = res.data.accessToken;
                 refreshClient(originalConfig);
             } catch (err) {

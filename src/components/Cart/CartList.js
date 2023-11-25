@@ -10,6 +10,7 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const [isCartRoomVisible, setCartRoomVisible] = useState(true);
     const [isCartFrozenVisible, setCartFrozenVisible] = useState(true);
     const [checked, setChecked] = useState(false);
+    const [allchecked, setAllchecked] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
 
     const count =
@@ -86,16 +87,10 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     };
 
     const handleCheckAllChange = () => {
-        setChecked(!checked);
-
-        const newCheckedRefrigeItems = checkedRefrigeItems.map(() => !checked);
-        setCheckedRefrigeItems(newCheckedRefrigeItems);
-
-        const newCheckedRoomItems = checkedRoomItems.map(() => !checked);
-        setCheckedRoomItems(newCheckedRoomItems);
-
-        const newCheckedFrozenItems = checkedFrozenItems.map(() => !checked);
-        setCheckedFrozenItems(newCheckedFrozenItems);
+        setAllchecked(!allchecked);
+        if (allchecked) {
+        } else {
+        }
     };
 
     const handleDeleteSelected = async () => {
@@ -117,7 +112,7 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                             id='checkall'
                             type='checkbox'
                             checked={checked}
-                            onChange={handleCheckAllChange}
+                            onChange={handleCheckAllChange(allchecked)}
                         ></input>
                         <label
                             htmlFor='checkall'
