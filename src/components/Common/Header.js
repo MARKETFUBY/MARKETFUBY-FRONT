@@ -262,8 +262,15 @@ function Header() {
                             </li>
                         </Menu>
                         <FixedSearch>
-                            <input placeholder='검색어를 입력해주세요' />
-                            <button></button>
+                            <input
+                                placeholder='검색어를 입력해주세요'
+                                onChange={e => handleSearchChange(e)}
+                            />
+                            <button
+                                onClick={() =>
+                                    navigate(`/search?sword=${sword}`)
+                                }
+                            ></button>
                         </FixedSearch>
                         <SpotIcon />
                         <HeartIcon onClick={clickMyPage} />
