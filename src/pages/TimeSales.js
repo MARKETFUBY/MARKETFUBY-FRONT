@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Header from '../components/Common/Header';
 import banner from '../assets/banner/time_sales_banner.png';
 import Title from '../components/Common/Title';
@@ -13,7 +14,14 @@ import { getProductList } from '../api/product';
 
 const TimeSales = () => {
     const [products, setProducts] = useState(); // 상품 목록
+    const [categories, setCategories] = useState(); // 카테고리 목록
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [clickedSort, setClickedSort] = useState(0);
+
+    const filterList = useSelector(state => {
+        return state.filter;
+    }).filter(item => item.clicked);
+    const selectedFilter = filterList.length > 0 ? filterList[0].id : null;
 
     // 모달 열기 함수
     const handleModalOpen = () => {
@@ -26,26 +34,27 @@ const TimeSales = () => {
     };
 
     // 상품 목록 받아오기
-    const getProducts = async (sort, filters) => {
+    const getProducts = async () => {
         try {
             const res = await getProductList(
                 'market-time-sales',
-                sort,
-                filters,
+                clickedSort,
+                selectedFilter,
             );
             setProducts(res.productList);
+            setCategories(res.categoryList);
         } catch (err) {
             console.log(err);
         }
     };
 
     useEffect(() => {
-        getProducts(0, null);
-    }, []);
+        getProducts(clickedSort, selectedFilter);
+    }, [clickedSort, selectedFilter]);
 
     // 정렬된 상품 목록 받아오기
-    const sortProducts = async sort => {
-        getProducts(sort, null);
+    const sortProducts = sort => {
+        setClickedSort(sort);
     };
 
     // 장바구니 모달 관련
@@ -79,13 +88,19 @@ const TimeSales = () => {
                 />
             )}
             {isModalOpen && (
-                <FilterModal onClick={handleModalClose}></FilterModal>
+                <FilterModal
+                    onClick={handleModalClose}
+                    categories={categories}
+                ></FilterModal>
             )}
             <Header />
             <img src={banner} />
             <Title text='알뜰쇼핑' />
             <Body>
-                <Filter handleModalOpen={handleModalOpen} />
+                <Filter
+                    handleModalOpen={handleModalOpen}
+                    categories={categories}
+                />
                 <Result>
                     <SortBar
                         count={products?.length}

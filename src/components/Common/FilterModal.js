@@ -6,7 +6,7 @@ import { ReactComponent as PurpleCheckIcon } from '../../assets/icon/check_purpl
 import { ReactComponent as InitializationIcon } from '../../assets/icon/initialization.svg';
 import { click, initialize } from '../../store/filterSlice';
 
-const FilterModal = ({ onClick }) => {
+const FilterModal = ({ onClick, categories }) => {
     // 체크 버튼 클릭 시
     const dispatch = useDispatch();
     const filterList = useSelector(state => {
@@ -16,6 +16,17 @@ const FilterModal = ({ onClick }) => {
 
     const handleCheckClick = id => {
         dispatch(click(id));
+    };
+
+    // 카테고리에 해당하는 제품 수 반환해주는 함수
+    const getCategoryNum = name => {
+        const sameCategory = categories.filter(item => name === item.name);
+
+        if (sameCategory.length > 0) {
+            return sameCategory[0].count;
+        } else {
+            return 0;
+        }
     };
 
     return (
@@ -38,6 +49,9 @@ const FilterModal = ({ onClick }) => {
                                     <CheckIcon />
                                 )}
                                 <span>{filter.label}</span>
+                                <span className='count'>
+                                    {getCategoryNum(filter.label)}
+                                </span>
                             </li>
                         ))}
                     </ul>
@@ -157,6 +171,14 @@ const Window = styled.div`
         white-space: normal;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+    }
+
+    & .count {
+        margin: 0;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+        color: #cccccc;
     }
 `;
 

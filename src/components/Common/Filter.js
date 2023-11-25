@@ -7,7 +7,7 @@ import { ReactComponent as CheckIcon } from '../../assets/icon/check.svg';
 import { ReactComponent as PurpleCheckIcon } from '../../assets/icon/check_purple.svg';
 import { click, initialize } from '../../store/filterSlice';
 
-const Filter = ({ handleModalOpen }) => {
+const Filter = ({ handleModalOpen, categories }) => {
     const [isCategoryClicked, setIsCategoryClicked] = useState(false);
 
     // 카테고리 옆 화살표 버튼 클릭 시 실행할 함수
@@ -28,6 +28,17 @@ const Filter = ({ handleModalOpen }) => {
     useEffect(() => {
         dispatch(initialize());
     }, []);
+
+    // 카테고리에 해당하는 제품 수 반환해주는 함수
+    const getCategoryNum = name => {
+        const sameCategory = categories.filter(item => name === item.name);
+
+        if (sameCategory.length > 0) {
+            return sameCategory[0].count;
+        } else {
+            return 0;
+        }
+    };
 
     return (
         <Wrapper>
@@ -70,7 +81,9 @@ const Filter = ({ handleModalOpen }) => {
                                                 <CheckIcon />
                                             )}
                                             <span>{filter.label}</span>
-                                            <span>22</span>
+                                            <span>
+                                                {getCategoryNum(filter.label)}
+                                            </span>
                                         </li>
                                     );
                                 })}

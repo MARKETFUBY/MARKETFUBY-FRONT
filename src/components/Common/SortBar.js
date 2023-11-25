@@ -24,6 +24,10 @@ const SortBar = ({ count, sortProducts }) => {
     });
     const selectedFilter = filterList.filter(item => item.clicked);
 
+    const handleRemoveClick = () => {
+        dispatch(initialize());
+    };
+
     return (
         <Wrapper>
             <SortBarWrapper>
@@ -41,10 +45,7 @@ const SortBar = ({ count, sortProducts }) => {
                 <FilterBarWrapper>
                     <div>
                         <span>{selectedFilter[0].label}</span>
-                        <img
-                            src={removeIcon}
-                            onClick={() => dispatch(initialize())}
-                        />
+                        <img src={removeIcon} onClick={handleRemoveClick} />
                     </div>
                 </FilterBarWrapper>
             )}
