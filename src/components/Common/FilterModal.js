@@ -4,7 +4,7 @@ import { ReactComponent as CloseBtn } from '../../assets/icon/close.svg';
 import { ReactComponent as CheckIcon } from '../../assets/icon/check.svg';
 import { ReactComponent as PurpleCheckIcon } from '../../assets/icon/check_purple.svg';
 import { ReactComponent as InitializationIcon } from '../../assets/icon/initialization.svg';
-import { click } from '../../store/filterSlice';
+import { click, initialize } from '../../store/filterSlice';
 
 const FilterModal = ({ onClick }) => {
     // 체크 버튼 클릭 시
@@ -12,6 +12,7 @@ const FilterModal = ({ onClick }) => {
     const filterList = useSelector(state => {
         return state.filter;
     });
+    const selectedFilter = filterList.filter(item => item.clicked);
 
     const handleCheckClick = id => {
         dispatch(click(id));
@@ -41,11 +42,16 @@ const FilterModal = ({ onClick }) => {
                         ))}
                     </ul>
                     <Footer>
-                        <Button>
+                        <Button
+                            className={
+                                selectedFilter.length <= 0 && 'disabled-btn'
+                            }
+                            onClick={() => dispatch(initialize())}
+                        >
                             <InitializationIcon />
                             <span>초기화</span>
                         </Button>
-                        <Button className='purple-btn'>
+                        <Button className='purple-btn' onClick={onClick}>
                             <span>확인</span>
                         </Button>
                     </Footer>
