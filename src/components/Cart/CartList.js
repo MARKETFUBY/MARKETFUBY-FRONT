@@ -52,7 +52,6 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
 
     const updateSelectedItems = (index, itemList, checkedItems) => {
         const selectedItem = index;
-
         if (checkedItems[index]) {
             setSelectedItems(prevSelectedItems => [
                 ...prevSelectedItems,
@@ -80,6 +79,7 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const handleUpdateItemCount = async (itemKey, newCount) => {
         try {
             const data = await putCartList(itemKey, newCount);
+            window.location.reload();
         } catch (err) {
             console.log(err);
         }
@@ -101,7 +101,6 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const handleDeleteSelected = async () => {
         try {
             const deletedItems = await deleteCartList(selectedItems);
-            console.log('Deleted Items:', deletedItems);
             alert('삭제되었습니다.');
             window.location.reload();
         } catch (err) {

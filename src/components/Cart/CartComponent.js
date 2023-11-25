@@ -7,8 +7,6 @@ import { getCartList } from '../../api/cart';
 function CartComponent() {
     const [cartItem, setCartItem] = useState([]);
 
-    console.log('cartItem', cartItem);
-
     useEffect(() => {
         getCartItem();
     }, []);

@@ -6,16 +6,17 @@ import UserInfo from '../components/Common/UserInfo';
 
 function MyPage({ rightSection }) {
     return (
-        <Div>
+        <Wrapper>
             <Header />
             <UserInfo />
             <MyKurly rightSection={rightSection} />
-        </Div>
+        </Wrapper>
     );
 }
 
 export default MyPage;
-const Div = styled.div`
+
+const Wrapper = styled.div`
     margin: 0px auto;
     padding-bottom: 80px;
 `;

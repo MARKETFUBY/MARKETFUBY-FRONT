@@ -23,11 +23,21 @@ function Header() {
     };
 
     const clickCart = () => {
-        navigate('/cart');
+        if (isLogin) {
+            navigate('/cart');
+        } else {
+            alert('로그인 후 이용해 주세요');
+            navigate('/member/login');
+        }
     };
 
     const clickMyPage = () => {
-        navigate('/mypage/order');
+        if (isLogin) {
+            navigate('/mypage/order');
+        } else {
+            alert('로그인 후 이용해 주세요');
+            navigate('/member/login');
+        }
     };
 
     const clickNewProduct = () => {
@@ -83,6 +93,7 @@ function Header() {
             ? setIsLogin(true)
             : setIsLogin(false);
     }, []);
+
     // 검색어 관련
     const [sword, setSword] = useState('');
 
