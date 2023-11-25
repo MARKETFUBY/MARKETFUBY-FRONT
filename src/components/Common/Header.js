@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import menu from '../../assets/icon/menu.png';
 import Category from './Category';
-
+import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { initialize } from '../../store/filterSlice';
 
@@ -84,6 +84,18 @@ function Header() {
     const handleSearchChange = e => {
         setSword(e.target.value);
     };
+
+    // 클릭된 페이지
+    const clickedPage = useLocation().pathname.replace('/', '');
+    const [isPurple, setIsPurple] = useState(
+        clickedPage === 'new-product'
+            ? 1
+            : clickedPage === 'best'
+            ? 2
+            : clickedPage === 'time-sales'
+            ? 3
+            : clickedPage === 'benefit' && 4,
+    );
 
     return (
         <Div>
@@ -175,10 +187,31 @@ function Header() {
                             </CategoryBox>
 
                             <Menu>
-                                <li onClick={clickNewProduct}>신상품</li>
-                                <li onClick={clickBest}>베스트</li>
-                                <li onClick={clickTimeSales}>알뜰쇼핑 </li>
-                                <li onClick={clickBenefit}> 특가/혜택</li>
+                                <li
+                                    className={isPurple === 1 && 'purple-menu'}
+                                    onClick={clickNewProduct}
+                                >
+                                    신상품
+                                </li>
+                                <li
+                                    className={isPurple === 2 && 'purple-menu'}
+                                    onClick={clickBest}
+                                >
+                                    베스트
+                                </li>
+                                <li
+                                    className={isPurple === 3 && 'purple-menu'}
+                                    onClick={clickTimeSales}
+                                >
+                                    알뜰쇼핑{' '}
+                                </li>
+                                <li
+                                    className={isPurple === 4 && 'purple-menu'}
+                                    onClick={clickBenefit}
+                                >
+                                    {' '}
+                                    특가/혜택
+                                </li>
                             </Menu>
                             <Delevery>
                                 <span className='purple'>샛별・택배</span>
@@ -202,10 +235,31 @@ function Header() {
                             ) : null}
                         </CategoryBox>
                         <Menu className='fixed-menu'>
-                            <li onClick={clickNewProduct}>신상품</li>
-                            <li onClick={clickBest}>베스트</li>
-                            <li onClick={clickTimeSales}>알뜰쇼핑 </li>
-                            <li onClick={clickBenefit}> 특가/혜택</li>
+                            <li
+                                className={isPurple === 1 && 'purple-menu'}
+                                onClick={clickNewProduct}
+                            >
+                                신상품
+                            </li>
+                            <li
+                                className={isPurple === 2 && 'purple-menu'}
+                                onClick={clickBest}
+                            >
+                                베스트
+                            </li>
+                            <li
+                                className={isPurple === 3 && 'purple-menu'}
+                                onClick={clickTimeSales}
+                            >
+                                알뜰쇼핑{' '}
+                            </li>
+                            <li
+                                className={isPurple === 4 && 'purple-menu'}
+                                onClick={clickBenefit}
+                            >
+                                {' '}
+                                특가/혜택
+                            </li>
                         </Menu>
                         <FixedSearch>
                             <input placeholder='검색어를 입력해주세요' />
@@ -413,6 +467,10 @@ const Menu = styled.ul`
         &:hover {
             color: purple;
             text-decoration: underline;
+        }
+
+        &.purple-menu {
+            color: #5f0080;
         }
     }
 
