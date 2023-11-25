@@ -25,10 +25,6 @@ const Filter = ({ handleModalOpen, categories }) => {
         dispatch(click(id));
     };
 
-    useEffect(() => {
-        dispatch(initialize());
-    }, []);
-
     // 카테고리에 해당하는 제품 수 반환해주는 함수
     const getCategoryNum = name => {
         const sameCategory = categories.filter(item => name === item.name);

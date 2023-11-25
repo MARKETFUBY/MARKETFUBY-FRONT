@@ -4,10 +4,14 @@ import styled from 'styled-components';
 import menu from '../../assets/icon/menu.png';
 import Category from './Category';
 
+import { useDispatch } from 'react-redux';
+import { initialize } from '../../store/filterSlice';
+
 function Header() {
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const username = localStorage.getItem('username');
+    const dispatch = useDispatch();
 
     const clickLogin = () => {
         navigate('/member/login');
@@ -30,14 +34,17 @@ function Header() {
     };
 
     const clickNewProduct = () => {
+        dispatch(initialize());
         navigate('/new-product');
     };
 
     const clickBest = () => {
+        dispatch(initialize());
         navigate('/best');
     };
 
     const clickTimeSales = () => {
+        dispatch(initialize());
         navigate('/time-sales');
     };
 
