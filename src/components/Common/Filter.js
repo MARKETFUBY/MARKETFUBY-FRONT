@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReactComponent as InitializationIcon } from '../../assets/icon/initialization.svg';
 import { ReactComponent as ArrowIcon } from '../../assets/icon/arrow.svg';
@@ -24,6 +24,10 @@ const Filter = ({ handleModalOpen }) => {
     const handleCheckClick = id => {
         dispatch(click(id));
     };
+
+    useEffect(() => {
+        dispatch(initialize());
+    }, []);
 
     return (
         <Wrapper>
