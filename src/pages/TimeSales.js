@@ -7,6 +7,7 @@ import Filter from '../components/Common/Filter';
 import SortBar from '../components/Common/SortBar';
 import Product from '../components/Common/Product';
 import FilterModal from '../components/Common/FilterModal';
+import CartModal from '../components/Common/CartModal';
 
 import { getProductList } from '../api/product';
 
@@ -47,8 +48,36 @@ const TimeSales = () => {
         getProducts(sort, null);
     };
 
+    // 장바구니 모달 관련
+    const [cartModalOpen, setCartModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState();
+
+    const handleModalContent = (name, productImg, alreadyInCart) => {
+        setCartModalOpen(true);
+        setModalContent({
+            name: name,
+            productImg: productImg,
+            alreadyInCart: alreadyInCart,
+        });
+    };
+
+    // 5초 뒤에 장바구니 모달 표시 여부 초기화
+    useEffect(() => {
+        if (cartModalOpen) {
+            const timer = setTimeout(() => setCartModalOpen(false), 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [cartModalOpen]);
+
     return (
         <Wrapper>
+            {cartModalOpen && (
+                <CartModal
+                    name={modalContent.name}
+                    productImg={modalContent.productImg}
+                    alreadyInCart={modalContent.alreadyInCart}
+                />
+            )}
             {isModalOpen && (
                 <FilterModal onClick={handleModalClose}></FilterModal>
             )}

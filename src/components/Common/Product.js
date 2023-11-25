@@ -6,9 +6,7 @@ import { ReactComponent as CommentIcon } from '../../assets/icon/comment.svg';
 import { getCartList, postCartItem, putCartList } from '../../api/cart';
 import { formatPrice } from '../../utils/formatPrice';
 
-import CartModal from './CartModal';
-
-const Product = ({ product }) => {
+const Product = ({ product, handleModalContent }) => {
     const nav = useNavigate();
 
     // 할인된 가격 계산
@@ -18,7 +16,6 @@ const Product = ({ product }) => {
 
     const CART_CATEGORY = ['roomTempList', 'refrigeList', 'frozenList'];
     const [cartList, setCartList] = useState();
-    const [isAdded, setIsAdded] = useState([false, false]); // 장바구니에 담겼는지, 기존에 장바구니에 있었는지
 
     // 장바구니 목록 저장할 함수
     const getCartItems = async () => {
@@ -38,7 +35,7 @@ const Product = ({ product }) => {
     const putInCart = async () => {
         try {
             const res = postCartItem(product.productId, 1);
-            setIsAdded([true, false]);
+            handleModalContent(product.title, product.image, false);
             getCartItems();
         } catch (err) {
             console.log(err);
@@ -49,7 +46,7 @@ const Product = ({ product }) => {
     const addCartCnt = async (cartProductId, cnt) => {
         try {
             const res = putCartList(cartProductId, cnt);
-            setIsAdded([true, true]);
+            handleModalContent(product.title, product.image, true);
             getCartItems();
         } catch (err) {
             console.log(err);
@@ -79,23 +76,8 @@ const Product = ({ product }) => {
         }
     };
 
-    // 5초 뒤에 해당 변수 초기화
-    useEffect(() => {
-        if (isAdded) {
-            const timer = setTimeout(() => setIsAdded([false, false]), 5000);
-            return () => clearTimeout(timer);
-        }
-    }, [isAdded]);
-
     return (
         <Wrapper>
-            {isAdded[0] && (
-                <CartModal
-                    name={product.title}
-                    productImg={product.image}
-                    alreadyInCart={isAdded[1]}
-                />
-            )}
             <img
                 src={product.image}
                 onClick={() => nav(`/goods/${product.productId}`)}

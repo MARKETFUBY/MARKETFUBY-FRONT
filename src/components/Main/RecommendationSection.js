@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import { getMainList } from '../../api/main';
 import RecommendationBox from './RecommendationBox';
 
-function RecommendationSection() {
+function RecommendationSection({ handleModalContent }) {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -24,7 +24,11 @@ function RecommendationSection() {
     return (
         <div>
             {data.map((section, key) => (
-                <RecommendationBox key={key} data={section.value} />
+                <RecommendationBox
+                    key={key}
+                    data={section.value}
+                    handleModalContent={handleModalContent}
+                />
             ))}
         </div>
     );
