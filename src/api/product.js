@@ -24,3 +24,61 @@ export const getProductList = async (page, sort, filters) => {
         throw error;
     }
 };
+
+// 제품 상세 정보 조회
+export const getProductDetail = async productId => {
+    try {
+        const res = await client.get(`/goods/${productId}`);
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// 찜하기
+export const postLike = async (productId, memberId) => {
+    try {
+        const res = await client.post(`goods/${productId}/likes`, {
+            data: { memberId: memberId },
+        });
+        return res;
+    } catch (err) {
+        throw err;
+    }
+};
+
+// 찜 취소하기
+export const deleteLike = async (productId, memberId) => {
+    try {
+        const res = await client.delete(`goods/${productId}/likes`, {
+            data: { memberId: memberId },
+        });
+        return res;
+    } catch (err) {
+        throw err;
+    }
+};
+
+// 후기 도움돼요
+export const postHelp = async (reviewId, memberId) => {
+    try {
+        const res = await client.post(`goods/reviews/${reviewId}/helps`, {
+            memberId: memberId,
+        });
+        return res;
+    } catch (err) {
+        throw err;
+    }
+};
+
+// 후기 도움돼요 취소하기
+export const deleteHelp = async (reviewId, memberId) => {
+    try {
+        const res = await client.delete(`goods/reviews/${reviewId}/helps`, {
+            memberId: memberId,
+        });
+        return res;
+    } catch (err) {
+        throw err;
+    }
+};

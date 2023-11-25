@@ -6,11 +6,23 @@ import Title from '../components/Common/Title';
 import Filter from '../components/Common/Filter';
 import SortBar from '../components/Common/SortBar';
 import Product from '../components/Common/Product';
+import FilterModal from '../components/Common/FilterModal';
 
 import { getProductList } from '../api/product';
 
 const TimeSales = () => {
     const [products, setProducts] = useState(); // 상품 목록
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // 모달 열기 함수
+    const handleModalOpen = () => {
+        setIsModalOpen(true);
+    };
+
+    // 모달 닫기 버튼 클릭 시 실행할 함수
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
 
     // 상품 목록 받아오기
     const getProducts = async (sort, filters) => {
@@ -37,11 +49,14 @@ const TimeSales = () => {
 
     return (
         <Wrapper>
+            {isModalOpen && (
+                <FilterModal onClick={handleModalClose}></FilterModal>
+            )}
             <Header />
             <img src={banner} />
             <Title text='알뜰쇼핑' />
             <Body>
-                <Filter />
+                <Filter handleModalOpen={handleModalOpen} />
                 <Result>
                     <SortBar
                         count={products?.length}
@@ -70,7 +85,6 @@ const Wrapper = styled.div`
 `;
 
 const Body = styled.div`
-    position: relative;
     display: flex;
     width: 1050px;
     margin: 50px auto 75px;

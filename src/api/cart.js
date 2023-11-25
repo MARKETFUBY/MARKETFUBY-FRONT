@@ -34,3 +34,16 @@ export const deleteCartList = async itemKey => {
         throw err;
     }
 };
+
+// 장바구니 담기
+export const postCartItem = async (productId, count) => {
+    try {
+        const res = await client.post('/cart', {
+            productId: productId,
+            count: count,
+        });
+        return res.data;
+    } catch (err) {
+        throw err;
+    }
+};

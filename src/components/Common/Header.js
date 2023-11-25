@@ -83,6 +83,12 @@ function Header() {
             ? setIsLogin(true)
             : setIsLogin(false);
     }, []);
+    // 검색어 관련
+    const [sword, setSword] = useState('');
+
+    const handleSearchChange = e => {
+        setSword(e.target.value);
+    };
 
     return (
         <Div>
@@ -142,8 +148,19 @@ function Header() {
                                 </SectionDiv>
                                 <SectionDiv>
                                     <SearchBox>
-                                        <Input placeholder='검색어를 입력해주세요' />
-                                        <SearchBtn />
+                                        <Input
+                                            placeholder='검색어를 입력해주세요'
+                                            onChange={e =>
+                                                handleSearchChange(e)
+                                            }
+                                        />
+                                        <SearchBtn
+                                            onClick={() =>
+                                                navigate(
+                                                    `/search?sword=${sword}`,
+                                                )
+                                            }
+                                        />
                                     </SearchBox>
                                 </SectionDiv>
                             </Maina>

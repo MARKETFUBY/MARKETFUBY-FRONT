@@ -1,41 +1,140 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as CartIcon } from '../../assets/icon/cart.svg';
 import { ReactComponent as CommentIcon } from '../../assets/icon/comment.svg';
+import { getCartList, postCartItem, putCartList } from '../../api/cart';
+import { formatPrice } from '../../utils/formatPrice';
 
-import { useEffect } from 'react';
+import CartModal from './CartModal';
 
 const Product = ({ product }) => {
     const nav = useNavigate();
 
+    // 할인된 가격 계산
+    const getDiscountPrice = (price, discount) => {
+        return parseInt((1 - discount / 100) * price);
+    };
+
+    const CART_CATEGORY = ['roomTempList', 'refrigeList', 'frozenList'];
+    const [cartList, setCartList] = useState();
+    const [isAdded, setIsAdded] = useState([false, false]); // 장바구니에 담겼는지, 기존에 장바구니에 있었는지
+
+    // 장바구니 목록 저장할 함수
+    const getCartItems = async () => {
+        try {
+            const cartItems = await getCartList();
+            setCartList(cartItems);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        getCartItems();
+    }, []);
+
+    // 장바구니에 담기
+    const putInCart = async () => {
+        try {
+            const res = postCartItem(product.productId, 1);
+            setIsAdded([true, false]);
+            getCartItems();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // 장바구니에 수량 추가
+    const addCartCnt = async (cartProductId, cnt) => {
+        try {
+            const res = putCartList(cartProductId, cnt);
+            setIsAdded([true, true]);
+            getCartItems();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // 담기 버튼 클릭 시 실행할 함수
+    const handleCartClick = () => {
+        let sameProduct = [];
+        for (let category of CART_CATEGORY) {
+            sameProduct = cartList[category]?.filter(
+                item => item.productName === product.title,
+            );
+
+            if (sameProduct?.length > 0) {
+                break;
+            }
+        }
+
+        // 장바구니에 없는 상품일 경우, 장바구니에 담기
+        if (sameProduct.length === 0) {
+            putInCart();
+        }
+        // 장바구니에 있는 제품일 경우, 상품 개수 1 증가
+        else {
+            addCartCnt(sameProduct[0].cartProductId, sameProduct[0].count + 1);
+        }
+    };
+
+    // 5초 뒤에 해당 변수 초기화
+    useEffect(() => {
+        if (isAdded) {
+            const timer = setTimeout(() => setIsAdded([false, false]), 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [isAdded]);
+
     return (
-        <Wrapper onClick={() => nav(`/goods/${product.productId}`)}>
-            <img src={product.image} />
-            <CartBtn>
+        <Wrapper>
+            {isAdded[0] && (
+                <CartModal
+                    name={product.title}
+                    productImg={product.image}
+                    alreadyInCart={isAdded[1]}
+                />
+            )}
+            <img
+                src={product.image}
+                onClick={() => nav(`/goods/${product.productId}`)}
+            />
+            <CartBtn onClick={handleCartClick}>
                 <CartIcon />
                 담기
             </CartBtn>
-            <TextWrapper>
+            <TextWrapper onClick={() => nav(`/goods/${product.productId}`)}>
                 <DeliveryText>{product.delivery}</DeliveryText>
                 <ProductName>{product.title}</ProductName>
                 <ProductDescription>{product.subtitle}</ProductDescription>
                 <PriceWrapper>
                     <Price className={product.discount > 0 && 'discounted'}>
-                        {product.price}원
+                        {formatPrice(product.price)}원
                     </Price>
                     {product.discount > 0 && (
                         <DiscountWrapper>
                             <Price className='discount-rate'>
                                 {product.discount}%
                             </Price>
-                            <Price>{product.price}원</Price>
+                            <Price>
+                                {formatPrice(
+                                    getDiscountPrice(
+                                        product.price,
+                                        product.discount,
+                                    ),
+                                )}
+                                원
+                            </Price>
                         </DiscountWrapper>
                     )}
                 </PriceWrapper>
-                <Comment>
-                    <CommentIcon />
-                    {/* <span>{props.commentCnt}</span> */}
-                </Comment>
+                {product.reviewNum > 0 && (
+                    <Comment>
+                        <CommentIcon />
+                        <span>{product.reviewNum}</span>
+                    </Comment>
+                )}
                 {/* {props.isKurlyOnly && <KurlyOnly>Kurly Only</KurlyOnly>} */}
             </TextWrapper>
         </Wrapper>
