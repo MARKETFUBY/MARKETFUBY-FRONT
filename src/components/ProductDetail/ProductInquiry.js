@@ -5,7 +5,7 @@ import { ReactComponent as DisabledPageBtn } from '../../assets/product/page_btn
 
 const ProductInquiry = ({ inquiries }) => {
     return (
-        <Wrapper>
+        <Wrapper id='product-inquiry'>
             <Header>
                 <div>상품 문의</div>
                 <ul>

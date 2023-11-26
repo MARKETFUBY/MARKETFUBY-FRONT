@@ -100,7 +100,7 @@ const ProductAtf = ({ productInfo, handleHeartClick }) => {
     };
 
     return (
-        <Wrapper>
+        <Wrapper id='product-atf'>
             {isAdded[0] && (
                 <CartModal
                     name={productInfo?.title}
