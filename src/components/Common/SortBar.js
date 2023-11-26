@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import removeIcon from '../../assets/icon/close.svg';
+import { click, initialize } from '../../store/filterSlice';
 
 /*
  * props
@@ -14,17 +17,38 @@ const SortBar = ({ count, sortProducts }) => {
         sortProducts(sort);
     };
 
+    // 필터링 관련
+    const dispatch = useDispatch();
+    const filterList = useSelector(state => {
+        return state.filter;
+    });
+    const selectedFilter = filterList.filter(item => item.clicked);
+
+    const handleRemoveClick = () => {
+        dispatch(initialize());
+    };
+
     return (
         <Wrapper>
-            <Count>총 {count}건</Count>
-            <SortList $clicked={clickedSort}>
-                <li onClick={() => handleSortClick(0)}>추천순</li>
-                <li onClick={() => handleSortClick(1)}>신상품순</li>
-                <li onClick={() => handleSortClick(2)}>판매량순</li>
-                <li onClick={() => handleSortClick(3)}>혜택순</li>
-                <li onClick={() => handleSortClick(4)}>낮은 가격순</li>
-                <li onClick={() => handleSortClick(5)}>높은 가격순</li>
-            </SortList>
+            <SortBarWrapper>
+                <Count>총 {count}건</Count>
+                <SortList $clicked={clickedSort}>
+                    <li onClick={() => handleSortClick(0)}>추천순</li>
+                    <li onClick={() => handleSortClick(1)}>신상품순</li>
+                    <li onClick={() => handleSortClick(2)}>판매량순</li>
+                    <li onClick={() => handleSortClick(3)}>혜택순</li>
+                    <li onClick={() => handleSortClick(4)}>낮은 가격순</li>
+                    <li onClick={() => handleSortClick(5)}>높은 가격순</li>
+                </SortList>
+            </SortBarWrapper>
+            {selectedFilter.length > 0 && (
+                <FilterBarWrapper>
+                    <div>
+                        <span>{selectedFilter[0].label}</span>
+                        <img src={removeIcon} onClick={handleRemoveClick} />
+                    </div>
+                </FilterBarWrapper>
+            )}
         </Wrapper>
     );
 };
@@ -32,10 +56,14 @@ const SortBar = ({ count, sortProducts }) => {
 export default SortBar;
 
 const Wrapper = styled.div`
+    width: 100%;
     display: flex;
-    -webkit-box-align: center;
+    flex-direction: column;
+`;
+
+const SortBarWrapper = styled.div`
+    display: flex;
     align-items: center;
-    -webkit-box-pack: justify;
     justify-content: space-between;
     padding-bottom: 20px;
     line-height: 20px;
@@ -80,5 +108,34 @@ const SortList = styled.ul`
                 background-color: rgb(226, 226, 226);
             }
         }
+    }
+`;
+
+const FilterBarWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 20px 18px;
+    border: 1px solid rgb(238, 238, 238);
+    margin-bottom: 31px;
+
+    div {
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+    }
+
+    span {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        color: #8d4cc4;
+        margin-right: 2px;
+    }
+
+    img {
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
     }
 `;
