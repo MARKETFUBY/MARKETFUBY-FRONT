@@ -10,59 +10,14 @@ import { getFormalizedNum } from '../../utils/getFormalizedNum';
 import { getDiscountPrice } from '../../utils/getDiscountPrice';
 
 import { getCartList, postCartItem, putCartList } from '../../api/cart';
-import { getLikeList, postLike, deleteLike } from '../../api/product';
 import CartModal from '../Common/CartModal';
 
-const ProductAtf = ({ productInfo }) => {
-    const productId = useParams().id;
-    const memberId = localStorage.getItem('memberId');
+const ProductAtf = ({ productInfo, handleHeartClick }) => {
     const [num, setNum] = useState(1); // 선택한 상품 개수
-    const [likeList, setLikeList] = useState(); // 찜 목록
-    const [isLiked, setIsLike] = useState(); // 찜한 상품인지
 
     useEffect(() => {
         getCartItems();
-        getLikes();
     }, []);
-
-    // 찜 목록 가져오기
-    const getLikes = async () => {
-        try {
-            const res = await getLikeList(memberId);
-            setLikeList(res.likeProducts);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    useEffect(() => {
-        if (!!likeList) {
-            // 찜 목록에 같은 상품이 있는지 저장
-            const newIsLike = likeList.filter(
-                product => product.title === productInfo?.title,
-            );
-            setIsLike(newIsLike?.length > 0);
-        }
-    }, [likeList]);
-
-    // 찜하기
-    const handleHeartClick = () => {
-        handleLike(memberId);
-    };
-
-    // 찜하기 & 찜 취소하기
-    const handleLike = async () => {
-        try {
-            if (!isLiked) {
-                const res = await postLike(productId, memberId);
-            } else {
-                const res = await deleteLike(productId, memberId);
-            }
-            getLikes();
-        } catch (err) {
-            console.log(err);
-        }
-    };
 
     // 장바구니 관련
     const CART_CATEGORY = ['roomTempList', 'refrigeList', 'frozenList'];
@@ -181,7 +136,11 @@ const ProductAtf = ({ productInfo }) => {
                         <QuestionMarkIcon />
                     </OriginPrice>
                 )}
-                <Origin>원산지: 상품설명/상세정보 참조</Origin>
+                {productInfo?.origin === null ? (
+                    <Origin>원산지: 상품설명/상세정보 참조</Origin>
+                ) : (
+                    <Origin>{productInfo?.origin}</Origin>
+                )}
                 <SavePointWrapper>
                     <p>
                         매월
@@ -288,7 +247,11 @@ const ProductAtf = ({ productInfo }) => {
                 </TotalPriceInfo>
                 <BtnWrapper>
                     <SquareBtn onClick={handleHeartClick}>
-                        {isLiked ? <FilledHeartIcon /> : <HeartIcon />}
+                        {productInfo?.isLiked ? (
+                            <FilledHeartIcon />
+                        ) : (
+                            <HeartIcon />
+                        )}
                     </SquareBtn>
                     <SquareBtn>
                         <AlarmIcon />
