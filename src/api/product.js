@@ -53,7 +53,9 @@ export const postLike = async (productId, memberId) => {
 export const deleteLike = async (productId, memberId) => {
     try {
         const res = await client.delete(`goods/${productId}/likes`, {
-            memberId: memberId,
+            data: {
+                memberId: memberId,
+            },
         });
         return res;
     } catch (err) {
@@ -86,9 +88,9 @@ export const postHelp = async (reviewId, memberId) => {
 // 후기 도움돼요 취소하기
 export const deleteHelp = async (reviewId, memberId) => {
     try {
-        const res = await client.delete(`goods/reviews/${reviewId}/helps`, {
-            memberId: memberId,
-        });
+        const res = await client.delete(
+            `goods/reviews/${reviewId}/helps?memberId=${memberId}`,
+        );
         return res;
     } catch (err) {
         throw err;

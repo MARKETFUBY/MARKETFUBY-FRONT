@@ -4,7 +4,12 @@ import { ReactComponent as LikeIcon } from '../../assets/product/like.svg';
 import { ReactComponent as PageBtn } from '../../assets/product/page_btn.svg';
 import { ReactComponent as DisabledPageBtn } from '../../assets/product/page_btn_disabled.svg';
 
-const ProductReview = ({ reviews, reviewImg, reviewCount }) => {
+const ProductReview = ({
+    reviews,
+    reviewImg,
+    reviewCount,
+    handleHelpClick,
+}) => {
     return (
         <Wrapper>
             <Title>상품 후기</Title>
@@ -42,9 +47,9 @@ const ProductReview = ({ reviews, reviewImg, reviewCount }) => {
                 </Notice>
             </NoticeWrapper>
             <ReviewList>
-                {reviews?.map((review, idx) => {
+                {reviews?.map(review => {
                     return (
-                        <ReviewItem key={idx}>
+                        <ReviewItem key={review.reviewId}>
                             <div className='reviewer-name'>{review.name}</div>
                             <div className='review-right-section'>
                                 <div className='product-name'>
@@ -71,6 +76,12 @@ const ProductReview = ({ reviews, reviewImg, reviewCount }) => {
                                             review.isReviewHelp
                                                 ? 'like-btn clicked-like'
                                                 : 'like-btn'
+                                        }
+                                        onClick={() =>
+                                            handleHelpClick(
+                                                review.reviewId,
+                                                review.isReviewHelp,
+                                            )
                                         }
                                     >
                                         <LikeIcon />
@@ -178,7 +189,7 @@ const SortBar = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 16px;
+    padding: 10px 0 16px 5px;
 `;
 
 const ReviewNum = styled.span`
