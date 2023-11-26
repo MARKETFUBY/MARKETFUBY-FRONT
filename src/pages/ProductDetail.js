@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Header from '../components/Common/Header';
 import ProductAtf from '../components/ProductDetail/ProductAtf';
 import NavBar from '../components/ProductDetail/NavBar';
+import ProductInfo from '../components/ProductDetail/ProductInfo';
 import ProductDescription from '../components/ProductDetail/ProductDescription';
 import ProductReview from '../components/ProductDetail/ProductReview';
 import ProductInquiry from '../components/ProductDetail/ProductInquiry';
@@ -77,8 +78,9 @@ const ProductDetail = () => {
                     />
                     <NavBar reviewNum={productInfo?.reviewCount} />
                     <ProductDescription
-                        productInfoImg={productInfo?.productInfoImg}
+                        productInfoImg={productInfo?.detailInfoImg}
                     />
+                    <ProductInfo productInfoImg={productInfo?.productInfoImg} />
                     <ProductReview
                         reviews={productInfo?.reviews}
                         reviewImg={productInfo?.reviewImages}

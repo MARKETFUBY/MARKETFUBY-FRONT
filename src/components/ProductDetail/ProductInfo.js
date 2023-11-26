@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 
-const ProductDescription = ({ detailInfoImg }) => {
+const ProductInfo = ({ productInfoImg }) => {
     return (
-        <Wrapper id='product-description'>
-            {detailInfoImg?.map((image, idx) => (
+        <Wrapper id='product-info'>
+            {productInfoImg?.map((image, idx) => (
                 <img key={idx} src={image} />
             ))}
         </Wrapper>
     );
 };
 
-export default ProductDescription;
+export default ProductInfo;
 
 const Wrapper = styled.div`
     display: flex;

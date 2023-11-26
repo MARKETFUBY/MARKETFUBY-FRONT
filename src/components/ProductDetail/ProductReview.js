@@ -11,7 +11,7 @@ const ProductReview = ({
     handleHelpClick,
 }) => {
     return (
-        <Wrapper>
+        <Wrapper id='product-review'>
             <Title>상품 후기</Title>
             {reviewImg?.length > 0 && (
                 <ImgWrapper>
