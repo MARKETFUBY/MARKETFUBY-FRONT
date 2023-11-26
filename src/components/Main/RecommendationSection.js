@@ -1,10 +1,12 @@
 import { React, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { getMainList } from '../../api/main';
+import Loading from '../Common/Loading';
 import RecommendationBox from './RecommendationBox';
 
 function RecommendationSection({ handleModalContent }) {
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getMain();
@@ -16,6 +18,7 @@ function RecommendationSection({ handleModalContent }) {
             setData(
                 Object.entries(getData).map(([key, value]) => ({ key, value })),
             );
+            setLoading(false);
         } catch (err) {
             console.log(err);
         }
@@ -23,13 +26,19 @@ function RecommendationSection({ handleModalContent }) {
 
     return (
         <div>
-            {data.map((section, key) => (
-                <RecommendationBox
-                    key={key}
-                    data={section.value}
-                    handleModalContent={handleModalContent}
-                />
-            ))}
+            {loading ? (
+                <Loading />
+            ) : (
+                <>
+                    {data.map((section, key) => (
+                        <RecommendationBox
+                            key={key}
+                            data={section.value}
+                            handleModalContent={handleModalContent}
+                        />
+                    ))}
+                </>
+            )}
         </div>
     );
 }

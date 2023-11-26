@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { SignInAPI } from '../api/member';
 import Header from '../components/Common/Header';
+import Loading from '../components/Common/Loading';
 
 function Login() {
+    const [loading, setLoading] = useState(false);
     const [userInfo, setUserInfo] = useState({ fubyId: '', passwd: '' });
     const { fubyId, passwd } = userInfo;
 
@@ -14,6 +16,7 @@ function Login() {
     };
 
     const submitUserInfo = async () => {
+        setLoading(true);
         const LoginInfo = {
             ...userInfo,
         };
@@ -22,60 +25,70 @@ function Login() {
             SignInAPI(LoginInfo);
         } catch (err) {
             console.log(err);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div>
-            <Header />
-            <LoginDiv>
-                <div className='title'>로그인</div>
-                <FormDiv>
-                    <InputDiv>
-                        <Input
-                            data-testid='input-box'
-                            name='fubyId'
-                            value={fubyId}
-                            placeholder='아이디를 입력해주세요'
-                            type='text'
-                            onChange={getUserInfo}
-                        />
-                        <Input
-                            data-testid='input-box'
-                            name='passwd'
-                            placeholder='비밀번호를 입력해주세요'
-                            type='passwd'
-                            autocomplete='off'
-                            value={passwd}
-                            onChange={getUserInfo}
-                        />
-                    </InputDiv>
-                </FormDiv>
-                <FindingDiv>
-                    <a className='id'>아이디 찾기</a>
-                    <span className='bar'>|</span>
-                    <a className='password'>비밀번호 찾기</a>
-                </FindingDiv>
-                <BtnDiv>
-                    <button
-                        className='loginBtn'
-                        onClick={submitUserInfo}
-                        type='submit'
-                        height='54'
-                        radius='3'
-                    >
-                        <span class='css-nytqmg e4nu7ef1'>로그인</span>
-                    </button>
-                    <button
-                        className='signupBtn'
-                        type='button'
-                        height='54'
-                        radius='3'
-                    >
-                        <span class='css-nytqmg e4nu7ef1'>회원가입</span>
-                    </button>
-                </BtnDiv>
-            </LoginDiv>
+            {loading ? (
+                <Loading />
+            ) : (
+                <>
+                    <Header />
+                    <LoginDiv>
+                        <div className='title'>로그인</div>
+                        <FormDiv>
+                            <InputDiv>
+                                <Input
+                                    data-testid='input-box'
+                                    name='fubyId'
+                                    value={fubyId}
+                                    placeholder='아이디를 입력해주세요'
+                                    type='text'
+                                    onChange={getUserInfo}
+                                />
+                                <Input
+                                    data-testid='input-box'
+                                    name='passwd'
+                                    placeholder='비밀번호를 입력해주세요'
+                                    type='passwd'
+                                    autocomplete='off'
+                                    value={passwd}
+                                    onChange={getUserInfo}
+                                />
+                            </InputDiv>
+                        </FormDiv>
+                        <FindingDiv>
+                            <a className='id'>아이디 찾기</a>
+                            <span className='bar'>|</span>
+                            <a className='password'>비밀번호 찾기</a>
+                        </FindingDiv>
+                        <BtnDiv>
+                            <button
+                                className='loginBtn'
+                                onClick={submitUserInfo}
+                                type='submit'
+                                height='54'
+                                radius='3'
+                            >
+                                <span class='css-nytqmg e4nu7ef1'>로그인</span>
+                            </button>
+                            <button
+                                className='signupBtn'
+                                type='button'
+                                height='54'
+                                radius='3'
+                            >
+                                <span class='css-nytqmg e4nu7ef1'>
+                                    회원가입
+                                </span>
+                            </button>
+                        </BtnDiv>
+                    </LoginDiv>
+                </>
+            )}
         </div>
     );
 }

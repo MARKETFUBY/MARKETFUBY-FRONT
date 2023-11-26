@@ -5,7 +5,7 @@ export const SignUpAPI = async signUpInfo => {
     try {
         const res = await client.post('/members/signup', signUpInfo);
         alert('회원가입에 성공하였습니다.');
-        window.location.replace('members/login');
+        navigate('/member/login');
     } catch (err) {
         console.log(err, '회원가입 에러');
         alert('회원가입 에러');
@@ -78,5 +78,25 @@ export const RefreshAPI = async refreshToken => {
         }
     } catch (err) {
         console.log(err, '토큰 재발급 에러');
+    }
+};
+
+//아이디 중복 확인
+export const ExistIdAPI = async fubyId => {
+    try {
+        const res = await client.get(`/members/fubyId/${fubyId}/exists`);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+//이메일 중복 확인
+export const ExistEmailAPI = async email => {
+    try {
+        const res = await client.get(`/members/email/${email}/exists`);
+        return res.data;
+    } catch (err) {
+        console.log(err);
     }
 };

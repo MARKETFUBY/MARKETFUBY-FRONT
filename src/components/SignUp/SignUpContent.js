@@ -1,10 +1,11 @@
 import { React, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { SignUpAPI } from '../../api/member';
+import { ExistEmailAPI, ExistIdAPI, SignUpAPI } from '../../api/member';
+import Loading from '../Common/Loading';
 
 function SignUpContent() {
-    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const [values, setValues] = useState({
         fubyId: '',
         passwd: '',
@@ -19,6 +20,8 @@ function SignUpContent() {
         day: '',
     });
     const [isPasswordWarning, setIspasswdWarning] = useState(false);
+    const [existId, setExistId] = useState(false);
+    const [existEmail, setExistEmail] = useState(false);
 
     const showPasswordWarning = () => {
         setIspasswdWarning(true);
@@ -27,6 +30,36 @@ function SignUpContent() {
     const valueHandler = e => {
         const { name, value } = e.target;
         setValues({ ...values, [name]: value });
+    };
+
+    const checkExitId = async fubyId => {
+        setExistId(false);
+        try {
+            const data = await ExistIdAPI(fubyId);
+            if (data) {
+                setExistId(data);
+                alert('사용중인 아이디입니다. 다시 입력해 주세요');
+            } else {
+                alert('사용중이지 않은 아이디입니다. 계속 진행해 주세요');
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const checkExitEmail = async email => {
+        setExistEmail(false);
+        try {
+            const data = await ExistEmailAPI(email);
+            if (data) {
+                setExistEmail(data);
+                alert('사용중인 이메일입니다. 다시 입력해 주세요');
+            } else {
+                alert('사용중이지 않은 이메일입니다. 계속 진행해 주세요');
+            }
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     const {
@@ -57,343 +90,337 @@ function SignUpContent() {
     // a-z와 A-Z/숫자/+와 - 허용, @와 a-z 그리고 \. a-z 사용가능
     const isEmailValid = emailRegEx.test(email);
 
-    const signupSubmit = e => {
-        submitUseInfo(e);
-        alert('회원가입이 완료되었습니다');
-    };
-
     const submitUseInfo = async () => {
-        try {
-            const SignUpInfo = {
-                ...values,
-                birthday: year + '-' + month + '-' + day,
-            };
-            console.log('SignUpInfo', SignUpInfo);
-            SignUpAPI(SignUpInfo);
-        } catch (err) {
-            console.log(err);
+        setLoading(true);
+        if (!existId && !existEmail) {
+            try {
+                const SignUpInfo = {
+                    ...values,
+                    birthday: year + '-' + month + '-' + day,
+                };
+                console.log('SignUpInfo', SignUpInfo);
+                SignUpAPI(SignUpInfo);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        } else if (existId) {
+            alert('아이디 중복 여부를 다시 확인 해주세요');
+        } else {
+            alert('이메일 중복 여부를 다시 확인 해주세요');
         }
     };
 
     return (
         <SignupDiv>
-            <div className='mainContainer'>
-                <div className='title'>회원가입</div>
-                <div className='requiredSymbolDescription'>
-                    <span className='requiredSymbol'>*</span>필수입력사항
-                </div>
-                <FormDiv>
-                    <div className='eachContainer'>
-                        <span className='containerTitle'>
-                            아이디<span className='requiredSymbol'>*</span>
-                        </span>
-                        <div className='inputContainer'>
-                            <Input
-                                className='signupInputBox'
-                                name='fubyId'
-                                type='text'
-                                placeholder='아이디를 입력해주세요'
-                                onChange={valueHandler}
-                            />
-                            {fubyId.length !== 0 &&
-                                (fubyIdValid || (
-                                    <span className='warningText'>
-                                        6자 이상 16자 이하의 영문 혹은 숫자를
-                                        조합
-                                    </span>
-                                ))}
-                        </div>
-                        <button
-                            className='duplicationCheckButton'
-                            // onClick={UserIdDuplicationCheck}
-                        >
-                            <span className='duplicationCheckButtonText'>
-                                중복확인
-                            </span>
-                        </button>
-                        {/* {isModalOpen && (
-                            <Modal
-                                type='default'
-                                contents={contents[infoIndex]}
-                                close={() =>
-                                    setModalInfo(prev => ({
-                                        ...prev,
-                                        isModalOpen: false,
-                                    }))
-                                }
-                            />
-                        )} */}
-                    </div>
-                    <div className='eachContainer'>
-                        <span className='containerTitle'>
-                            비밀번호
+            {loading ? (
+                <Loading />
+            ) : (
+                <>
+                    <div className='mainContainer'>
+                        <div className='title'>회원가입</div>
+                        <div className='requiredSymbolDescription'>
                             <span className='requiredSymbol'>*</span>
-                        </span>
-                        <div className='inputContainer'>
-                            <Input
-                                className='signupInputBox'
-                                type='passwd'
-                                name='passwd'
-                                placeholder='비밀번호를 입력해주세요'
-                                onChange={valueHandler}
-                                onFocus={showPasswordWarning}
-                            />
-                            {isPasswordWarning &&
-                                (passwd.length < 10 ? (
-                                    <span className='warningText'>
-                                        최소 10자 이상 입력
-                                    </span>
-                                ) : (
-                                    isPasswordValid || (
-                                        <span className='warningText'>
-                                            영문/숫자/특수문자(공백 제외)만
-                                            허용하며, 2개 이상 조합
-                                        </span>
-                                    )
-                                ))}
+                            필수입력사항
                         </div>
-                        <div className='blankBox'> </div>
-                    </div>
-
-                    <div className='eachContainer'>
-                        <span className='containerTitle'>
-                            비밀번호확인
-                            <span className='requiredSymbol'>*</span>
-                        </span>
-                        <div className='inputContainer'>
-                            <Input
-                                type='passwd'
-                                name='passwdCheck'
-                                className='signupInputBox'
-                                placeholder='비밀번호를 한번 더 입력해주세요'
-                                onChange={valueHandler}
-                            />
-                            {passwdCheck.length !== 0 &&
-                                (isPasswordCheck || (
-                                    <span className='warningText'>
-                                        동일한 비밀번호를 입력
-                                    </span>
-                                ))}
-                        </div>
-                        <div className='blankBox'> </div>
-                    </div>
-
-                    <div className='eachContainer'>
-                        <span className='containerTitle'>
-                            이름<span className='requiredSymbol'>*</span>
-                        </span>
-                        <div className='inputContainer'>
-                            <Input
-                                className='signupInputBox'
-                                name='name'
-                                placeholder='이름을 입력해주세요'
-                                onChange={valueHandler}
-                            />
-                            {name.length !== 0 &&
-                                (isNameValid || (
-                                    <span className='warningText'>
-                                        이름을 입력해주세요.
-                                    </span>
-                                ))}
-                        </div>
-                        <div className='blankBox'> </div>
-                    </div>
-
-                    <div className='eachContainer'>
-                        <span className='containerTitle'>
-                            이메일<span className='requiredSymbol'>*</span>
-                        </span>
-                        <div className='inputContainer'>
-                            <Input
-                                className='signupInputBox'
-                                name='email'
-                                value={email}
-                                placeholder='예: weketkurly@weket.com'
-                                onChange={valueHandler}
-                            />
-                            {email.length !== 0 &&
-                                (isEmailValid || (
-                                    <span className='warningText'>
-                                        이메일 형식으로 입력해 주세요.
-                                    </span>
-                                ))}
-                        </div>
-                        <button
-                            className='duplicationCheckButton'
-                            // onClick={emailDuplicationCheck}
-                        >
-                            <span className='duplicationCheckButtonText'>
-                                중복확인
-                            </span>
-                        </button>
-                    </div>
-
-                    <div className='eachContainer'>
-                        <span className='containerTitle'>
-                            휴대폰<span className='requiredSymbol'>*</span>
-                        </span>
-                        <div className='inputContainer'>
-                            <Input
-                                className='signupInputBox'
-                                name='phone'
-                                value={phone}
-                                placeholder='숫자만 입력해주세요.'
-                                onChange={valueHandler}
-                            />
-                        </div>
-                        <button
-                            className='duplicationCheckButton'
-                            // onClick={emailDuplicationCheck}
-                        >
-                            <span className='duplicationCheckButtonText'>
-                                인증번호 받기
-                            </span>
-                        </button>
-                    </div>
-
-                    <div className='eachContainer'>
-                        <span className='containerTitle'>
-                            주소
-                            <span className='requiredSymbol'>*</span>
-                        </span>
-                        <div className='inputContainer'>
-                            <button
-                                className='addressButton'
-                                // onClick={emailDuplicationCheck}
-                            >
-                                <span className='duplicationCheckButtonText'>
-                                    주소 검색
+                        <FormDiv>
+                            <div className='eachContainer'>
+                                <span className='containerTitle'>
+                                    아이디
+                                    <span className='requiredSymbol'>*</span>
                                 </span>
-                            </button>
-                            <span className='alarm'>
-                                배송지에 따라 상품 정보가 달라질 수 있습니다.
-                            </span>
-                        </div>
-                        <div className='blankBox'> </div>
-                        {/* <div className='blankBox'> </div> */}
-                    </div>
+                                <div className='inputContainer'>
+                                    <Input
+                                        className='signupInputBox'
+                                        name='fubyId'
+                                        type='text'
+                                        placeholder='아이디를 입력해주세요'
+                                        onChange={valueHandler}
+                                    />
+                                    {fubyId.length !== 0 &&
+                                        (fubyIdValid || (
+                                            <span className='warningText'>
+                                                6자 이상 16자 이하의 영문 혹은
+                                                숫자를 조합
+                                            </span>
+                                        ))}
+                                </div>
+                                <button
+                                    className='duplicationCheckButton'
+                                    onClick={() => checkExitId(fubyId)}
+                                >
+                                    <span className='duplicationCheckButtonText'>
+                                        중복확인
+                                    </span>
+                                </button>
+                            </div>
+                            <div className='eachContainer'>
+                                <span className='containerTitle'>
+                                    비밀번호
+                                    <span className='requiredSymbol'>*</span>
+                                </span>
+                                <div className='inputContainer'>
+                                    <Input
+                                        className='signupInputBox'
+                                        type='passwd'
+                                        name='passwd'
+                                        placeholder='비밀번호를 입력해주세요'
+                                        onChange={valueHandler}
+                                        onFocus={showPasswordWarning}
+                                    />
+                                    {isPasswordWarning &&
+                                        (passwd.length < 10 ? (
+                                            <span className='warningText'>
+                                                최소 10자 이상 입력
+                                            </span>
+                                        ) : (
+                                            isPasswordValid || (
+                                                <span className='warningText'>
+                                                    영문/숫자/특수문자(공백
+                                                    제외)만 허용하며, 2개 이상
+                                                    조합
+                                                </span>
+                                            )
+                                        ))}
+                                </div>
+                                <div className='blankBox'> </div>
+                            </div>
 
-                    <div className='eachContainer'>
-                        <span className='containerTitle'>성별</span>
-                        <div className='choiceContainer'>
-                            <div className='label'>
-                                <input
-                                    name='sex'
-                                    type='radio'
-                                    className='sexChoiceButton'
-                                    value='MALE'
-                                    checked={sex === 'MALE'}
-                                    onChange={valueHandler}
-                                />
-                                <span></span>
-                                <div className='maleLetter'>남자</div>
+                            <div className='eachContainer'>
+                                <span className='containerTitle'>
+                                    비밀번호확인
+                                    <span className='requiredSymbol'>*</span>
+                                </span>
+                                <div className='inputContainer'>
+                                    <Input
+                                        type='passwd'
+                                        name='passwdCheck'
+                                        className='signupInputBox'
+                                        placeholder='비밀번호를 한번 더 입력해주세요'
+                                        onChange={valueHandler}
+                                    />
+                                    {passwdCheck.length !== 0 &&
+                                        (isPasswordCheck || (
+                                            <span className='warningText'>
+                                                동일한 비밀번호를 입력
+                                            </span>
+                                        ))}
+                                </div>
+                                <div className='blankBox'> </div>
                             </div>
-                            <div className='label'>
-                                <input
-                                    type='radio'
-                                    name='sex'
-                                    className='sexChoiceButton'
-                                    checked={sex === 'FEMALE'}
-                                    value='FEMALE'
-                                    onChange={valueHandler}
-                                />
-                                <div className='femaleLetter'>여자</div>
-                            </div>
-                            <div className='label'>
-                                <input
-                                    type='radio'
-                                    name='sex'
-                                    className='sexChoiceButton'
-                                    checked={sex === '3'}
-                                    value='3'
-                                    onChange={valueHandler}
-                                />
-                                <div className='femaleLetter'>선택 안함</div>
-                            </div>
-                        </div>
-                        <div className='blankBox'> </div>
-                    </div>
 
-                    <div className='eachContainer'>
-                        <span className='containerTitle'>생년월일</span>
-                        <div className='birthInputContainer'>
-                            <input
-                                name='year'
-                                type='text'
-                                className='birthInput'
-                                maxLength='4'
-                                placeholder='YYYY'
-                                onChange={valueHandler}
-                            />
-                            <span className='birthInputSeparatorSlash'>/</span>
-                            <input
-                                name='month'
-                                className='birthInput'
-                                maxLength='2'
-                                placeholder='MM'
-                                type='text'
-                                onChange={valueHandler}
-                            />
-                            <span className='birthInputSeparatorSlash'>/</span>
-                            <input
-                                name='day'
-                                className='birthInput'
-                                maxLength='2'
-                                placeholder='DD'
-                                onChange={valueHandler}
-                            />
-                        </div>
-                        <div className='blankBox'> </div>
-                    </div>
+                            <div className='eachContainer'>
+                                <span className='containerTitle'>
+                                    이름
+                                    <span className='requiredSymbol'>*</span>
+                                </span>
+                                <div className='inputContainer'>
+                                    <Input
+                                        className='signupInputBox'
+                                        name='name'
+                                        placeholder='이름을 입력해주세요'
+                                        onChange={valueHandler}
+                                    />
+                                    {name.length !== 0 &&
+                                        (isNameValid || (
+                                            <span className='warningText'>
+                                                이름을 입력해주세요.
+                                            </span>
+                                        ))}
+                                </div>
+                                <div className='blankBox'> </div>
+                            </div>
 
-                    <div className='eachContainer'>
-                        <span className='containerTitle'>추가입력 사항</span>
-                        <div className='choiceContainer'>
-                            <div className='recommendContainer'>
-                                <input
-                                    name='additionalIfo'
-                                    type='radio'
-                                    className='genderChoiceButton'
-                                />
-                                <span>추천인 아이디</span>
+                            <div className='eachContainer'>
+                                <span className='containerTitle'>
+                                    이메일
+                                    <span className='requiredSymbol'>*</span>
+                                </span>
+                                <div className='inputContainer'>
+                                    <Input
+                                        className='signupInputBox'
+                                        name='email'
+                                        value={email}
+                                        placeholder='예: weketkurly@weket.com'
+                                        onChange={valueHandler}
+                                    />
+                                    {email.length !== 0 &&
+                                        (isEmailValid || (
+                                            <span className='warningText'>
+                                                이메일 형식으로 입력해 주세요.
+                                            </span>
+                                        ))}
+                                </div>
+                                <button
+                                    className='duplicationCheckButton'
+                                    onClick={() => checkExitEmail(email)}
+                                >
+                                    <span className='duplicationCheckButtonText'>
+                                        중복확인
+                                    </span>
+                                </button>
                             </div>
-                            <div className='recommendContainer'>
-                                <input
-                                    type='radio'
-                                    name='additionalIfo'
-                                    className='genderChoiceButton'
-                                />
-                                <span>참여 이벤트명</span>
+
+                            <div className='eachContainer'>
+                                <span className='containerTitle'>
+                                    휴대폰
+                                    <span className='requiredSymbol'>*</span>
+                                </span>
+                                <div className='inputContainer'>
+                                    <Input
+                                        className='signupInputBox'
+                                        name='phone'
+                                        value={phone}
+                                        placeholder='숫자만 입력해주세요.'
+                                        onChange={valueHandler}
+                                    />
+                                </div>
+                                <button className='duplicationCheckButton'>
+                                    <span className='duplicationCheckButtonText'>
+                                        인증번호 받기
+                                    </span>
+                                </button>
                             </div>
-                            <div className='blankBox'> </div>
-                        </div>
+
+                            <div className='eachContainer'>
+                                <span className='containerTitle'>
+                                    주소
+                                    <span className='requiredSymbol'>*</span>
+                                </span>
+                                <div className='inputContainer'>
+                                    <button className='addressButton'>
+                                        <span className='duplicationCheckButtonText'>
+                                            주소 검색
+                                        </span>
+                                    </button>
+                                    <span className='alarm'>
+                                        배송지에 따라 상품 정보가 달라질 수
+                                        있습니다.
+                                    </span>
+                                </div>
+                                <div className='blankBox'> </div>
+                            </div>
+
+                            <div className='eachContainer'>
+                                <span className='containerTitle'>성별</span>
+                                <div className='choiceContainer'>
+                                    <div className='label'>
+                                        <input
+                                            name='sex'
+                                            type='radio'
+                                            className='sexChoiceButton'
+                                            value='MALE'
+                                            checked={sex === 'MALE'}
+                                            onChange={valueHandler}
+                                        />
+                                        <span></span>
+                                        <div className='maleLetter'>남자</div>
+                                    </div>
+                                    <div className='label'>
+                                        <input
+                                            type='radio'
+                                            name='sex'
+                                            className='sexChoiceButton'
+                                            checked={sex === 'FEMALE'}
+                                            value='FEMALE'
+                                            onChange={valueHandler}
+                                        />
+                                        <div className='femaleLetter'>여자</div>
+                                    </div>
+                                    <div className='label'>
+                                        <input
+                                            type='radio'
+                                            name='sex'
+                                            className='sexChoiceButton'
+                                            checked={sex === '3'}
+                                            value='3'
+                                            onChange={valueHandler}
+                                        />
+                                        <div className='femaleLetter'>
+                                            선택 안함
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='blankBox'> </div>
+                            </div>
+
+                            <div className='eachContainer'>
+                                <span className='containerTitle'>생년월일</span>
+                                <div className='birthInputContainer'>
+                                    <input
+                                        name='year'
+                                        type='text'
+                                        className='birthInput'
+                                        maxLength='4'
+                                        placeholder='YYYY'
+                                        onChange={valueHandler}
+                                    />
+                                    <span className='birthInputSeparatorSlash'>
+                                        /
+                                    </span>
+                                    <input
+                                        name='month'
+                                        className='birthInput'
+                                        maxLength='2'
+                                        placeholder='MM'
+                                        type='text'
+                                        onChange={valueHandler}
+                                    />
+                                    <span className='birthInputSeparatorSlash'>
+                                        /
+                                    </span>
+                                    <input
+                                        name='day'
+                                        className='birthInput'
+                                        maxLength='2'
+                                        placeholder='DD'
+                                        onChange={valueHandler}
+                                    />
+                                </div>
+                                <div className='blankBox'> </div>
+                            </div>
+
+                            <div className='eachContainer'>
+                                <span className='containerTitle'>
+                                    추가입력 사항
+                                </span>
+                                <div className='choiceContainer'>
+                                    <div className='recommendContainer'>
+                                        <input
+                                            name='additionalIfo'
+                                            type='radio'
+                                            className='genderChoiceButton'
+                                        />
+                                        <span>추천인 아이디</span>
+                                    </div>
+                                    <div className='recommendContainer'>
+                                        <input
+                                            type='radio'
+                                            name='additionalIfo'
+                                            className='genderChoiceButton'
+                                        />
+                                        <span>참여 이벤트명</span>
+                                    </div>
+                                    <div className='blankBox'> </div>
+                                </div>
+                            </div>
+                            <div className='bottomSeparatorBar'></div>
+                            <Border />
+                            <div className='signupSubmitButtonContainer'>
+                                <button
+                                    className='signupSubmitButton'
+                                    onClick={submitUseInfo}
+                                >
+                                    <span className='signupSubmitButtonText'>
+                                        가입하기
+                                    </span>
+                                </button>
+                            </div>
+                        </FormDiv>
                     </div>
-                    <div className='bottomSeparatorBar'></div>
-                    <Border />
-                    <div className='signupSubmitButtonContainer'>
-                        <button
-                            className='signupSubmitButton'
-                            onClick={signupSubmit}
-                        >
-                            <span className='signupSubmitButtonText'>
-                                가입하기
-                            </span>
-                        </button>
-                        {/* {isModalOpen && (
-                            <Modal
-                                type='default'
-                                contents={contents[infoIndex]}
-                                close={() =>
-                                    setModalInfo(prev => ({
-                                        ...prev,
-                                        isModalOpen: false,
-                                    }))
-                                }
-                            />
-                        )} */}
-                    </div>
-                </FormDiv>
-            </div>
+                </>
+            )}
         </SignupDiv>
     );
 }
@@ -653,11 +680,9 @@ const Input2 = styled.input`
     border: 1px solid rgb(221, 221, 221);
 
     input[type='radio']:checked {
-        background-color: #22d3ee; // 체크 시 내부 원으로 표시될 색상
-        border: 3px solid white; // 테두리가 아닌, 테두리와 원 사이의 색상
-        box-shadow: 0 0 0 1.6px #22d3ee; // 얘가 테두리가 됨
-        // 그림자로 테두리를 직접 만들어야 함 (퍼지는 정도를 0으로 주면 테두리처럼 보입니다.)
-        // 그림자가 없으면 그냥 설정한 색상이 꽉 찬 원으로만 나옵니다.
+        background-color: #22d3ee;
+        border: 3px solid white;
+        box-shadow: 0 0 0 1.6px #22d3ee;
     }
 `;
 
