@@ -36,14 +36,12 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
         setCheckedRefrigeItems(newCheckedRefrigeItems);
         updateSelectedItems(index, refrigeList, newCheckedRefrigeItems);
     };
-
     const handleCheckRoomChange = index => {
         const newCheckedRoomItems = [...checkedRoomItems];
         newCheckedRoomItems[index] = !newCheckedRoomItems[index];
         setCheckedRoomItems(newCheckedRoomItems);
         updateSelectedItems(index, roomTempList, newCheckedRoomItems);
     };
-
     const handleCheckFrozenChange = index => {
         const newCheckedFrozenItems = [...checkedFrozenItems];
         newCheckedFrozenItems[index] = !newCheckedFrozenItems[index];
@@ -68,11 +66,9 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const toggleCartRefrigeVisibility = () => {
         setCartRefrigeVisible(!isCartRefrigeVisible);
     };
-
     const toggleCartRoomVisibility = () => {
         setCartRoomVisible(!isCartRoomVisible);
     };
-
     const toggleCartFrozenVisibility = () => {
         setCartFrozenVisible(!isCartFrozenVisible);
     };
@@ -86,13 +82,6 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
         }
     };
 
-    const handleCheckAllChange = () => {
-        setAllchecked(!allchecked);
-        if (allchecked) {
-        } else {
-        }
-    };
-
     const handleDeleteSelected = async () => {
         try {
             const deletedItems = await deleteCartList(selectedItems);
@@ -101,6 +90,17 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
         } catch (err) {
             console.error(err);
         }
+    };
+
+    const handleCheckAllChange = () => {
+        setChecked(!checked);
+
+        const newCheckedRefrigeItems = checkedRefrigeItems.map(() => !checked);
+        setCheckedRefrigeItems(newCheckedRefrigeItems);
+        const newCheckedRoomItems = checkedRoomItems.map(() => !checked);
+        setCheckedRoomItems(newCheckedRoomItems);
+        const newCheckedFrozenItems = checkedFrozenItems.map(() => !checked);
+        setCheckedFrozenItems(newCheckedFrozenItems);
     };
 
     return (
@@ -112,7 +112,7 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
                             id='checkall'
                             type='checkbox'
                             checked={checked}
-                            onChange={handleCheckAllChange(allchecked)}
+                            onChange={handleCheckAllChange}
                         ></input>
                         <label
                             htmlFor='checkall'
