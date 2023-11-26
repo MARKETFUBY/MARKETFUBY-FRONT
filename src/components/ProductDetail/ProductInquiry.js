@@ -3,31 +3,7 @@ import { ReactComponent as LockIcon } from '../../assets/product/lock.svg';
 import { ReactComponent as PageBtn } from '../../assets/product/page_btn.svg';
 import { ReactComponent as DisabledPageBtn } from '../../assets/product/page_btn_disabled.svg';
 
-const ProductInquiry = () => {
-    const inquiryData = [
-        {
-            title: '배송',
-            author: '임*주',
-            date: '2023.11.04',
-            hasReply: false,
-            isSecret: false,
-        },
-        {
-            title: '배송',
-            author: '오*림',
-            date: '2023.11.01',
-            hasReply: true,
-            isSecret: true,
-        },
-        {
-            title: '배송',
-            author: '임*주',
-            date: '2023.10.27',
-            hasReply: true,
-            isSecret: true,
-        },
-    ];
-
+const ProductInquiry = ({ inquiries }) => {
     return (
         <Wrapper>
             <Header>
@@ -54,7 +30,7 @@ const ProductInquiry = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {inquiryData.map((inquiry, idx) => {
+                    {inquiries?.map((inquiry, idx) => {
                         return (
                             <tr key={idx}>
                                 {inquiry.isSecret ? (
@@ -67,12 +43,12 @@ const ProductInquiry = () => {
                                         {inquiry.title}
                                     </td>
                                 )}
-                                <td>{inquiry.author}</td>
+                                <td>{inquiry.name}</td>
                                 <td>{inquiry.date}</td>
-                                {inquiry.hasReply ? (
-                                    <td className='has-reply'>답변완료</td>
-                                ) : (
+                                {inquiry.status === 'WAIT' ? (
                                     <td>답변대기</td>
+                                ) : (
+                                    <td className='has-reply'>답변완료</td>
                                 )}
                             </tr>
                         );

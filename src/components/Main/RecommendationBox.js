@@ -14,7 +14,7 @@ const responsive = {
     },
 };
 
-function RecommendationBox({ data }) {
+function RecommendationBox({ data, handleModalContent }) {
     const renderPrevButton = ({ isDisabled }) => {
         if (isDisabled) {
             return null;
@@ -30,7 +30,11 @@ function RecommendationBox({ data }) {
     };
 
     const items = data.map(product => (
-        <Product key={product.productId} product={product} />
+        <Product
+            key={product.productId}
+            product={product}
+            handleModalContent={handleModalContent}
+        />
     ));
 
     return (
