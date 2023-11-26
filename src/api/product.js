@@ -26,9 +26,11 @@ export const getProductList = async (page, sort, filters) => {
 };
 
 // 제품 상세 정보 조회
-export const getProductDetail = async productId => {
+export const getProductDetail = async (productId, memberId) => {
     try {
-        const res = await client.get(`/goods/${productId}`);
+        const res = await client.get(
+            `/goods/${productId}?memberId=${memberId}`,
+        );
         return res.data;
     } catch (error) {
         throw error;
@@ -39,7 +41,7 @@ export const getProductDetail = async productId => {
 export const postLike = async (productId, memberId) => {
     try {
         const res = await client.post(`goods/${productId}/likes`, {
-            data: { memberId: memberId },
+            memberId: memberId,
         });
         return res;
     } catch (err) {
@@ -51,9 +53,21 @@ export const postLike = async (productId, memberId) => {
 export const deleteLike = async (productId, memberId) => {
     try {
         const res = await client.delete(`goods/${productId}/likes`, {
-            data: { memberId: memberId },
+            data: {
+                memberId: memberId,
+            },
         });
         return res;
+    } catch (err) {
+        throw err;
+    }
+};
+
+// 찜 목록 조회
+export const getLikeList = async memberId => {
+    try {
+        const res = await client.get(`mypage/pick/list?memberId=${memberId}`);
+        return res.data;
     } catch (err) {
         throw err;
     }
@@ -74,9 +88,9 @@ export const postHelp = async (reviewId, memberId) => {
 // 후기 도움돼요 취소하기
 export const deleteHelp = async (reviewId, memberId) => {
     try {
-        const res = await client.delete(`goods/reviews/${reviewId}/helps`, {
-            memberId: memberId,
-        });
+        const res = await client.delete(
+            `goods/reviews/${reviewId}/helps?memberId=${memberId}`,
+        );
         return res;
     } catch (err) {
         throw err;

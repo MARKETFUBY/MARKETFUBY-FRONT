@@ -14,7 +14,7 @@ const CartModal = ({ name, productImg, alreadyInCart }) => {
     }, []);
 
     return (
-        <Wrapper display={display}>
+        <Wrapper display={display.toString()}>
             <div>
                 <img src={top} />
                 <Content>
@@ -37,7 +37,7 @@ const CartModal = ({ name, productImg, alreadyInCart }) => {
 export default CartModal;
 
 const Wrapper = styled.div`
-    display: ${props => (props.display ? 'block' : 'none')};
+    display: ${props => (props.display === 'true' ? 'block' : 'none')};
     z-index: 2000;
     position: absolute;
     max-width: 346px;
@@ -91,7 +91,7 @@ const Content = styled.div`
 
 const Name = styled.span`
     overflow: hidden;
-    width: 100%;
+    width: 95%;
     padding-bottom: 4px;
     color: #999;
     white-space: nowrap;

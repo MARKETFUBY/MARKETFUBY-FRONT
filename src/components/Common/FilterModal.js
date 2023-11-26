@@ -4,17 +4,29 @@ import { ReactComponent as CloseBtn } from '../../assets/icon/close.svg';
 import { ReactComponent as CheckIcon } from '../../assets/icon/check.svg';
 import { ReactComponent as PurpleCheckIcon } from '../../assets/icon/check_purple.svg';
 import { ReactComponent as InitializationIcon } from '../../assets/icon/initialization.svg';
-import { click } from '../../store/filterSlice';
+import { click, initialize } from '../../store/filterSlice';
 
-const FilterModal = ({ onClick }) => {
+const FilterModal = ({ onClick, categories }) => {
     // 체크 버튼 클릭 시
     const dispatch = useDispatch();
     const filterList = useSelector(state => {
         return state.filter;
     });
+    const selectedFilter = filterList.filter(item => item.clicked);
 
     const handleCheckClick = id => {
         dispatch(click(id));
+    };
+
+    // 카테고리에 해당하는 제품 수 반환해주는 함수
+    const getCategoryNum = name => {
+        const sameCategory = categories.filter(item => name === item.name);
+
+        if (sameCategory.length > 0) {
+            return sameCategory[0].count;
+        } else {
+            return 0;
+        }
     };
 
     return (
@@ -37,15 +49,23 @@ const FilterModal = ({ onClick }) => {
                                     <CheckIcon />
                                 )}
                                 <span>{filter.label}</span>
+                                <span className='count'>
+                                    {getCategoryNum(filter.label)}
+                                </span>
                             </li>
                         ))}
                     </ul>
                     <Footer>
-                        <Button>
+                        <Button
+                            className={
+                                selectedFilter.length <= 0 && 'disabled-btn'
+                            }
+                            onClick={() => dispatch(initialize())}
+                        >
                             <InitializationIcon />
                             <span>초기화</span>
                         </Button>
-                        <Button className='purple-btn'>
+                        <Button className='purple-btn' onClick={onClick}>
                             <span>확인</span>
                         </Button>
                     </Footer>
@@ -151,6 +171,14 @@ const Window = styled.div`
         white-space: normal;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+    }
+
+    & .count {
+        margin: 0;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+        color: #cccccc;
     }
 `;
 

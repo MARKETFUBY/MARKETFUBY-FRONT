@@ -35,6 +35,7 @@ export const SignInAPI = async loginInfo => {
                 'Bearer ' + res.data.refreshToken,
             );
             localStorage.setItem('username', res.data.username);
+            localStorage.setItem('memberId', res.data.memberId);
             window.location.replace('/');
             return 'Login Success';
         } else {

@@ -17,7 +17,7 @@ const Benefit = () => {
             <Header />
             <ImageList>
                 {events?.map(event => (
-                    <img src={event.image} />
+                    <img key={event.eventId} src={event.image} />
                 ))}
             </ImageList>
         </>

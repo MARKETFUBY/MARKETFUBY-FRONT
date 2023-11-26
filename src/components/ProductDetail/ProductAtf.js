@@ -1,43 +1,23 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import product1 from '../../assets/product/product1.png';
 import { ReactComponent as RightArrow } from '../../assets/product/arrow_right.svg';
 import { ReactComponent as HeartIcon } from '../../assets/product/heart.svg';
 import { ReactComponent as FilledHeartIcon } from '../../assets/product/heart_fill.svg';
 import { ReactComponent as AlarmIcon } from '../../assets/product/alarm.svg';
-import { formatPrice } from '../../utils/formatPrice';
+import { ReactComponent as QuestionMarkIcon } from '../../assets/icon/question_mark.svg';
+import { getFormalizedNum } from '../../utils/getFormalizedNum';
+import { getDiscountPrice } from '../../utils/getDiscountPrice';
 
 import { getCartList, postCartItem, putCartList } from '../../api/cart';
-import { postLike, deleteLike } from '../../api/product';
 import CartModal from '../Common/CartModal';
 
-const ProductAtf = ({ productInfo }) => {
-    const productId = useParams().id;
+const ProductAtf = ({ productInfo, handleHeartClick }) => {
     const [num, setNum] = useState(1); // 선택한 상품 개수
-    const [heartClicked, setHeartClicked] = useState(false); // 찜 버튼 클릭 여부
-    const memberId = 13; //🚨임의설정
-
-    const handleHeartClick = () => {
-        setHeartClicked(!heartClicked);
-    };
-
-    // 찜하기 & 찜 취소하기
-    const handleLike = async memberId => {
-        try {
-            if (heartClicked) {
-                const res = await postLike(productId, memberId);
-            } else {
-                const res = await deleteLike(productId, memberId);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    };
 
     useEffect(() => {
-        handleLike(memberId);
-    }, [heartClicked]);
+        getCartItems();
+    }, []);
 
     // 장바구니 관련
     const CART_CATEGORY = ['roomTempList', 'refrigeList', 'frozenList'];
@@ -53,10 +33,6 @@ const ProductAtf = ({ productInfo }) => {
             console.log(err);
         }
     };
-
-    useEffect(() => {
-        getCartItems();
-    }, []);
 
     // 장바구니에 담기
     const putInCart = async () => {
@@ -111,54 +87,75 @@ const ProductAtf = ({ productInfo }) => {
         }
     }, [isAdded]);
 
+    // 포장타입 문자열 반환하는 함수
+    const getPacking = packing => {
+        switch (packing) {
+            case 'COLD':
+                return '냉장';
+            case 'FREEZE':
+                return '냉동';
+            default:
+                return '상온';
+        }
+    };
+
     return (
         <Wrapper>
             {isAdded[0] && (
                 <CartModal
-                    name={productInfo.title}
-                    productImg={productInfo.image}
+                    name={productInfo?.title}
+                    productImg={productInfo?.image}
                     alreadyInCart={isAdded[1]}
                 />
             )}
-            <img src={product1} />
+            <img src={productInfo?.image} />
             <RightSection>
-                <Deliver>{productInfo.delivery}</Deliver>
+                <Deliver>{productInfo?.delivery}</Deliver>
                 <ProductName>
-                    <div>{productInfo.title}</div>
+                    <div>{productInfo?.title}</div>
                     <div className='share'></div>
-                    <div>{productInfo.subtitle}</div>
+                    <div>{productInfo?.subtitle}</div>
                 </ProductName>
                 <Price>
-                    {productInfo.discount > 0 && (
-                        <span className='red'>{productInfo.discount}%</span>
+                    {productInfo?.discount > 0 && (
+                        <span className='red'>{productInfo?.discount}%</span>
                     )}
-                    <span>{formatPrice(productInfo.price)}</span>
+                    <span>
+                        {getFormalizedNum(
+                            getDiscountPrice(
+                                productInfo?.price,
+                                productInfo?.discount,
+                            ),
+                        )}
+                    </span>
                     <span className='small'>원</span>
                 </Price>
-                <Origin>원산지: 상품설명/상세정보 참조</Origin>
+                {productInfo?.discount > 0 && (
+                    <OriginPrice>
+                        {getFormalizedNum(productInfo?.price)}원
+                        <QuestionMarkIcon />
+                    </OriginPrice>
+                )}
+                {productInfo?.origin === null ? (
+                    <Origin>원산지: 상품설명/상세정보 참조</Origin>
+                ) : (
+                    <Origin>{productInfo?.origin}</Origin>
+                )}
                 <SavePointWrapper>
-                    <SavePointTop>
-                        <span>웰컴 5%</span>
-                        <span>
-                            개당 <strong>600원 적립</strong>
-                        </span>
-                    </SavePointTop>
-                    <SavePointBottom>
-                        <p>
-                            매월
-                            <strong>2,000원</strong>
-                            {` 적립금 + `}
-                            <strong>24,000원</strong>
-                            {` 쿠폰 받기`}
-                        </p>
-                        <RightArrow className='right-arrow' />
-                    </SavePointBottom>
+                    <p>
+                        매월
+                        <strong>2,000원</strong>
+                        {` 적립금 + `}
+                        <strong>24,000원</strong>
+                        {` 쿠폰 받기`}
+                    </p>
+                    <RightArrow className='right-arrow' />
                 </SavePointWrapper>
                 <InfoWrapper>
                     <Info>
                         <dt>배송</dt>
                         <dd>
-                            <p>{productInfo.delivery}</p>
+                            <p>{productInfo?.delivery}</p>
                             <p className='additional'>
                                 23시 전 주문 시 내일 아침 7시 전 도착
                                 (대구·부산·울산 샛별배송 운영시간 별도 확인)
@@ -168,13 +165,13 @@ const ProductAtf = ({ productInfo }) => {
                     <Info>
                         <dt>판매자</dt>
                         <dd>
-                            <p>{productInfo.seller}</p>
+                            <p>{productInfo?.seller}</p>
                         </dd>
                     </Info>
                     <Info>
                         <dt>포장타입</dt>
                         <dd>
-                            <p>{productInfo.packing}</p>
+                            <p>{getPacking(productInfo?.packing)}</p>
                             <p className='additional'>
                                 택배배송은 에코 포장이 스티로폼으로 대체됩니다.
                             </p>
@@ -183,35 +180,32 @@ const ProductAtf = ({ productInfo }) => {
                     <Info>
                         <dt>판매단위</dt>
                         <dd>
-                            <p>{productInfo.unit}</p>
+                            <p>{productInfo?.unit}</p>
                         </dd>
                     </Info>
                     <Info>
                         <dt>중량/용량</dt>
                         <dd>
-                            <p>1KG</p>
+                            <p>{productInfo?.weight}</p>
                         </dd>
                     </Info>
                     <Info>
-                        <dt>알레르기정보</dt>
+                        <dt>유통기한(또는 소비기한) 정보</dt>
                         <dd>
-                            <p>소고기, 밀, 대두 함유</p>
+                            <p>{productInfo?.expiration}</p>
                         </dd>
                     </Info>
                     <Info>
                         <dt>안내사항</dt>
                         <dd>
-                            <p>
-                                뼈조각이 있을 수 있으니 섭취 시
-                                주의부탁드립니다.
-                            </p>
+                            <p>{productInfo?.info}</p>
                         </dd>
                     </Info>
                     <Info>
                         <dt>상품선택</dt>
                         <dd className='product-select'>
                             <div className='cart-option-item'>
-                                <span>{productInfo.title}</span>
+                                <span>{productInfo?.title}</span>
                                 <OptionWrapper>
                                     <AddBtnWrapper>
                                         <button
@@ -226,31 +220,38 @@ const ProductAtf = ({ productInfo }) => {
                                         </button>
                                     </AddBtnWrapper>
                                     <span>
-                                        {formatPrice(productInfo.price)}원
+                                        {getFormalizedNum(
+                                            getDiscountPrice(
+                                                productInfo?.price,
+                                                productInfo?.discount,
+                                            ),
+                                        )}
+                                        원
                                     </span>
                                 </OptionWrapper>
                             </div>
                         </dd>
                     </Info>
                 </InfoWrapper>
-                <TotalPriceWrapper>
-                    <TotalPriceInfo>
-                        <span className='total-price-text'>총 상품금액 :</span>
-                        <span className='price-num'>
-                            {formatPrice(num * productInfo.price)}
-                        </span>
-                        <span className='price-unit'>원</span>
-                    </TotalPriceInfo>
-                    <TotalPriceInfo>
-                        <span className='save-icon-text'>적립</span>
-                        <span className='save-info-text'>
-                            로그인 후, 적립 혜택 제공
-                        </span>
-                    </TotalPriceInfo>
-                </TotalPriceWrapper>
+                <TotalPriceInfo>
+                    <span className='total-price-text'>총 상품금액 :</span>
+                    <span className='price-num'>
+                        {getFormalizedNum(
+                            getDiscountPrice(
+                                productInfo?.price,
+                                productInfo?.discount,
+                            ) * num,
+                        )}
+                    </span>
+                    <span className='price-unit'>원</span>
+                </TotalPriceInfo>
                 <BtnWrapper>
                     <SquareBtn onClick={handleHeartClick}>
-                        {heartClicked ? <FilledHeartIcon /> : <HeartIcon />}
+                        {productInfo?.isLiked ? (
+                            <FilledHeartIcon />
+                        ) : (
+                            <HeartIcon />
+                        )}
                     </SquareBtn>
                     <SquareBtn>
                         <AlarmIcon />
@@ -330,7 +331,6 @@ const Deliver = styled.div`
 
 const Price = styled.div`
     display: flex;
-    flex-direction: row;
     align-items: flex-end;
     padding-top: 20px;
     font-weight: bold;
@@ -357,6 +357,22 @@ const Price = styled.div`
     }
 `;
 
+const OriginPrice = styled.div`
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #b5b5b5;
+    letter-spacing: -0.5px;
+    text-decoration: line-through;
+    margin-top: 8px;
+    margin-right: 1px;
+
+    svg {
+        margin-top: 1px;
+        margin-left: 1px;
+    }
+`;
+
 const Origin = styled.p`
     color: #333;
     font-size: 24px;
@@ -366,49 +382,8 @@ const Origin = styled.p`
 
 const SavePointWrapper = styled.div`
     margin-top: 2px;
-`;
-
-const SavePointTop = styled.div`
-    display: flex;
-    flex-direction: row;
-    -webkit-box-align: center;
-    align-items: center;
-    margin-top: 14px;
-
-    span {
-        &:first-child {
-            font-weight: 500;
-            font-size: 14px;
-            letter-spacing: -0.5px;
-            color: rgb(153, 153, 153);
-
-            &::after {
-                content: '';
-                display: inline-block;
-                width: 1px;
-                height: 12px;
-                margin: 0px 6px 0px 7px;
-                background-color: rgb(221, 221, 221);
-                vertical-align: -2px;
-            }
-        }
-
-        &:nth-child(2) {
-            color: rgb(51, 51, 51);
-            letter-spacing: -0.5px;
-
-            strong {
-                font-weight: 500;
-            }
-        }
-    }
-`;
-
-const SavePointBottom = styled.div`
     display: inline-flex;
-    -webkit-box-pack: justify;
     justify-content: space-between;
-    -webkit-box-align: center;
     align-items: center;
 
     box-sizing: border-box;
@@ -568,17 +543,11 @@ const AddBtnWrapper = styled.div`
     }
 `;
 
-const TotalPriceWrapper = styled.div`
-    padding-top: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-`;
-
 const TotalPriceInfo = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
+    padding-top: 30px;
 
     span {
         &.total-price-text {
