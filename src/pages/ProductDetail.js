@@ -6,6 +6,7 @@ import NavBar from '../components/ProductDetail/NavBar';
 import ProductDescription from '../components/ProductDetail/ProductDescription';
 import ProductReview from '../components/ProductDetail/ProductReview';
 import ProductInquiry from '../components/ProductDetail/ProductInquiry';
+import Loading from '../components/Common/Loading';
 import { getProductDetail } from '../api/product';
 import { postHelp, deleteHelp } from '../api/product';
 import { postLike, deleteLike } from '../api/product';
@@ -66,19 +67,27 @@ const ProductDetail = () => {
     return (
         <>
             <Header />
-            <ProductAtf
-                productInfo={productInfo}
-                handleHeartClick={handleHeartClick}
-            />
-            <NavBar reviewNum={productInfo?.reviewCount} />
-            <ProductDescription productInfoImg={productInfo?.productInfoImg} />
-            <ProductReview
-                reviews={productInfo?.reviews}
-                reviewImg={productInfo?.reviewImages}
-                reviewCount={productInfo?.reviewCount}
-                handleHelpClick={handleHelpClick}
-            />
-            <ProductInquiry inquiries={productInfo?.inquiries} />
+            {!productInfo ? (
+                <Loading />
+            ) : (
+                <>
+                    <ProductAtf
+                        productInfo={productInfo}
+                        handleHeartClick={handleHeartClick}
+                    />
+                    <NavBar reviewNum={productInfo?.reviewCount} />
+                    <ProductDescription
+                        productInfoImg={productInfo?.productInfoImg}
+                    />
+                    <ProductReview
+                        reviews={productInfo?.reviews}
+                        reviewImg={productInfo?.reviewImages}
+                        reviewCount={productInfo?.reviewCount}
+                        handleHelpClick={handleHelpClick}
+                    />
+                    <ProductInquiry inquiries={productInfo?.inquiries} />
+                </>
+            )}
         </>
     );
 };
