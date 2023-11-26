@@ -1,14 +1,11 @@
 import styled from 'styled-components';
-import detail1 from '../../assets/product/detail1.png';
-import detail2 from '../../assets/product/detail2.png';
-import detail3 from '../../assets/product/detail3.png';
 
-const ProductDescription = () => {
+const ProductDescription = ({ productInfoImg }) => {
     return (
         <Wrapper>
-            <img src={detail1} />
-            <img src={detail2} />
-            <img src={detail3} />
+            {productInfoImg?.map((image, idx) => (
+                <img key={idx} src={image} />
+            ))}
         </Wrapper>
     );
 };

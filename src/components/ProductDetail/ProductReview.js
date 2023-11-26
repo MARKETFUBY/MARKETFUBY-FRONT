@@ -4,49 +4,29 @@ import { ReactComponent as LikeIcon } from '../../assets/product/like.svg';
 import { ReactComponent as PageBtn } from '../../assets/product/page_btn.svg';
 import { ReactComponent as DisabledPageBtn } from '../../assets/product/page_btn_disabled.svg';
 
-const ProductReview = () => {
-    const reviewData = [
-        {
-            name: '백**',
-            content: `어젯밤에 갑자기 아침밥을 든든하게 먹고싶더라구요 ㅋㅋㅋ 무슨 바람이 들었는지...?ㅋㅋㅋ
-베스트 상품 보다고 항상 상위권에 있는 갈비탕을 주문했어요  아침이 얼마나 기다려 지던지요?ㅋㅋ
-집에 뚝배기가 있어서 뚝배기에   제대로 먹어보자 해서 뚝배기에  조리했어요 ㅋㅋㅋ
-설명서에 따로  간을 안해도 된다고 적혀있길래 간은 따로  안했어요 ~~ 정말 간이 적당하게 되어있더라구요
-고기도  부드럽고  4덩이나 들어있었어요  국물도 많이 들어있어요  뚝배기에 국물이 넘칠만큼 많아서   덜어냈어요~~  덕분에 아침  든든하게 먹었습니다
-주말에 부모님드릴려고  또 주문할게요~~`,
-            date: '2023.07.10',
-            likeCnt: 23,
-        },
-        {
-            name: '문**',
-            content: `어젯밤에 갑자기 아침밥을 든든하게 먹고싶더라구요 ㅋㅋㅋ 무슨 바람이 들었는지...?ㅋㅋㅋ
-베스트 상품 보다고 항상 상위권에 있는 갈비탕을 주문했어요  아침이 얼마나 기다려 지던지요?ㅋㅋ
-집에 뚝배기가 있어서 뚝배기에   제대로 먹어보자 해서 뚝배기에  조리했어요 ㅋㅋㅋ
-설명서에 따로  간을 안해도 된다고 적혀있길래 간은 따로  안했어요 ~~ 정말 간이 적당하게 되어있더라구요
-고기도  부드럽고  4덩이나 들어있었어요  국물도 많이 들어있어요  뚝배기에 국물이 넘칠만큼 많아서   덜어냈어요~~  덕분에 아침  든든하게 먹었습니다
-주말에 부모님드릴려고  또 주문할게요~~`,
-            date: '2023.07.10',
-            likeCnt: 23,
-        },
-    ];
+const ProductReview = ({ reviews, reviewImg, reviewCount }) => {
     return (
         <Wrapper>
             <Title>상품 후기</Title>
-            <ImgWrapper>
-                {[...Array(parseInt(8))].map((n, idx) => {
-                    return <ImgPreview key={idx} />;
-                })}
-                <a>
-                    <span>+더보기</span>
-                </a>
-            </ImgWrapper>
-            <SortBar>
-                <ReviewNum>총 10개</ReviewNum>
-                <SortBtnWrapper>
-                    <SortBtn>추천순</SortBtn>
-                    <SortBtn>최근등록순</SortBtn>
-                </SortBtnWrapper>
-            </SortBar>
+            {reviewImg?.length > 0 && (
+                <ImgWrapper>
+                    {reviewImg?.map((image, idx) => {
+                        return <ImgPreview src={image} key={idx} />;
+                    })}
+                    <a>
+                        <span>+더보기</span>
+                    </a>
+                </ImgWrapper>
+            )}
+            {reviews?.length > 0 && (
+                <SortBar>
+                    <ReviewNum>{`총 ${reviewCount}개`}</ReviewNum>
+                    <SortBtnWrapper>
+                        <SortBtn>추천순</SortBtn>
+                        <SortBtn>최근등록순</SortBtn>
+                    </SortBtnWrapper>
+                </SortBar>
+            )}
             <MembershipBtn>
                 회원 등급
                 <UpArrow className='down-arrow' />
@@ -62,30 +42,39 @@ const ProductReview = () => {
                 </Notice>
             </NoticeWrapper>
             <ReviewList>
-                {reviewData.map((review, idx) => {
+                {reviews?.map((review, idx) => {
                     return (
                         <ReviewItem key={idx}>
                             <div className='reviewer-name'>{review.name}</div>
-                            <div>
+                            <div className='review-right-section'>
                                 <div className='product-name'>
-                                    [사미헌] 갈비탕
+                                    {review.title}
                                 </div>
                                 <div className='content'>{review.content}</div>
-                                <ImgWrapper className='inside-review'>
-                                    {[...Array(parseInt(4))].map((n, idx) => {
-                                        return (
-                                            <ImgPreview
-                                                className='inside-review'
-                                                key={idx}
-                                            />
-                                        );
-                                    })}
-                                </ImgWrapper>
+                                {review.imageList?.length > 0 && (
+                                    <ImgWrapper className='inside-review'>
+                                        {review.imageList?.map((image, idx) => {
+                                            return (
+                                                <ImgPreview
+                                                    className='inside-review'
+                                                    src={image}
+                                                    key={idx}
+                                                />
+                                            );
+                                        })}
+                                    </ImgWrapper>
+                                )}
                                 <div className='review-footer'>
                                     <span>{review.date}</span>
-                                    <span className='like-btn'>
+                                    <span
+                                        className={
+                                            review.isReviewHelp
+                                                ? 'like-btn clicked-like'
+                                                : 'like-btn'
+                                        }
+                                    >
                                         <LikeIcon />
-                                        <span>도움돼요{review.likeCnt}</span>
+                                        <span>도움돼요</span>
                                     </span>
                                 </div>
                             </div>
@@ -171,7 +160,7 @@ const ImgWrapper = styled.div`
     }
 `;
 
-const ImgPreview = styled.div`
+const ImgPreview = styled.img`
     width: 124px;
     height: 124px;
     object-fit: cover;
@@ -287,9 +276,13 @@ const ReviewList = styled.div`
 `;
 
 const ReviewItem = styled.div`
+    width: 100%;
     display: flex;
     padding: 30px 0px 19px 20px;
     border-bottom: 1px solid rgb(244, 244, 244);
+
+    box-sizing: border-box;
+    margin: 0;
 
     div,
     span {
@@ -301,6 +294,11 @@ const ReviewItem = styled.div`
     & > .reviewer-name {
         flex: 0 0 225px;
         font-weight: 500;
+    }
+
+    & > .review-right-section {
+        width: 100%;
+        overflow: hidden;
     }
 
     & .product-name {
@@ -336,13 +334,14 @@ const ReviewItem = styled.div`
         justify-content: center;
         align-items: center;
         height: 32px;
-        padding: 0px 13px 0px 11px;
+        padding: 0px 11px 0px 11px;
         border: 1px solid rgb(226, 226, 226);
         border-radius: 20px;
         background-color: transparent;
         cursor: pointer;
 
         span {
+            margin-left: 4px;
             font-size: 12px;
             line-height: 20px;
         }
@@ -351,6 +350,17 @@ const ReviewItem = styled.div`
             width: 15px;
             height: 15px;
             margin-right: 4px;
+        }
+
+        &:hover,
+        &.clicked-like {
+            span {
+                color: #5f0080;
+            }
+
+            svg path {
+                stroke: #5f0080;
+            }
         }
     }
 `;
