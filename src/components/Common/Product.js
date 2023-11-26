@@ -4,15 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { ReactComponent as CartIcon } from '../../assets/icon/cart.svg';
 import { ReactComponent as CommentIcon } from '../../assets/icon/comment.svg';
 import { getCartList, postCartItem, putCartList } from '../../api/cart';
-import { formatPrice } from '../../utils/formatPrice';
+import { getDiscountPrice } from '../../utils/getDiscountPrice';
+import { getFormalizedNum } from '../../utils/getFormalizedNum';
 
 const Product = ({ product, handleModalContent }) => {
     const nav = useNavigate();
-
-    // 할인된 가격 계산
-    const getDiscountPrice = (price, discount) => {
-        return parseInt((1 - discount / 100) * price);
-    };
 
     const CART_CATEGORY = ['roomTempList', 'refrigeList', 'frozenList'];
     const [cartList, setCartList] = useState();
@@ -92,7 +88,7 @@ const Product = ({ product, handleModalContent }) => {
                 <ProductDescription>{product.subtitle}</ProductDescription>
                 <PriceWrapper>
                     <Price className={product.discount > 0 && 'discounted'}>
-                        {formatPrice(product.price)}원
+                        {getFormalizedNum(product.price)}원
                     </Price>
                     {product.discount > 0 && (
                         <DiscountWrapper>
@@ -100,7 +96,7 @@ const Product = ({ product, handleModalContent }) => {
                                 {product.discount}%
                             </Price>
                             <Price>
-                                {formatPrice(
+                                {getFormalizedNum(
                                     getDiscountPrice(
                                         product.price,
                                         product.discount,
