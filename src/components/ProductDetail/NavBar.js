@@ -5,34 +5,32 @@ import { getFormalizedNum } from '../../utils/getFormalizedNum';
 const NavBar = ({ reviewNum }) => {
     const [position, setPosition] = useState([false, false, false, false]); // 현재 스크롤 위치
 
+    const scrollY = window.scrollY; // 스크롤 양
+    // 각 컴포넌트의 절대적 위치 (뷰포트에서의 상대적 위치 + 스크롤 양)
+    const productDescription = Math.floor(
+        scrollY +
+            document
+                .getElementById('product-description')
+                ?.getBoundingClientRect().top,
+    );
+    const productInfo = Math.floor(
+        scrollY +
+            document.getElementById('product-info')?.getBoundingClientRect()
+                .top,
+    );
+    const productReview = Math.floor(
+        scrollY +
+            document.getElementById('product-review')?.getBoundingClientRect()
+                .top,
+    );
+    const productInquiry = Math.floor(
+        scrollY +
+            document.getElementById('product-inquiry')?.getBoundingClientRect()
+                .top,
+    );
+
     // 현재 스크롤 위치 구하기
     const getCurrentPosition = () => {
-        const scrollY = window.scrollY; // 스크롤 양
-        // 각 컴포넌트의 절대적 위치 (뷰포트에서의 상대적 위치 + 스크롤 양)
-        const productDescription = Math.floor(
-            scrollY +
-                document
-                    .getElementById('product-description')
-                    .getBoundingClientRect().top,
-        );
-        const productInfo = Math.floor(
-            scrollY +
-                document.getElementById('product-info').getBoundingClientRect()
-                    .top,
-        );
-        const productReview = Math.floor(
-            scrollY +
-                document
-                    .getElementById('product-review')
-                    .getBoundingClientRect().top,
-        );
-        const productInquiry = Math.floor(
-            scrollY +
-                document
-                    .getElementById('product-inquiry')
-                    .getBoundingClientRect().top,
-        );
-
         setPosition([
             scrollY >= productDescription && scrollY < productInfo,
             scrollY >= productInfo && scrollY < productReview,
@@ -47,18 +45,69 @@ const NavBar = ({ reviewNum }) => {
         return () => window.removeEventListener('scroll', getCurrentPosition);
     }, [position]);
 
+    // 네브바 클릭 시 해당 컴포넌트 위치로 이동
+    const scrollToComponent = component => {
+        switch (component) {
+            case 'product-description':
+                window.scrollTo({
+                    top: productDescription,
+                });
+                break;
+            case 'product-info':
+                window.scrollTo({
+                    top: productInfo,
+                });
+                break;
+            case 'product-review':
+                window.scrollTo({
+                    top: productReview,
+                });
+                break;
+            default:
+                window.scrollTo({
+                    top: productInquiry,
+                });
+        }
+    };
+
     return (
         <Wrapper>
             <BtnWrapper>
-                <NavBtn className={position[0] && 'current'}>상품설명</NavBtn>
-                <NavBtn className={position[1] && 'current'}>상세정보</NavBtn>
-                <NavBtn className={position[2] && 'current'}>
+                <NavBtn
+                    className={position[0] && 'current'}
+                    onClick={() => {
+                        scrollToComponent('product-description');
+                    }}
+                >
+                    상품설명
+                </NavBtn>
+                <NavBtn
+                    className={position[1] && 'current'}
+                    onClick={() => {
+                        scrollToComponent('product-info');
+                    }}
+                >
+                    상세정보
+                </NavBtn>
+                <NavBtn
+                    className={position[2] && 'current'}
+                    onClick={() => {
+                        scrollToComponent('product-review');
+                    }}
+                >
                     <span>후기</span>
                     <span className='reveiw-cnt'>
                         {getFormalizedNum(reviewNum)}
                     </span>
                 </NavBtn>
-                <NavBtn className={position[3] && 'current'}>문의</NavBtn>
+                <NavBtn
+                    className={position[3] && 'current'}
+                    onClick={() => {
+                        scrollToComponent('product-inquiry');
+                    }}
+                >
+                    문의
+                </NavBtn>
             </BtnWrapper>
         </Wrapper>
     );
