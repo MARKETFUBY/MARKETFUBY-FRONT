@@ -5,7 +5,6 @@ export const SignUpAPI = async signUpInfo => {
     try {
         const res = await client.post('/members/signup', signUpInfo);
         alert('회원가입에 성공하였습니다.');
-        navigate('/member/login');
     } catch (err) {
         console.log(err, '회원가입 에러');
         alert('회원가입 에러');

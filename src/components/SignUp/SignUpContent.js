@@ -5,6 +5,7 @@ import { ExistEmailAPI, ExistIdAPI, SignUpAPI } from '../../api/member';
 import Loading from '../Common/Loading';
 
 function SignUpContent() {
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [values, setValues] = useState({
         fubyId: '',
@@ -91,19 +92,19 @@ function SignUpContent() {
     const isEmailValid = emailRegEx.test(email);
 
     const submitUseInfo = async () => {
-        setLoading(true);
         if (!existId && !existEmail) {
             try {
+                setLoading(true);
                 const SignUpInfo = {
                     ...values,
                     birthday: year + '-' + month + '-' + day,
                 };
                 console.log('SignUpInfo', SignUpInfo);
                 SignUpAPI(SignUpInfo);
+                setLoading(false);
+                navigate('/member/login');
             } catch (err) {
                 console.log(err);
-            } finally {
-                setLoading(false);
             }
         } else if (existId) {
             alert('아이디 중복 여부를 다시 확인 해주세요');
