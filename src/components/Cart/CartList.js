@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useState } from 'react';
 import styled from 'styled-components';
 import CartItem from './CartItem';
 import arrow from '../../assets/icon/arrow.png';
@@ -10,7 +10,6 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const [isCartRoomVisible, setCartRoomVisible] = useState(true);
     const [isCartFrozenVisible, setCartFrozenVisible] = useState(true);
     const [checked, setChecked] = useState(false);
-    const [allchecked, setAllchecked] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
 
     const count =

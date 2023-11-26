@@ -14,7 +14,6 @@ function Order() {
         try {
             const getData = await getMyOrder();
             setOrderList(getData.orderList);
-            console.log(orderList);
         } catch (err) {
             console.log(err);
         }

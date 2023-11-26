@@ -15,7 +15,6 @@ function CartComponent() {
         try {
             const data = await getCartList();
             setCartItem(data);
-            console.log('cartItem', cartItem);
         } catch (err) {
             console.log(err);
         }

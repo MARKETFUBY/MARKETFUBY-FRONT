@@ -63,11 +63,6 @@ function Header() {
         navigate('/benefit');
     };
 
-    // const clickUserMenu = userMenuClick => {
-    //     console.log('click', userMenuClick);
-    //     setUserMenuClick(true);
-    // };
-
     const [openCategory, setOpenCategory] = useState(false);
     const [openUserMenu, setOpenUserMenu] = useState(false);
 

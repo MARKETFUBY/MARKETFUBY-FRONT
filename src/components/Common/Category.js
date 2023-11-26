@@ -4,17 +4,10 @@ import styled from 'styled-components';
 import { category } from './CategoryList';
 
 function Category({ setOpenCategory }) {
-    const navigate = useNavigate();
-    // const [categories, setCategories] = useState([]);
-    // const [categoryId, setCategoryId] = useState(null);
     const [active, setActive] = useState(false);
 
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedSubCategory, setSelectedSubCategory] = useState(null);
-
-    const toggleCategory = () => {
-        setActive(!active);
-    };
 
     const handleCategoryClick = section => {
         setSelectedCategory(prevRegion =>
@@ -45,7 +38,6 @@ function Category({ setOpenCategory }) {
                             {selectedCategory && (
                                 <div
                                     className='subcategoryFrame'
-                                    // onMouseLeave={() => setCategoryId(0)}
                                 >
                                     {category
                                         .find(
@@ -94,7 +86,6 @@ const Div = styled.div`
         background-color: rgb(255, 255, 255);
         position: relative;
         z-index: 21;
-        /* width: 517px; */
     }
     .mainCategoryFrame {
         img {
@@ -110,7 +101,6 @@ const Div = styled.div`
             overflow-y: auto;
             width: 247px;
             height: 100%;
-            /* background-color: rgb(255, 255, 255); */
             cursor: pointer;
             margin: 0;
             padding: 0;
