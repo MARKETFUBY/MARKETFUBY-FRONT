@@ -14,7 +14,7 @@ const responsive = {
     },
 };
 
-function RecommendationBox({ data, handleModalContent }) {
+function RecommendationBox({ title, subtitle, data, handleModalContent }) {
     const renderPrevButton = ({ isDisabled }) => {
         if (isDisabled) {
             return null;
@@ -41,9 +41,9 @@ function RecommendationBox({ data, handleModalContent }) {
         <Div>
             <Title>
                 <div className='top'>
-                    <span>💜슈퍼빅세일 기획특가💜</span>
+                    <span>{title}</span>
                 </div>
-                <p>올 가을 찾아온 최대 혜택</p>
+                <p>{subtitle}</p>
             </Title>
             <Card>
                 <AliceCarousel

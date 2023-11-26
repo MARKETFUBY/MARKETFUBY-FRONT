@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import CartList from './CartList';
 import OrderBox from './OrderBox';
 import { getCartList } from '../../api/cart';
+import Loading from '../Common/Loading';
 
 function CartComponent() {
     const [cartItem, setCartItem] = useState([]);
-
-    console.log('cartItem', cartItem);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getCartItem();
@@ -17,7 +17,7 @@ function CartComponent() {
         try {
             const data = await getCartList();
             setCartItem(data);
-            console.log('cartItem', cartItem);
+            setLoading(false);
         } catch (err) {
             console.log(err);
         }
@@ -25,20 +25,26 @@ function CartComponent() {
 
     return (
         <Div>
-            <div className='cartContentsBox'>
-                <CartBox>
-                    <CartList
-                        roomTempList={cartItem.roomTempList}
-                        refrigeList={cartItem.refrigeList}
-                        frozenList={cartItem.frozenList}
-                    />
-                </CartBox>
-                <OrderBox
-                    totalAmount={cartItem.totalAmount}
-                    discountAmount={cartItem.discountAmount}
-                    paymentAmount={cartItem.paymentAmount}
-                />
-            </div>
+            {loading ? (
+                <Loading />
+            ) : (
+                <>
+                    <div className='cartContentsBox'>
+                        <CartBox>
+                            <CartList
+                                roomTempList={cartItem.roomTempList}
+                                refrigeList={cartItem.refrigeList}
+                                frozenList={cartItem.frozenList}
+                            />
+                        </CartBox>
+                        <OrderBox
+                            totalAmount={cartItem.totalAmount}
+                            discountAmount={cartItem.discountAmount}
+                            paymentAmount={cartItem.paymentAmount}
+                        />
+                    </div>
+                </>
+            )}
         </Div>
     );
 }

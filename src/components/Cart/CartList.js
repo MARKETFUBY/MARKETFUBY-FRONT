@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useState } from 'react';
 import styled from 'styled-components';
 import CartItem from './CartItem';
 import arrow from '../../assets/icon/arrow.png';
@@ -35,14 +35,12 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
         setCheckedRefrigeItems(newCheckedRefrigeItems);
         updateSelectedItems(index, refrigeList, newCheckedRefrigeItems);
     };
-
     const handleCheckRoomChange = index => {
         const newCheckedRoomItems = [...checkedRoomItems];
         newCheckedRoomItems[index] = !newCheckedRoomItems[index];
         setCheckedRoomItems(newCheckedRoomItems);
         updateSelectedItems(index, roomTempList, newCheckedRoomItems);
     };
-
     const handleCheckFrozenChange = index => {
         const newCheckedFrozenItems = [...checkedFrozenItems];
         newCheckedFrozenItems[index] = !newCheckedFrozenItems[index];
@@ -52,7 +50,6 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
 
     const updateSelectedItems = (index, itemList, checkedItems) => {
         const selectedItem = index;
-
         if (checkedItems[index]) {
             setSelectedItems(prevSelectedItems => [
                 ...prevSelectedItems,
@@ -68,11 +65,9 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const toggleCartRefrigeVisibility = () => {
         setCartRefrigeVisible(!isCartRefrigeVisible);
     };
-
     const toggleCartRoomVisibility = () => {
         setCartRoomVisible(!isCartRoomVisible);
     };
-
     const toggleCartFrozenVisibility = () => {
         setCartFrozenVisible(!isCartFrozenVisible);
     };
@@ -80,8 +75,19 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
     const handleUpdateItemCount = async (itemKey, newCount) => {
         try {
             const data = await putCartList(itemKey, newCount);
+            window.location.reload();
         } catch (err) {
             console.log(err);
+        }
+    };
+
+    const handleDeleteSelected = async () => {
+        try {
+            const deletedItems = await deleteCartList(selectedItems);
+            alert('삭제되었습니다.');
+            window.location.reload();
+        } catch (err) {
+            console.error(err);
         }
     };
 
@@ -90,23 +96,10 @@ function CartList({ roomTempList, refrigeList, frozenList }) {
 
         const newCheckedRefrigeItems = checkedRefrigeItems.map(() => !checked);
         setCheckedRefrigeItems(newCheckedRefrigeItems);
-
         const newCheckedRoomItems = checkedRoomItems.map(() => !checked);
         setCheckedRoomItems(newCheckedRoomItems);
-
         const newCheckedFrozenItems = checkedFrozenItems.map(() => !checked);
         setCheckedFrozenItems(newCheckedFrozenItems);
-    };
-
-    const handleDeleteSelected = async () => {
-        try {
-            const deletedItems = await deleteCartList(selectedItems);
-            console.log('Deleted Items:', deletedItems);
-            alert('삭제되었습니다.');
-            window.location.reload();
-        } catch (err) {
-            console.error(err);
-        }
     };
 
     return (
