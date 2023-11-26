@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import menu from '../../assets/icon/menu.png';
 import Category from './Category';
+import UserMenu from './UserMenu';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { initialize } from '../../store/filterSlice';
@@ -52,7 +53,13 @@ function Header() {
         navigate('/benefit');
     };
 
+    // const clickUserMenu = userMenuClick => {
+    //     console.log('click', userMenuClick);
+    //     setUserMenuClick(true);
+    // };
+
     const [openCategory, setOpenCategory] = useState(false);
+    const [openUserMenu, setOpenUserMenu] = useState(false);
 
     // 네브바 스타일 - 스크롤 감지
     const [isFixed, setIsFixed] = useState(false);
@@ -78,6 +85,11 @@ function Header() {
         };
     }, []);
 
+    useEffect(() => {
+        localStorage.getItem('refreshToken')
+            ? setIsLogin(true)
+            : setIsLogin(false);
+    }, []);
     // 검색어 관련
     const [sword, setSword] = useState('');
 
@@ -105,12 +117,22 @@ function Header() {
                         <NavUser>
                             {isLogin ? (
                                 <User>
-                                    <a>
+                                    <a
+                                        onMouseEnter={() => {
+                                            setOpenUserMenu(true);
+                                        }}
+                                    >
                                         <div>
                                             <span className='class'>일반</span>
-                                            {username} 님<PlusBtn />
+                                            {username} 님
+                                            <PlusBtn />
                                         </div>
                                     </a>
+                                    {openUserMenu ? (
+                                        <UserMenu
+                                            setOpenUserMenu={setOpenUserMenu}
+                                        />
+                                    ) : null}
                                 </User>
                             ) : (
                                 <>
@@ -185,7 +207,6 @@ function Header() {
                                     />
                                 ) : null}
                             </CategoryBox>
-
                             <Menu>
                                 <li
                                     className={isPurple === 1 && 'purple-menu'}

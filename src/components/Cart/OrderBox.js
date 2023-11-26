@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 function OrderBox({ totalAmount, discountAmount, paymentAmount }) {
-    console.log('가격', totalAmount, discountAmount, paymentAmount);
     return (
         <Div>
             <OrderDiv>
