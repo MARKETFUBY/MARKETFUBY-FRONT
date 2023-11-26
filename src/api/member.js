@@ -51,3 +51,21 @@ export const SignInAPI = async loginInfo => {
         //   }
     }
 };
+
+// 로그아웃
+export const LogoutAPI = async refreshToken => {
+    try {
+        const res = await client.delete('/members/logout', {
+            data: { refreshToken: refreshToken.slice(7) },
+        });
+        // 로그아웃 (로컬스토리지 토큰 삭제 후 메인페이지 이동)
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('username');
+        window.location.replace('/');
+        console.log('로그아웃 성공');
+        return res.data;
+    } catch (err) {
+        console.log(err, '로그아웃 에러');
+    }
+};
