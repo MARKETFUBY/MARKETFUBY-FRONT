@@ -3,9 +3,7 @@ import styled from 'styled-components';
 const ProductInfo = ({ productInfoImg }) => {
     return (
         <Wrapper id='product-info'>
-            {productInfoImg?.map((image, idx) => (
-                <img key={idx} src={image} />
-            ))}
+            <img src={productInfoImg} />
         </Wrapper>
     );
 };
