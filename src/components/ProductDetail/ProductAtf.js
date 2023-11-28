@@ -14,6 +14,7 @@ import CartModal from '../Common/CartModal';
 
 const ProductAtf = ({ productInfo, handleHeartClick }) => {
     const [num, setNum] = useState(1); // 선택한 상품 개수
+    const productId = useParams().id;
 
     useEffect(() => {
         getCartItems();
@@ -37,7 +38,7 @@ const ProductAtf = ({ productInfo, handleHeartClick }) => {
     // 장바구니에 담기
     const putInCart = async () => {
         try {
-            const res = postCartItem(productInfo.productId, 1);
+            const res = postCartItem(productId, 1);
             setIsAdded([true, false]);
             getCartItems();
         } catch (err) {
